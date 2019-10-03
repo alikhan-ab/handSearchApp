@@ -17,7 +17,8 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate {
     
     var navbar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 75))
     var navItem = UINavigationItem()
-    
+    lazy var searchBar:UISearchBar = UISearchBar()
+
     let tableview: UITableView = {
         let tv = UITableView()
         tv.backgroundColor = UIColor.white
@@ -25,9 +26,6 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate {
         tv.separatorColor = UIColor.white
         return tv
     }()
-    
-    lazy var searchBar:UISearchBar = UISearchBar()
-    
     //MARK:- Methods:
     @objc func back(_ sender: UIButton){
         self.dismiss(animated: true, completion: nil)
@@ -79,6 +77,7 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate {
 //            print(isMatchingSearchText)
             if !isMatchingSearchText {
                 filteredFootballer = [Footballer(name: "none", league: "")]
+                tableview.reloadData()
             }
             return isMatchingSearchText
         }
@@ -97,12 +96,7 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate {
             tableview.leftAnchor.constraint(equalTo: self.view.leftAnchor)
         ])
     }
-    
-    func setUpView(){
-        setupNavBar()
-        //        self.view.backgroundColor = .white
-    }
-    
+
 }
 // MARK: - UISearchResultsUpdating Delegate
 extension DictionaryByWordsVC: UISearchBarDelegate {
