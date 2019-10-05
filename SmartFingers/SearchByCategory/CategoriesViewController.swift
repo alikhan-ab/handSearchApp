@@ -26,12 +26,13 @@ class CategoriesViewController: UIViewController, UINavigationBarDelegate {
                        ExpandableSection(isExpanded: true, name: "Sentences", subsections: ["Greeting & standard phrases", "Questions", "Idioms & expressions"]),
                        ExpandableSection(isExpanded: true, name: "Religion", subsections: ["Magic & myths", "Sins, negative actions & emotions", "Theological studies","Artifacts & Symbols"]),
                        ExpandableSection(isExpanded: true, name: "Pedagogy", subsections: ["Grades&Certificates", "Child care", "Education & Learning"])]
-    var filteredData = [String]()
+    var filteredData = [ExpandableSection]()
     //MARK:- Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround()
         view.backgroundColor = UIColor.white
+        filteredData = dataExample
         setupNavBar()
         setUpTableView()
     }
@@ -78,16 +79,15 @@ class CategoriesViewController: UIViewController, UINavigationBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange textSearched: String) {
-        var subsections = [String]()
-        for item in dataExample {
-            for it in item.subsections {
-                subsections.append(it)
+        filteredData = dataExample
+        if !textSearched.isEmpty {
+            for index in 0..<filteredData.count {
+                filteredData[index].subsections = filteredData[index].subsections.filter({ item in
+                    return item.lowercased().contains(textSearched.lowercased())
+                })
             }
         }
-        filteredData = subsections.filter { item in
-            let isMatchingSearchText = item.lowercased().contains(textSearched.lowercased())// || textSearched.lowercased().count == 0
-            return isMatchingSearchText
-        }
+        print(filteredData)
         tableView.reloadData()
     }
     
@@ -95,33 +95,26 @@ class CategoriesViewController: UIViewController, UINavigationBarDelegate {
 // MARK: - UISearchResultsUpdating Delegate
 extension CategoriesViewController: UISearchBarDelegate {
 }
+
 // MARK: - UITableView Delegate
 extension CategoriesViewController: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return dataExample.count
+        return filteredData.count
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 40
     }
-// MARK: - PROBLEM:
-    // - Shows result in every section and at that case open/close buttons doesn't work
+/
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if filteredData.count > 0 {
-//            dataExample[section].subsections
-            
-//            return dataExample[section].subsections.count
-
-            return filteredData.count
-        }
         
-        if !dataExample[section].isExpanded {
+        if !filteredData[section].isExpanded {
             return 0
         }
-        return dataExample[section].subsections.count
+        return filteredData[section].subsections.count
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -140,12 +133,13 @@ extension CategoriesViewController: UITableViewDataSource, UITableViewDelegate {
         
         let section = button.tag
         var indexPaths = [IndexPath]()
-        for row in dataExample[section].subsections.indices {
+        for row in filteredData[section].subsections.indices {
             let indexPath = IndexPath(row: row, section: section)
             indexPaths.append(indexPath)
         }
         
-        let isExpanded = dataExample[section].isExpanded
+        let isExpanded = filteredData[section].isExpanded
+        filteredData[section].isExpanded = !isExpanded
         dataExample[section].isExpanded = !isExpanded
         
         button.setTitle(isExpanded ? "Open" : "Close", for: .normal)
@@ -164,12 +158,7 @@ extension CategoriesViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let destination = SubcategoriesViewController()
         
-        let name: String
-        if filteredData.isEmpty {
-            name = dataExample[indexPath.section].subsections[indexPath.row]
-        } else {
-            name = filteredData[indexPath.row]
-        }
+        let name = filteredData[indexPath.section].subsections[indexPath.row]
         
         destination.navItem.title = name
         //        destination.dataExample = dataExample[indexPath.section].subsections[indexPath.row]
@@ -179,13 +168,8 @@ extension CategoriesViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath) as! NameCell
-        
-        let name: String
-        if filteredData.isEmpty {
-            name = dataExample[indexPath.section].subsections[indexPath.row]
-        } else {
-            name = filteredData[indexPath.row]
-        }
+                
+        let name = filteredData[indexPath.section].subsections[indexPath.row]
         
 //        let name = dataExample[indexPath.section].subsections[indexPath.row]
         cell.dayLabel.text = name
