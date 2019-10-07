@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 class SubcategoriesViewController: UIViewController, UINavigationBarDelegate {
     
@@ -15,13 +16,47 @@ class SubcategoriesViewController: UIViewController, UINavigationBarDelegate {
     let navbar      = UINavigationBar(frame: CGRect(x: 0, y: 25, width: UIScreen.main.bounds.width, height: 75))
     var dataExample = ["Colours", "Measurements", "Emotions","Characteristics","Numbers","General: Time"]
     var navItem = UINavigationItem()
+    
+    var subcategory: String?
+    private let persistentContainer = NSPersistentContainer(name: "SmartFingers")
+
+    lazy var fetchedResultsController: NSFetchedResultsController<Word> = {
+        
+        let fetchRequest: NSFetchRequest<Word> = Word.fetchRequest()
+        
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "translation", ascending: true)]
+        
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        fetchedResultsController.delegate = self
+        
+        return fetchedResultsController
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        persistentContainer.loadPersistentStores { (NSPersistentStoreDescription, error) in
+            if let error = error {
+                print("Unable to Load Persistent Store")
+                print("\(error), \(error.localizedDescription)")
+            } else {
+                do {
+                    guard let subcategory = self.subcategory else {
+                        fatalError()
+                    }
+                    self.fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "from.name = %@", subcategory)
+                    try self.fetchedResultsController.performFetch()
+                } catch {
+                    let error = error as NSError
+                    print("\(error), \(error.localizedDescription)")
+                }
+            }
+        }
+        
         self.hideKeyboardWhenTappedAround()
-        view.backgroundColor = UIColor.white
-        setupNavBar()
-        setUpTableView()
+        self.view.backgroundColor = UIColor.white
+        self.setupNavBar()
+        self.setUpTableView()
     }
 
     func setUpTableView() {
@@ -49,8 +84,10 @@ class SubcategoriesViewController: UIViewController, UINavigationBarDelegate {
 //        navItem.title =
         navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(back))
         navbar.items = [navItem]
+        navItem.title = subcategory
         view.addSubview(navbar)
         self.view.frame = CGRect(x: 0, y: height+25, width: UIScreen.main.bounds.width, height: (UIScreen.main.bounds.height - height-25))
+        navItem.title = subcategory
     }
 
     @objc func back(_ sender: UIButton){
@@ -64,7 +101,8 @@ extension SubcategoriesViewController: UITableViewDataSource, UITableViewDelegat
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataExample.count
+        guard let words = fetchedResultsController.fetchedObjects else {return 0}
+        return words.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -72,16 +110,20 @@ extension SubcategoriesViewController: UITableViewDataSource, UITableViewDelegat
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let destination = SignWordViewController()
-        destination.navItem.title = dataExample[indexPath.row]
+        let destination = SignWordViewController()        
+        let word = fetchedResultsController.object(at: indexPath)
+        destination.word = word
         self.present(destination, animated: true, completion: nil)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath) as! NameCell
-        let name = dataExample[indexPath.row]
-        cell.dayLabel.text = name
+        
+        let word = fetchedResultsController.object(at: indexPath)
+        cell.dayLabel.text = word.translation
         return cell
     }
     
 }
+
+extension SubcategoriesViewController: NSFetchedResultsControllerDelegate {}

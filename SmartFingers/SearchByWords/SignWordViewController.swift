@@ -20,6 +20,8 @@ class SignWordViewController: UIViewController, UINavigationBarDelegate {
     var player = AVPlayer()
     var playerLayer = AVPlayerLayer()
     
+    var word: Word?
+    
     var descriptionTextLabel: UILabel = {
         let label = UILabel()
         label.text = "Text"
@@ -47,14 +49,15 @@ class SignWordViewController: UIViewController, UINavigationBarDelegate {
         navbar.delegate = self
         navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(back))
         navbar.items = [navItem]
-        descriptionTextLabel.text = navItem.title
+        navItem.title = word?.translation
+        descriptionTextLabel.text = word?.translation
         view.addSubview(navbar)
         self.view.frame = CGRect(x: 0, y: height, width: UIScreen.main.bounds.width, height: (UIScreen.main.bounds.height - height))
     }
     
     func setVideo(){
-        
-        guard let path = Bundle.main.path(forResource: "video", ofType:"mp4") else {
+        guard let videoName = word?.video else { return }
+        guard let path = Bundle.main.path(forResource: videoName, ofType:"mp4", inDirectory: "Videos") else {
             print("video not found")
             return
         }
@@ -119,6 +122,7 @@ class SignWordViewController: UIViewController, UINavigationBarDelegate {
         descriptionTextLabel.centerYAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -100).isActive = true
         descriptionTextLabel.heightAnchor.constraint(equalToConstant: 80).isActive = true
         descriptionTextLabel.widthAnchor.constraint(equalTo: self.view.widthAnchor, constant: -40).isActive = true
+        
         
         
     }

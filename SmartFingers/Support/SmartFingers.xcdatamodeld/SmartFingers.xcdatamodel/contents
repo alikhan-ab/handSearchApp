@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14903" systemVersion="18G95" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Category" representedClassName="Category" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="over" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Subcategory" inverseName="under" inverseEntity="Subcategory"/>
+    </entity>
+    <entity name="Subcategory" representedClassName="Subcategory" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="contains" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Word" inverseName="from" inverseEntity="Word"/>
+        <relationship name="under" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="over" inverseEntity="Category"/>
+    </entity>
+    <entity name="Word" representedClassName="Word" syncable="YES">
+        <attribute name="favourite" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="translation" optional="YES" attributeType="String"/>
+        <attribute name="video" optional="YES" attributeType="String"/>
+        <relationship name="from" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Subcategory" inverseName="contains" inverseEntity="Subcategory"/>
+    </entity>
+    <elements>
+        <element name="Category" positionX="-36" positionY="9" width="128" height="73"/>
+        <element name="Subcategory" positionX="0" positionY="45" width="128" height="88"/>
+        <element name="Word" positionX="27" positionY="72" width="128" height="118"/>
+    </elements>
 </model>

@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 struct ExpandableSection {
     var isExpanded: Bool
@@ -26,15 +27,66 @@ class CategoriesViewController: UIViewController, UINavigationBarDelegate {
                        ExpandableSection(isExpanded: true, name: "Sentences", subsections: ["Greeting & standard phrases", "Questions", "Idioms & expressions"]),
                        ExpandableSection(isExpanded: true, name: "Religion", subsections: ["Magic & myths", "Sins, negative actions & emotions", "Theological studies","Artifacts & Symbols"]),
                        ExpandableSection(isExpanded: true, name: "Pedagogy", subsections: ["Grades&Certificates", "Child care", "Education & Learning"])]
+    var coredataData = [ExpandableSection]()
     var filteredData = [ExpandableSection]()
     //MARK:- Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround()
         view.backgroundColor = UIColor.white
-        filteredData = dataExample
+        loadCategroies()
+        filteredData = coredataData
         setupNavBar()
         setUpTableView()
+    }
+    
+    func loadCategroies() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Category")
+        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        do {
+            let categories = try managedContext.fetch(fetchRequest)
+            
+            for category in categories {
+                guard let categoryName = category.value(forKey: "name") as? String else {
+                    fatalError("Couldn't get a category name")
+                }
+                
+                var subcategoriesNames = [String]()
+                
+                let fetchSubRequest = NSFetchRequest<NSManagedObject>(entityName: "Subcategory")
+                fetchSubRequest.sortDescriptors = [sortDescriptor]
+                
+                let predicate = NSPredicate(format: "%K = %@", "under.name", categoryName)
+                fetchSubRequest.predicate = predicate
+                
+                do {
+                    let subcategories = try managedContext.fetch(fetchSubRequest)
+                    
+                    for subcategory in subcategories {
+                        guard let subcategoryName = subcategory.value(forKey: "name") as? String else {
+                            fatalError("Couldn't get a subcategoryname")
+                        }
+                        subcategoriesNames.append(subcategoryName)
+                    }
+                    
+                    coredataData.append(ExpandableSection(isExpanded: false, name: categoryName, subsections: subcategoriesNames))
+                    
+
+                } catch let error as NSError {
+                    print("Could not fetch. \(error), \(error.userInfo)")
+                }
+            }
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
     }
     
     func setUpTableView() {
@@ -79,7 +131,7 @@ class CategoriesViewController: UIViewController, UINavigationBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange textSearched: String) {
-        filteredData = dataExample
+        filteredData = coredataData
         if !textSearched.isEmpty {
             for index in 0..<filteredData.count {
                 filteredData[index].subsections = filteredData[index].subsections.filter({ item in
@@ -106,10 +158,9 @@ extension CategoriesViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 40
     }
-/
+
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         
         if !filteredData[section].isExpanded {
             return 0
@@ -122,8 +173,8 @@ extension CategoriesViewController: UITableViewDataSource, UITableViewDelegate {
         view.section = section
         
 
-        view.nameLabel.text = dataExample[section].name
-        view.expandCloseButton.setTitle("Close", for: .normal)
+        view.nameLabel.text = coredataData[section].name
+        view.expandCloseButton.setTitle("Open", for: .normal)
         view.expandCloseButton.addTarget(self, action: #selector(handleExpandClose), for: .touchUpInside)
         view.expandCloseButton.tag = section
         return view
@@ -140,7 +191,7 @@ extension CategoriesViewController: UITableViewDataSource, UITableViewDelegate {
         
         let isExpanded = filteredData[section].isExpanded
         filteredData[section].isExpanded = !isExpanded
-        dataExample[section].isExpanded = !isExpanded
+        coredataData[section].isExpanded = !isExpanded
         
         button.setTitle(isExpanded ? "Open" : "Close", for: .normal)
         
@@ -158,9 +209,8 @@ extension CategoriesViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let destination = SubcategoriesViewController()
         
-        let name = filteredData[indexPath.section].subsections[indexPath.row]
-        
-        destination.navItem.title = name
+        let subcategoryName = filteredData[indexPath.section].subsections[indexPath.row]
+        destination.subcategory = subcategoryName
         //        destination.dataExample = dataExample[indexPath.section].subsections[indexPath.row]
         self.present(destination, animated: true, completion: nil)
     }
