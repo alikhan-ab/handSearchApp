@@ -14,6 +14,7 @@
 		19150E1C2320F42E00BF63DF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 19150E1A2320F42E00BF63DF /* LaunchScreen.storyboard */; };
 		19150E242320F57F00BF63DF /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19150E232320F57F00BF63DF /* Extensions.swift */; };
 		19D665A1232FB2FB00F60640 /* DictionaryByWordsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D665A0232FB2FB00F60640 /* DictionaryByWordsVC.swift */; };
+		9A0CB09A234F1D6600A756FE /* SignKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0CB099234F1D6600A756FE /* SignKeyboardView.swift */; };
 		9A2448492330F0C40048E249 /* Footballer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2448482330F0C40048E249 /* Footballer.swift */; };
 		9A33C13A23336C1F003BFBE7 /* SignWordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A33C13923336C1F003BFBE7 /* SignWordViewController.swift */; };
 		9AA63C2723321E2900B34F41 /* ThirdDayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA63C2623321E2900B34F41 /* ThirdDayCell.swift */; };
@@ -47,6 +48,7 @@
 		19150E1D2320F42E00BF63DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		19150E232320F57F00BF63DF /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		19D665A0232FB2FB00F60640 /* DictionaryByWordsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryByWordsVC.swift; sourceTree = "<group>"; };
+		9A0CB099234F1D6600A756FE /* SignKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignKeyboardView.swift; sourceTree = "<group>"; };
 		9A2448482330F0C40048E249 /* Footballer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Footballer.swift; sourceTree = "<group>"; };
 		9A33C13923336C1F003BFBE7 /* SignWordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignWordViewController.swift; sourceTree = "<group>"; };
 		9A33C13B233373C8003BFBE7 /* video.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = video.mp4; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 				9A33C13923336C1F003BFBE7 /* SignWordViewController.swift */,
 				9AA63C2623321E2900B34F41 /* ThirdDayCell.swift */,
 				9A2448482330F0C40048E249 /* Footballer.swift */,
+				9A0CB099234F1D6600A756FE /* SignKeyboardView.swift */,
 			);
 			path = SearchByWords;
 			sourceTree = "<group>";
@@ -273,6 +276,7 @@
 				C32708BE234358810028940B /* CategoriesViewController.swift in Sources */,
 				9AA63C2723321E2900B34F41 /* ThirdDayCell.swift in Sources */,
 				C32708C52343778B0028940B /* FingerSpellingViewController.swift in Sources */,
+				9A0CB09A234F1D6600A756FE /* SignKeyboardView.swift in Sources */,
 				DB6C9DC72348C07700BE5F3E /* Subcategory+CoreDataClass.swift in Sources */,
 				9A33C13A23336C1F003BFBE7 /* SignWordViewController.swift in Sources */,
 				DB6C9DC42348C07700BE5F3E /* Category+CoreDataProperties.swift in Sources */,

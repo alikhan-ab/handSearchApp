@@ -84,32 +84,6 @@ class SignWordViewController: UIViewController, UINavigationBarDelegate {
         }
     }
     
-//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        let view = UIView(frame: CGRect(x: 0, y: 150, width: self.view.bounds.width, height: 240))
-//        if let touch = touches.first {
-//            if touch. location(in: view) {
-//                if tapped {
-//                    play()
-//                    tapped = false
-//                } else {
-//                    pause()
-//                    tapped = true
-//                }
-//            }
-//        }
-//        super.touchesBegan(touches, with: event)
-//    }
-    
-    //    @objc func videoTapped(tapGestureRecognizer: UITapGestureRecognizer){
-    //        //        let tappedVideo = tapGestureRecognizer. as! AVPlayer
-    //        if tapped {
-    //            pause()
-    //            tapped = true
-    //        } else {
-    //            play()
-    //            tapped = true
-    //        }
-    //    }
     
     @objc func back(_ sender: UIButton){
         self.dismiss(animated: true, completion: nil)

@@ -9,7 +9,8 @@
 import Foundation
 import UIKit
 
-class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate {
+class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDelegate {
+
     //MARK:- Variables
     var allWords = [Footballer]()
     let searchController = UISearchController(searchResultsController: nil)
@@ -17,8 +18,9 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate {
     
     var navbar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 75))
     var navItem = UINavigationItem()
-    lazy var searchBar:UISearchBar = UISearchBar()
-
+    lazy var searchBar: UISearchBar = UISearchBar()
+//    var keyboardView: SignKeyboardView = SignKeyboardView()
+    
     let tableview: UITableView = {
         let tv = UITableView()
         tv.backgroundColor = UIColor.white
@@ -26,6 +28,7 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate {
         tv.separatorColor = UIColor.white
         return tv
     }()
+    
     //MARK:- Methods:
     @objc func back(_ sender: UIButton){
         self.dismiss(animated: true, completion: nil)
@@ -84,18 +87,38 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate {
         tableview.reloadData()
     }
     
+    func didPressButton(button: LetterButton) {
+        guard let letter = button.letter else {
+            return
+        }
+        searchBar.text! += letter
+    }
+
     func setupTableView() {
         tableview.delegate = self
         tableview.dataSource = self
         tableview.register(NameCell.self, forCellReuseIdentifier: "cellId")
         view.addSubview(tableview)
+        
+        let keyboardView = SignKeyboardView()
+        keyboardView.delegate = self
+        
+        keyboardView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(keyboardView)
         NSLayoutConstraint.activate([
             tableview.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 75),
-            tableview.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            tableview.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -150),
             tableview.rightAnchor.constraint(equalTo: self.view.rightAnchor),
             tableview.leftAnchor.constraint(equalTo: self.view.leftAnchor)
         ])
+        NSLayoutConstraint.activate([
+             keyboardView.topAnchor.constraint(equalTo: tableview.bottomAnchor),
+             keyboardView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+             keyboardView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
+             keyboardView.leftAnchor.constraint(equalTo: self.view.leftAnchor)
+         ])
     }
+    
 
 }
 // MARK: - UISearchResultsUpdating Delegate
