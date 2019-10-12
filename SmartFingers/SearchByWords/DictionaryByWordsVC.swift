@@ -20,6 +20,7 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
     var navItem = UINavigationItem()
     lazy var searchBar: UISearchBar = UISearchBar()
 //    var keyboardView: SignKeyboardView = SignKeyboardView()
+    let screenSize: CGRect = UIScreen.main.bounds
     
     let tableview: UITableView = {
         let tv = UITableView()
@@ -99,18 +100,18 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
         tableview.dataSource = self
         tableview.register(NameCell.self, forCellReuseIdentifier: "cellId")
         view.addSubview(tableview)
-        
-        let keyboardView = SignKeyboardView()
-        keyboardView.delegate = self
-        
-        keyboardView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(keyboardView)
         NSLayoutConstraint.activate([
             tableview.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 75),
-            tableview.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -150),
+            tableview.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -screenSize.width),
             tableview.rightAnchor.constraint(equalTo: self.view.rightAnchor),
             tableview.leftAnchor.constraint(equalTo: self.view.leftAnchor)
         ])
+        
+        let keyboardView = SignKeyboardView()
+        keyboardView.delegate = self
+        keyboardView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(keyboardView)
+//        screenSize.width        
         NSLayoutConstraint.activate([
              keyboardView.topAnchor.constraint(equalTo: tableview.bottomAnchor),
              keyboardView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
