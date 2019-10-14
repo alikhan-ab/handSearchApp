@@ -58,14 +58,13 @@ class ViewController: UIViewController {
         label.textColor = .black
         label.textAlignment = .center
         label.numberOfLines = 4
-
         label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = .clear
         return label
     }()
     var signNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Sign Recognition"
+        label.text = "Search by Hand Shape"
         label.textColor = .black
         label.textAlignment = .center
         label.numberOfLines = 4
@@ -73,16 +72,32 @@ class ViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    // Favourites:
+    var starImageView: UIImageView = {
+        let view = UIImageView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.image = UIImage(named: "star")
+        return view
+    }()
+ 
+    //bacground animation:
+    let gradient = CAGradientLayer()
+    var gradientSet = [[CGColor]]()
+    var currentGradient: Int = 0
     
-
+    let gradientOne = UIColor(red: 48/255, green: 62/255, blue: 103/255, alpha: 1).cgColor
+    let gradientTwo = UIColor(red: 244/255, green: 88/255, blue: 53/255, alpha: 1).cgColor
+    let gradientThree = UIColor(red: 196/255, green: 70/255, blue: 107/255, alpha: 1).cgColor
+    
     //MARK:- Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUpView()
-        gestureRecognizer()
+//        setUpView()
+//        gestureRecognizer()
     }
     
     func gestureRecognizer(){
+        
         let gesture1 = UITapGestureRecognizer(target: self, action: #selector(wordsAction(tapGestureRecognizer:)))
         dictionaryWordsImageView.addGestureRecognizer(gesture1)
         dictionaryWordsImageView.isUserInteractionEnabled = true
@@ -103,11 +118,14 @@ class ViewController: UIViewController {
     
     func setUpView(){
         self.view.backgroundColor = .yellow
-        [dictionaryWordsImageView, dictionaryWordsNameLabel, categoryImageView, categoryNameLabel, fingerSpellImageView, signImageView, fingerSpellNameLabel, signNameLabel].forEach(self.view.addSubview)
-                
+        [dictionaryWordsImageView, dictionaryWordsNameLabel, categoryImageView, categoryNameLabel, fingerSpellImageView, signImageView, fingerSpellNameLabel, signNameLabel, starImageView].forEach(self.view.addSubview)
+        let dist_width = self.view.bounds.width/4
+        let distance = self.view.bounds.height/8//self.view.frame.minY + dictionaryWordsImageView.frame.minY
+
         // dictionary:
-        dictionaryWordsImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -self.view.bounds.width/4).isActive = true
-        dictionaryWordsImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -self.view.bounds.height/4).isActive = true
+        dictionaryWordsImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -dist_width).isActive = true
+//        dictionaryWordsImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -dist_width).isActive = true
+        dictionaryWordsImageView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: distance).isActive = true
         dictionaryWordsImageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         dictionaryWordsImageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
         
@@ -117,7 +135,7 @@ class ViewController: UIViewController {
         dictionaryWordsNameLabel.widthAnchor.constraint(equalTo: dictionaryWordsImageView.widthAnchor).isActive = true
         
         //categories:
-        categoryImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: self.view.bounds.width/4).isActive = true
+        categoryImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: dist_width).isActive = true
         categoryImageView.centerYAnchor.constraint(equalTo: dictionaryWordsImageView.centerYAnchor).isActive = true
         categoryImageView.heightAnchor.constraint(equalTo: dictionaryWordsImageView.heightAnchor).isActive = true
         categoryImageView.widthAnchor.constraint(equalTo: dictionaryWordsImageView.widthAnchor).isActive = true
@@ -129,12 +147,12 @@ class ViewController: UIViewController {
         
 //        let const = self.view.topAnchor
 //        dictionaryWordsImageView.topAnchor
-        let distance = self.view.bounds.height/8//self.view.frame.minY + dictionaryWordsImageView.frame.minY
         
         //fingerSpelling:
         fingerSpellImageView.centerXAnchor.constraint(equalTo: dictionaryWordsImageView.centerXAnchor).isActive = true
-        fingerSpellImageView.topAnchor.constraint(equalTo: dictionaryWordsNameLabel.bottomAnchor, constant: distance).isActive = true
+        fingerSpellImageView.topAnchor.constraint(equalTo: dictionaryWordsNameLabel.bottomAnchor, constant: distance*0.8).isActive = true
 //        fingerSpellImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: self.view.bounds.height/4).isActive = true
+
         fingerSpellImageView.heightAnchor.constraint(equalTo: dictionaryWordsImageView.heightAnchor).isActive = true
         fingerSpellImageView.widthAnchor.constraint(equalTo: dictionaryWordsImageView.widthAnchor).isActive = true
         
@@ -154,6 +172,14 @@ class ViewController: UIViewController {
         signNameLabel.heightAnchor.constraint(equalToConstant: 60).isActive = true
         signNameLabel.widthAnchor.constraint(equalTo: signImageView.widthAnchor).isActive = true
         
+        // favourites:
+        starImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        starImageView.topAnchor.constraint(equalTo: signNameLabel.bottomAnchor, constant: distance*0.6).isActive = true
+//        starImageView.centerYAnchor.constraint(equalTo: fingerSpellImageView.centerYAnchor).isActive = true
+        starImageView.heightAnchor.constraint(equalTo: dictionaryWordsImageView.heightAnchor).isActive = true
+        starImageView.widthAnchor.constraint(equalTo: dictionaryWordsImageView.widthAnchor).isActive = true
+        
+
         
         [dictionaryWordsImageView, categoryImageView, fingerSpellImageView, signImageView].forEach { (view) in
             view.layer.masksToBounds = true
@@ -162,6 +188,9 @@ class ViewController: UIViewController {
             view.layer.cornerRadius = 35
             imageViews(imageView: view)
         }
+        
+        
+        
         
     }
     
@@ -197,5 +226,50 @@ class ViewController: UIViewController {
         }
     }
     
+    //Background Animation:
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        gradientSet.append([gradientOne, gradientTwo])
+        gradientSet.append([gradientTwo, gradientThree])
+        gradientSet.append([gradientThree, gradientOne])
+        
+        
+        gradient.frame = self.view.bounds
+        gradient.colors = gradientSet[currentGradient]
+        gradient.startPoint = CGPoint(x:0, y:0)
+        gradient.endPoint = CGPoint(x:1, y:1)
+        gradient.drawsAsynchronously = true
+        self.view.layer.addSublayer(gradient)
+        
+        animateGradient()
+        setUpView()
+        gestureRecognizer()
+        
+    }
+    
+    func animateGradient() {
+        if currentGradient < gradientSet.count - 1 {
+            currentGradient += 1
+        } else {
+            currentGradient = 0
+        }
+        
+        let gradientChangeAnimation = CABasicAnimation(keyPath: "colors")
+        gradientChangeAnimation.duration = 5.0
+        gradientChangeAnimation.toValue = gradientSet[currentGradient]
+        gradientChangeAnimation.fillMode = CAMediaTimingFillMode.forwards
+        gradientChangeAnimation.isRemovedOnCompletion = false
+        gradient.add(gradientChangeAnimation, forKey: "colorChange")
+    }
+    
 }
-
+//MARK: - Animation
+extension ViewController: CAAnimationDelegate {
+    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        if flag {
+            gradient.colors = gradientSet[currentGradient]
+            animateGradient()
+        }
+    }
+}

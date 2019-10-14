@@ -246,7 +246,7 @@ class SignKeyboardView: UIView {
   //MARK: - Methods:
     override init (frame : CGRect) {
         super.init(frame : frame)
-        self.backgroundColor = .blue
+        self.backgroundColor = .white
         setupView()
     }
     required init?(coder: NSCoder) {
