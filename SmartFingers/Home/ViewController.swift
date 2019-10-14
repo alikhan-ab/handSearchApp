@@ -79,6 +79,13 @@ class ViewController: UIViewController {
         view.image = UIImage(named: "star")
         return view
     }()
+    var catImageView: UIImageView = {
+        let view = UIImageView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.image = UIImage(named: "ginger-cat-productive-work")
+        view.contentMode = .scaleAspectFit
+        return view
+    }()
  
     //bacground animation:
     let gradient = CAGradientLayer()
@@ -122,7 +129,7 @@ class ViewController: UIViewController {
     
     func setUpView(){
         self.view.backgroundColor = .yellow
-        [dictionaryWordsImageView, dictionaryWordsNameLabel, categoryImageView, categoryNameLabel, fingerSpellImageView, signImageView, fingerSpellNameLabel, signNameLabel, starImageView].forEach(self.view.addSubview)
+        [dictionaryWordsImageView, dictionaryWordsNameLabel, categoryImageView, categoryNameLabel, fingerSpellImageView, signImageView, fingerSpellNameLabel, signNameLabel, starImageView, catImageView].forEach(self.view.addSubview)
         let dist_width = self.view.bounds.width/4
         let distance = self.view.bounds.height/8//self.view.frame.minY + dictionaryWordsImageView.frame.minY
 
@@ -177,13 +184,19 @@ class ViewController: UIViewController {
         signNameLabel.widthAnchor.constraint(equalTo: signImageView.widthAnchor).isActive = true
         
         // favourites:
-        starImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+//        starImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant).isActive = true
+        starImageView.centerXAnchor.constraint(equalTo: fingerSpellImageView.centerXAnchor).isActive = true
         starImageView.topAnchor.constraint(equalTo: signNameLabel.bottomAnchor, constant: distance*0.6).isActive = true
 //        starImageView.centerYAnchor.constraint(equalTo: fingerSpellImageView.centerYAnchor).isActive = true
-        starImageView.heightAnchor.constraint(equalTo: dictionaryWordsImageView.heightAnchor).isActive = true
-        starImageView.widthAnchor.constraint(equalTo: dictionaryWordsImageView.widthAnchor).isActive = true
+        starImageView.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        starImageView.widthAnchor.constraint(equalTo: starImageView.heightAnchor).isActive = true
         
-
+        
+        catImageView.centerXAnchor.constraint(equalTo: signNameLabel.centerXAnchor).isActive = true
+//        catImageView.topAnchor.constraint(equalTo: signNameLabel.bottomAnchor, constant: distance*0.6).isActive = true
+        catImageView.centerYAnchor.constraint(equalTo: starImageView.centerYAnchor).isActive = true
+        catImageView.heightAnchor.constraint(equalToConstant: 150).isActive = true
+        catImageView.widthAnchor.constraint(equalToConstant: 150).isActive = true
         
         [dictionaryWordsImageView, categoryImageView, fingerSpellImageView, signImageView].forEach { (view) in
             view.layer.masksToBounds = true
