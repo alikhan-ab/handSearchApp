@@ -114,6 +114,10 @@ class ViewController: UIViewController {
         signImageView.addGestureRecognizer(gesture4)
         signImageView.isUserInteractionEnabled = true
         
+        let gesture5 = UITapGestureRecognizer(target: self, action: #selector(wordsAction(tapGestureRecognizer:)))
+        starImageView.addGestureRecognizer(gesture5)
+        starImageView.isUserInteractionEnabled = true
+        
     }
     
     func setUpView(){
@@ -224,6 +228,11 @@ class ViewController: UIViewController {
             let signVC = SignViewController()
             self.present(signVC, animated: true, completion: nil)
         }
+        if tappedImage == starImageView {
+            let signVC = FavouriteViewController()
+            self.present(signVC, animated: true, completion: nil)
+        }
+        
     }
     
     //Background Animation:

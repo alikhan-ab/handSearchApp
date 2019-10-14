@@ -48,7 +48,14 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
                 self.keyboardView.backgroundColor = .blue
                 
             }, completion: nil)
+            
+            UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseIn, animations: {
+                //Frame Option 1:
+//                self.tableview.frame = CGRect(x: self.tableview.frame.origin.x, y: self.tableview.frame.origin.y, width: self.tableview.frame.width, height: self.screenSize.height-75-self.screenSize.width)
+                self.tableview.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -self.screenSize.width)
+            }, completion: nil)
             signPressed = true
+
             
         } else {
             UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseIn, animations: {
@@ -59,7 +66,17 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
                 self.keyboardView.backgroundColor = .blue
                 
             }, completion: nil)
+            
+            UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseIn, animations: {
+                //Frame Option 1:
+//                self.tableview.frame = CGRect(x: self.tableview.frame.origin.x, y: self.tableview.frame.origin.y, width: self.tableview.frame.width, height: self.screenSize.height-75)
+                self.tableview.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+
+            }, completion: nil)
+            
             signPressed = false
+            
+            
         }
     }
     
@@ -130,13 +147,14 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
         view.addSubview(tableview)
         NSLayoutConstraint.activate([
             tableview.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 75),
-            tableview.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -screenSize.width),
+            tableview.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),//, constant: -screenSize.width),
             tableview.rightAnchor.constraint(equalTo: self.view.rightAnchor),
             tableview.leftAnchor.constraint(equalTo: self.view.leftAnchor)
             ])
         
         keyboardView.delegate = self
         keyboardView.translatesAutoresizingMaskIntoConstraints = false
+        keyboardView.backgroundColor = .white
         view.addSubview(keyboardView)
         NSLayoutConstraint.activate([
             //             keyboardView.topAnchor.constraint(equalTo: tableview.bottomAnchor),

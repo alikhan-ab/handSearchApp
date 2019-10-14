@@ -20,6 +20,8 @@ class SignWordViewController: UIViewController, UINavigationBarDelegate {
     var player = AVPlayer()
     var playerLayer = AVPlayerLayer()
     
+    var starTapped = false
+    
     var word: Word?
     
     var descriptionTextLabel: UILabel = {
@@ -34,6 +36,12 @@ class SignWordViewController: UIViewController, UINavigationBarDelegate {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = .red
         return label
+    }()
+    
+    var addToFavourites: UIImageView = {
+        let view = UIImageView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     override func viewDidLoad() {
@@ -91,14 +99,48 @@ class SignWordViewController: UIViewController, UINavigationBarDelegate {
     
     func setUpView(){
         self.view.backgroundColor = .white
-        [descriptionTextLabel].forEach(self.view.addSubview)
+        
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(starTapped(tapGestureRecognizer:)))
+        addToFavourites.addGestureRecognizer(gesture)
+        addToFavourites.isUserInteractionEnabled = true
+        
+        
+        setImageFavourite()
+        
+        [descriptionTextLabel, addToFavourites].forEach(self.view.addSubview)
         descriptionTextLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         descriptionTextLabel.centerYAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -100).isActive = true
         descriptionTextLabel.heightAnchor.constraint(equalToConstant: 80).isActive = true
         descriptionTextLabel.widthAnchor.constraint(equalTo: self.view.widthAnchor, constant: -40).isActive = true
         
         
+        addToFavourites.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -self.view.frame.width/4).isActive = true
+        addToFavourites.bottomAnchor.constraint(equalTo: descriptionTextLabel.topAnchor, constant: -65).isActive = true
+        //        addToFavourites.centerYAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -100).isActive = true
+        addToFavourites.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        addToFavourites.widthAnchor.constraint(equalToConstant: 80).isActive = true
         
+        
+    }
+    
+    
+    func setImageFavourite() {
+        if starTapped {
+            addToFavourites.image = UIImage(named: "star_unfilled")
+            starTapped = false
+        } else {
+            addToFavourites.image = UIImage(named: "star_filled")
+            starTapped = true
+        }
+        
+    }
+    
+    @objc func starTapped(tapGestureRecognizer: UITapGestureRecognizer){
+        let tappedImage = tapGestureRecognizer.view as! UIImageView
+        if tappedImage == addToFavourites {
+            setImageFavourite()
+        }
     }
     
     
