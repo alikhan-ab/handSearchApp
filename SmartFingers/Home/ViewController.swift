@@ -238,7 +238,7 @@ class ViewController: UIViewController {
             self.present(fingerSpellingVC, animated: true, completion: nil)
         }
         if tappedImage == signImageView {
-            let signVC = SignViewController()
+            let signVC = HandShapeVC()//SignViewController()
             self.present(signVC, animated: true, completion: nil)
         }
         if tappedImage == starImageView {
