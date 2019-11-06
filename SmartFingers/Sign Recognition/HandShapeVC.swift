@@ -34,11 +34,11 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate {
     }()
     
     fileprivate let data = [
-        CustomData(title: "The Islands!", url: "maxcodes.io/enroll", backgroundImage: #imageLiteral(resourceName: "sample1")),
-        CustomData(title: "Subscribe to maxcodes boiiii!", url: "maxcodes.io/courses", backgroundImage: #imageLiteral(resourceName: "sample1")),
-        CustomData(title: "StoreKit Course!", url: "maxcodes.io/courses", backgroundImage: #imageLiteral(resourceName: "sample3")),
-        CustomData(title: "Collection Views!", url: "maxcodes.io/courses", backgroundImage: #imageLiteral(resourceName: "sample1")),
-        CustomData(title: "MapKit!", url: "maxcodes.io/courses", backgroundImage: #imageLiteral(resourceName: "sample1")),
+        CustomData(title: "The Islands!", url: "wiki", backgroundImage: #imageLiteral(resourceName: "sample1")),
+        CustomData(title: "Sample", url: "wiki", backgroundImage: #imageLiteral(resourceName: "sample1")),
+        CustomData(title: "Sample", url: "wiki", backgroundImage: #imageLiteral(resourceName: "sample3")),
+        CustomData(title: "Sample Views!", url: "wiki", backgroundImage: #imageLiteral(resourceName: "sample1")),
+        CustomData(title: "Sample", url: "wiki", backgroundImage: #imageLiteral(resourceName: "sample1")),
     ]
     
     let tableview: UITableView = {
@@ -59,15 +59,28 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate {
     @objc func back(_ sender: UIButton){
         self.dismiss(animated: true, completion: nil)
     }
+    
+    @objc func changeCamera(_ sender: UIButton){
+        print("Change Camera!")
+    }
         
     func setUpViews() {
         
         //NavigationBar:
         navbar.backgroundColor = UIColor.white
         navbar.delegate = self
-        navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(back))
-        navItem.rightBarButtonItem = UIBarButtonItem(title: "Change camera", style: .plain, target: self, action: nil)//#selector(signToLetter))
+//        navbar.t
         navItem.title = "HandShape Recognition"
+        navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(back))
+        let cameraItem = UIBarButtonItem(image: #imageLiteral(resourceName: "flip2"), style: .plain, target: self, action: #selector(changeCamera))
+//        navItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "flip2"), style: .plain, target: self, action: #selector(changeCamera))
+        //UIBarButtonItem(title: "Change camera", style: .plain, target: self, action: #selector(changeCamera))//#selector(signToLetter))
+//        UIBarButtonItem(image: UIImage(named: "camera_flip"), style: .plain, target: self, action: #selector(changeCamera))
+        
+        let negativeSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        negativeSpacer.width = 50
+
+        navItem.rightBarButtonItems = [negativeSpacer, cameraItem]
         
         navbar.items = [navItem]
         view.addSubview(navbar)
@@ -94,10 +107,10 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate {
         collectionView.backgroundColor = .white
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.topAnchor.constraint(equalTo: cameraView.bottomAnchor, constant: 10).isActive = true
-        collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40).isActive = true
-        collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
-        collectionView.heightAnchor.constraint(equalToConstant: view.frame.width/2).isActive = true
+        collectionView.topAnchor.constraint(equalTo: cameraView.bottomAnchor, constant: 0).isActive = true
+        collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15).isActive = true
+        collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15).isActive = true
+        collectionView.heightAnchor.constraint(equalToConstant: view.frame.width/3).isActive = true
         
         //TableView:
         tableview.delegate = self
@@ -122,7 +135,7 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate {
 // MARK: - UICollectionView Delegate
 extension HandShapeVC: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width/2.5, height: collectionView.frame.width/2)
+        return CGSize(width: collectionView.frame.width/2.5, height: collectionView.frame.width/3)
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return data.count
