@@ -20,6 +20,8 @@
 		9A2448492330F0C40048E249 /* Footballer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2448482330F0C40048E249 /* Footballer.swift */; };
 		9A33C13A23336C1F003BFBE7 /* SignWordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A33C13923336C1F003BFBE7 /* SignWordViewController.swift */; };
 		9A715E8B2354CC6800784AB0 /* FavouritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A715E8A2354CC6800784AB0 /* FavouritesViewController.swift */; };
+		9A75B23F237B6F4A001145D2 /* HandShapeVideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A75B23E237B6F4A001145D2 /* HandShapeVideoCell.swift */; };
+		9A75B241237B6F63001145D2 /* CameraVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A75B240237B6F63001145D2 /* CameraVC.swift */; };
 		9AA63C2723321E2900B34F41 /* ThirdDayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA63C2623321E2900B34F41 /* ThirdDayCell.swift */; };
 		C32708BB234357E40028940B /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C32708BA234357E40028940B /* Default-568h@2x.png */; };
 		C32708BE234358810028940B /* CategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32708BD234358810028940B /* CategoriesViewController.swift */; };
@@ -27,7 +29,6 @@
 		C32708C2234367840028940B /* SubcategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32708C1234367840028940B /* SubcategoriesViewController.swift */; };
 		C32708C52343778B0028940B /* FingerSpellingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32708C42343778B0028940B /* FingerSpellingViewController.swift */; };
 		C3CD866F233A2C5F00FBEC57 /* video.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 9A33C13B233373C8003BFBE7 /* video.mp4 */; };
-		C3DC71E12344D23F002F2F3D /* SignViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DC71E02344D23F002F2F3D /* SignViewController.swift */; };
 		DB5EBC07234AF31500E1A1DA /* Videos in Resources */ = {isa = PBXBuildFile; fileRef = DB5EBC06234AF31400E1A1DA /* Videos */; };
 		DB6C9DC32348C07700BE5F3E /* Category+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6C9DBD2348C07700BE5F3E /* Category+CoreDataClass.swift */; };
 		DB6C9DC42348C07700BE5F3E /* Category+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6C9DBE2348C07700BE5F3E /* Category+CoreDataProperties.swift */; };
@@ -58,13 +59,14 @@
 		9A33C13923336C1F003BFBE7 /* SignWordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignWordViewController.swift; sourceTree = "<group>"; };
 		9A33C13B233373C8003BFBE7 /* video.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = video.mp4; sourceTree = "<group>"; };
 		9A715E8A2354CC6800784AB0 /* FavouritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesViewController.swift; sourceTree = "<group>"; };
+		9A75B23E237B6F4A001145D2 /* HandShapeVideoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandShapeVideoCell.swift; sourceTree = "<group>"; };
+		9A75B240237B6F63001145D2 /* CameraVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraVC.swift; sourceTree = "<group>"; };
 		9AA63C2623321E2900B34F41 /* ThirdDayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdDayCell.swift; sourceTree = "<group>"; };
 		C32708BA234357E40028940B /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		C32708BD234358810028940B /* CategoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewController.swift; sourceTree = "<group>"; };
 		C32708BF23435B230028940B /* SectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionView.swift; sourceTree = "<group>"; };
 		C32708C1234367840028940B /* SubcategoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubcategoriesViewController.swift; sourceTree = "<group>"; };
 		C32708C42343778B0028940B /* FingerSpellingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FingerSpellingViewController.swift; sourceTree = "<group>"; };
-		C3DC71E02344D23F002F2F3D /* SignViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignViewController.swift; sourceTree = "<group>"; };
 		DB5EBC06234AF31400E1A1DA /* Videos */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Videos; sourceTree = "<group>"; };
 		DB6C9DBD2348C07700BE5F3E /* Category+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Category+CoreDataClass.swift"; sourceTree = "<group>"; };
 		DB6C9DBE2348C07700BE5F3E /* Category+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Category+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -186,8 +188,9 @@
 		C3DC71DF2344D219002F2F3D /* Sign Recognition */ = {
 			isa = PBXGroup;
 			children = (
-				C3DC71E02344D23F002F2F3D /* SignViewController.swift */,
+				9A75B240237B6F63001145D2 /* CameraVC.swift */,
 				9A179A952373621E003E33C9 /* HandShapeVC.swift */,
+				9A75B23E237B6F4A001145D2 /* HandShapeVideoCell.swift */,
 				9A179A97237369C3003E33C9 /* HandShapeImageCell.swift */,
 			);
 			path = "Sign Recognition";
@@ -299,6 +302,7 @@
 				9A33C13A23336C1F003BFBE7 /* SignWordViewController.swift in Sources */,
 				DB6C9DC42348C07700BE5F3E /* Category+CoreDataProperties.swift in Sources */,
 				DB6C9DCC2348C07F00BE5F3E /* WordJSON.swift in Sources */,
+				9A75B23F237B6F4A001145D2 /* HandShapeVideoCell.swift in Sources */,
 				19150E172320F42E00BF63DF /* SmartFingers.xcdatamodeld in Sources */,
 				C32708C2234367840028940B /* SubcategoriesViewController.swift in Sources */,
 				DB6C9DC32348C07700BE5F3E /* Category+CoreDataClass.swift in Sources */,
@@ -306,7 +310,7 @@
 				9A2448492330F0C40048E249 /* Footballer.swift in Sources */,
 				19D665A1232FB2FB00F60640 /* DictionaryByWordsVC.swift in Sources */,
 				19150E242320F57F00BF63DF /* Extensions.swift in Sources */,
-				C3DC71E12344D23F002F2F3D /* SignViewController.swift in Sources */,
+				9A75B241237B6F63001145D2 /* CameraVC.swift in Sources */,
 				DB6C9DC82348C07700BE5F3E /* Subcategory+CoreDataProperties.swift in Sources */,
 				9A179A98237369C3003E33C9 /* HandShapeImageCell.swift in Sources */,
 				9A179A962373621E003E33C9 /* HandShapeVC.swift in Sources */,

@@ -17,12 +17,12 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate {
     var navItem = UINavigationItem()
     let screenSize: CGRect = UIScreen.main.bounds
     
-    var cameraView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .darkGray
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+//    var cameraView: UIView = {
+//        let view = UIView()
+//        view.backgroundColor = .darkGray
+//        view.translatesAutoresizingMaskIntoConstraints = false
+//        return view
+//    }()
     
     fileprivate let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -61,7 +61,8 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate {
     }
     
     @objc func changeCamera(_ sender: UIButton){
-        print("Change Camera!")
+        print("Open camera!")
+        self.present(CameraVC(), animated: true, completion: nil)
     }
         
     func setUpViews() {
@@ -69,18 +70,18 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate {
         //NavigationBar:
         navbar.backgroundColor = UIColor.white
         navbar.delegate = self
-//        navbar.t
         navItem.title = "HandShape Recognition"
         navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(back))
-        let cameraItem = UIBarButtonItem(image: #imageLiteral(resourceName: "flip2"), style: .plain, target: self, action: #selector(changeCamera))
+        let cameraItem = UIBarButtonItem(title: "Camera", style: .plain, target: self, action: #selector(changeCamera))
 //        navItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "flip2"), style: .plain, target: self, action: #selector(changeCamera))
         //UIBarButtonItem(title: "Change camera", style: .plain, target: self, action: #selector(changeCamera))//#selector(signToLetter))
 //        UIBarButtonItem(image: UIImage(named: "camera_flip"), style: .plain, target: self, action: #selector(changeCamera))
         
-        let negativeSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-        negativeSpacer.width = 50
-
-        navItem.rightBarButtonItems = [negativeSpacer, cameraItem]
+//        let negativeSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+//        negativeSpacer.width = 50
+//
+//        navItem.rightBarButtonItems = [negativeSpacer, cameraItem]
+        navItem.rightBarButtonItem = cameraItem
         
         navbar.items = [navItem]
         view.addSubview(navbar)
@@ -93,21 +94,21 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate {
         self.view.frame = CGRect(x: 0, y: 75, width: UIScreen.main.bounds.width, height: (UIScreen.main.bounds.height - 75))
         
         //Camera:
-        view.addSubview(cameraView)
-        let cameraHeight = screenSize.height*0.4
-        NSLayoutConstraint.activate([
-            cameraView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 75),
-            cameraView.heightAnchor.constraint(equalToConstant: cameraHeight),
-            cameraView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
-            cameraView.leftAnchor.constraint(equalTo: self.view.leftAnchor)
-        ])
+//        view.addSubview(cameraView)
+//        let cameraHeight = screenSize.height*0.4
+//        NSLayoutConstraint.activate([
+//            cameraView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 75),
+//            cameraView.heightAnchor.constraint(equalToConstant: cameraHeight),
+//            cameraView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
+//            cameraView.leftAnchor.constraint(equalTo: self.view.leftAnchor)
+//        ])
         
         //CollectionView:
         view.addSubview(collectionView)
         collectionView.backgroundColor = .white
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.topAnchor.constraint(equalTo: cameraView.bottomAnchor, constant: 0).isActive = true
+        collectionView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 75).isActive = true
         collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15).isActive = true
         collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15).isActive = true
         collectionView.heightAnchor.constraint(equalToConstant: view.frame.width/3).isActive = true
@@ -115,7 +116,7 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate {
         //TableView:
         tableview.delegate = self
         tableview.dataSource = self
-        tableview.register(NameCell.self, forCellReuseIdentifier: "cellId")
+        tableview.register(HandShapeVideoCell.self, forCellReuseIdentifier: "cellId")
         view.addSubview(tableview)
         
         NSLayoutConstraint.activate([
@@ -128,12 +129,37 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate {
         
     }
     
+    func showActionSheet(controller: UIViewController, indexPath: IndexPath) {
+        let alert = UIAlertController(title: "Title", message: "\(indexPath.row)", preferredStyle: .actionSheet)
+//        alert.addAction(UIAlertAction(title: "Approve", style: .default, handler: { (_) in
+//            print("User click Approve button")
+//        }))
+        
+//        alert.addAction(UIAlertAction(title: "Edit", style: .default, handler: { (_) in
+//            print("User click Edit button")
+//        }))
+        
+        alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { (_) in
+            print("User click Delete button")
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: { (_) in
+            print("User click Dismiss button")
+        }))
+        
+        self.present(alert, animated: true, completion: {
+            print("completion block")
+        })
+    }
+    
     
     
 }
 
+
 // MARK: - UICollectionView Delegate
 extension HandShapeVC: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.width/2.5, height: collectionView.frame.width/3)
     }
@@ -146,6 +172,14 @@ extension HandShapeVC: UICollectionViewDelegateFlowLayout, UICollectionViewDataS
         cell.data = self.data[indexPath.item]
         return cell
     }
+    
+     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) else { return }
+        showActionSheet(controller: self, indexPath: indexPath)
+        
+//        performSegue(withIdentifier: "showDetail", sender: cell)
+    }
+    
 }
 
 // MARK: - UITableView Delegate
@@ -157,14 +191,14 @@ extension HandShapeVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // 2
-        let cell = tableview.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! NameCell
+        let cell = tableview.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! HandShapeVideoCell
         //        let candy: Footballer
         //        if filteredFootballer.isEmpty {
         //            candy = allPlayers[indexPath.row]
         //        } else {
         //            candy = filteredFootballer[indexPath.row]
         //        }
-        cell.dayLabel.text = "Sample video"
+        cell.nameLabel.text = "Sample video"
         return cell
     }
     
