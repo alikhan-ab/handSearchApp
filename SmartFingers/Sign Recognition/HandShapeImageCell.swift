@@ -16,11 +16,17 @@ struct CustomData {
 }
 
 class HandShapeImageCell: UICollectionViewCell {
+//    var data: CustomData? {
+//        didSet {
+//            guard let data = data else { return }
+//            bg.image = data.backgroundImage
+//        }
+//    }
     
-    var data: CustomData? {
+    var data: UIImage? {
         didSet {
             guard let data = data else { return }
-            bg.image = data.backgroundImage
+            bg.image = data
         }
     }
     

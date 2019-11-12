@@ -11,14 +11,6 @@ import UIKit
 
 class HandShapeVideoCell: UITableViewCell {
     
-    let cellView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.red
-        view.layer.cornerRadius = 10
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
     let nameLabel: UILabel = {
         let label = UILabel()
         label.text = "Day 1"
@@ -32,7 +24,8 @@ class HandShapeVideoCell: UITableViewCell {
         let view = UIImageView()
         view.backgroundColor = UIColor.red
         view.layer.cornerRadius = 10
-        view.image = #imageLiteral(resourceName: "sample3")
+        view.image = #imageLiteral(resourceName: "sample1")
+        view.contentMode = .scaleToFill
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -60,16 +53,16 @@ class HandShapeVideoCell: UITableViewCell {
         //            cellView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         //            ])
         nameLabel.heightAnchor.constraint(equalToConstant: 200).isActive = true
-        //        dayLabel.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        nameLabel.widthAnchor.constraint(equalToConstant: 150).isActive = true
         nameLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         nameLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 20).isActive = true
-        nameLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -100).isActive = true
+//        nameLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -100).isActive = true
         
         videoImageView.heightAnchor.constraint(equalToConstant: 150).isActive = true
-        //        dayLabel.widthAnchor.constraint(equalToConstant: 200).isActive = true
+//        videoImageView.widthAnchor.constraint(equalToConstant: 200).isActive = true
         videoImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         videoImageView.leftAnchor.constraint(equalTo: nameLabel.rightAnchor, constant: 50).isActive = true
-        videoImageView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -20).isActive = true
+        videoImageView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -15).isActive = true
         
     }
     

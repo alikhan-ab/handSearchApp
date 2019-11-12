@@ -188,8 +188,8 @@
 		C3DC71DF2344D219002F2F3D /* Sign Recognition */ = {
 			isa = PBXGroup;
 			children = (
-				9A75B240237B6F63001145D2 /* CameraVC.swift */,
 				9A179A952373621E003E33C9 /* HandShapeVC.swift */,
+				9A75B240237B6F63001145D2 /* CameraVC.swift */,
 				9A75B23E237B6F4A001145D2 /* HandShapeVideoCell.swift */,
 				9A179A97237369C3003E33C9 /* HandShapeImageCell.swift */,
 			);

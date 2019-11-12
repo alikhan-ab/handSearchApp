@@ -33,13 +33,15 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate {
         return cv
     }()
     
-    fileprivate let data = [
-        CustomData(title: "The Islands!", url: "wiki", backgroundImage: #imageLiteral(resourceName: "sample1")),
-        CustomData(title: "Sample", url: "wiki", backgroundImage: #imageLiteral(resourceName: "sample1")),
-        CustomData(title: "Sample", url: "wiki", backgroundImage: #imageLiteral(resourceName: "sample3")),
-        CustomData(title: "Sample Views!", url: "wiki", backgroundImage: #imageLiteral(resourceName: "sample1")),
-        CustomData(title: "Sample", url: "wiki", backgroundImage: #imageLiteral(resourceName: "sample1")),
-    ]
+//    fileprivate let data = [
+//        CustomData(title: "The Islands!", url: "wiki", backgroundImage: #imageLiteral(resourceName: "sample1")),
+//        CustomData(title: "Sample", url: "wiki", backgroundImage: #imageLiteral(resourceName: "sample1")),
+//        CustomData(title: "Sample", url: "wiki", backgroundImage: #imageLiteral(resourceName: "sample3")),
+//        CustomData(title: "Sample Views!", url: "wiki", backgroundImage: #imageLiteral(resourceName: "sample1")),
+//        CustomData(title: "Sample", url: "wiki", backgroundImage: #imageLiteral(resourceName: "sample1")),
+//    ]
+    
+    var sampleData = [#imageLiteral(resourceName: "sample1"), #imageLiteral(resourceName: "sample1"), #imageLiteral(resourceName: "sample3"), #imageLiteral(resourceName: "sample1"), #imageLiteral(resourceName: "sample3")]
     
     let tableview: UITableView = {
         let tv = UITableView()
@@ -65,6 +67,7 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate {
         self.present(CameraVC(), animated: true, completion: nil)
     }
         
+
     func setUpViews() {
         
         //NavigationBar:
@@ -130,17 +133,21 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate {
     }
     
     func showActionSheet(controller: UIViewController, indexPath: IndexPath) {
-        let alert = UIAlertController(title: "Title", message: "\(indexPath.row)", preferredStyle: .actionSheet)
-//        alert.addAction(UIAlertAction(title: "Approve", style: .default, handler: { (_) in
-//            print("User click Approve button")
-//        }))
         
-//        alert.addAction(UIAlertAction(title: "Edit", style: .default, handler: { (_) in
-//            print("User click Edit button")
-//        }))
+        let alert = UIAlertController(title: "Image #\(indexPath.row)", message: "What to do?", preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Add image", style: .default, handler: { (_) in
+            print("Adding the image!")
+            self.sampleData.insert(#imageLiteral(resourceName: "sample3"), at: indexPath.row)
+            self.collectionView.insertItems(at: [indexPath])
+        }))
         
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { (_) in
             print("User click Delete button")
+//            collectionView.delegate?.collectionView!(collectionView, performAction: #selector(onPan(_:)), forItemAt: indexPath, withSender: nil)
+
+            self.sampleData.remove(at: indexPath.row)
+            self.collectionView.deleteItems(at: [indexPath])
+            
         }))
         
         alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: { (_) in
@@ -164,12 +171,12 @@ extension HandShapeVC: UICollectionViewDelegateFlowLayout, UICollectionViewDataS
         return CGSize(width: collectionView.frame.width/2.5, height: collectionView.frame.width/3)
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return data.count
+        return sampleData.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! HandShapeImageCell
-        cell.data = self.data[indexPath.item]
+        cell.data = self.sampleData[indexPath.item]
         return cell
     }
     
@@ -180,13 +187,18 @@ extension HandShapeVC: UICollectionViewDelegateFlowLayout, UICollectionViewDataS
 //        performSegue(withIdentifier: "showDetail", sender: cell)
     }
     
+//    func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
+//      sampleData.remove(at: indexPath.row)
+//      collectionView.deleteItems(at: [indexPath])
+//    }
+    
 }
 
 // MARK: - UITableView Delegate
 extension HandShapeVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 15//allPlayers.count
+        return 10//allPlayers.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -198,7 +210,7 @@ extension HandShapeVC: UITableViewDataSource, UITableViewDelegate {
         //        } else {
         //            candy = filteredFootballer[indexPath.row]
         //        }
-        cell.nameLabel.text = "Sample video"
+        cell.nameLabel.text = "Sample video #\(indexPath.row)"
         return cell
     }
     
@@ -211,7 +223,7 @@ extension HandShapeVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 30
+        return 60
     }
     
 }
