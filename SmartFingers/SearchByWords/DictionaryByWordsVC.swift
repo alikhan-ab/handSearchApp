@@ -14,6 +14,23 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
     
     //MARK:- Variables
     let searchController = UISearchController(searchResultsController: nil)
+
+    
+    private let persistentContainer = NSPersistentContainer(name: "SmartFingers")
+    lazy var fetchedResultsController: NSFetchedResultsController<Word> = {
+        
+        let fetchRequest: NSFetchRequest<Word> = Word.fetchRequest()
+        
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "translation", ascending: true)]
+        
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        fetchedResultsController.delegate = self
+        
+        return fetchedResultsController
+    }()
+    
+    
     
     var navbar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 75))
     var navItem = UINavigationItem()
@@ -110,14 +127,27 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
             print("Could not fetch. \(error), \(error.userInfo)")
         }
     }
-
     
-
-
+   
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadWords()
+        
+        persistentContainer.loadPersistentStores { (NSPersistentStoreDescription, error) in
+            if let error = error {
+                print("Unable to Load Persistent Store")
+                print("\(error), \(error.localizedDescription)")
+            } else {
+                do {
+                    try self.fetchedResultsController.performFetch()
+                } catch {
+                    let error = error as NSError
+                    print("\(error), \(error.localizedDescription)")
+                }
+            }
+        }
+        
+        
         setupNavBar()
         setupTableView()
         self.hideKeyboardWhenTappedAround()
@@ -153,29 +183,24 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
     func searchBar(_ searchBar: UISearchBar, textDidChange textSearched: String) {
         //your code here....
         print("SEARCHIng...")
-//        filteredData = coredataData.filter { footballer in
-//            let isMatchingSearchText = footballer.lowercased().contains(textSearched.lowercased())// || textSearched.lowercased().count == 0
-//            //            print(isMatchingSearchText)
-//            if !isMatchingSearchText {
-//                filteredData = ["none"]
-//                tableview.reloadData()
-//            }
-//            return isMatchingSearchText
-//        }
-//        
-        
-        filteredWordsList = wordsList.filter { footballer in
-            let isMatchingSearchText = footballer.translation!.lowercased().contains(textSearched.lowercased())// || textSearched.lowercased().count == 0
-            //            print(isMatchingSearchText)
-            if !isMatchingSearchText {
-                filteredWordsList = [Word]()
-                tableview.reloadData()
-            }
-            return isMatchingSearchText
+    
+        var predicate: NSPredicate?
+        if textSearched.count > 0 {
+            predicate = NSPredicate(format: "(translation contains[cd] %@)", textSearched)
+        } else {
+            predicate = nil
         }
         
+        fetchedResultsController.fetchRequest.predicate = predicate
         
-        tableview.reloadData()
+        do {
+            try fetchedResultsController.performFetch()
+            tableview.reloadData()
+        } catch {
+            let error = error as NSError
+            print("\(error), \(error.localizedDescription)")
+        }
+
     }
     
     func didPressButton(button: LetterButton) {
@@ -217,7 +242,7 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
 extension DictionaryByWordsVC: UISearchBarDelegate {
     
 }
-// MARK: - UITableView Delegate 
+// MARK: - UITableView Delegate
 extension DictionaryByWordsVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -235,12 +260,7 @@ extension DictionaryByWordsVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // 2
         let cell = tableview.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! NameCell
-        let word: Word
-        if filteredWordsList.isEmpty {
-            word = wordsList[indexPath.row]
-        } else {
-            word = filteredWordsList[indexPath.row]
-        }
+        let word = fetchedResultsController.object(at: indexPath)
         cell.dayLabel.text = word.translation
         return cell
     }
@@ -248,14 +268,8 @@ extension DictionaryByWordsVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath.row)
         let destination = SignWordViewController()
-        let word: Word
-        if filteredWordsList.isEmpty {
-            word = wordsList[indexPath.row]
-        } else {
-            word = filteredWordsList[indexPath.row]
-        }
-//        destination.navItem.title = name
-        destination.word = word  //tableView.cellForRow(at: indexPath)?.textLabel!.text
+        let word = fetchedResultsController.object(at:indexPath)
+        destination.word = word
         self.present(destination, animated: true, completion: nil)
     }
     
@@ -264,4 +278,4 @@ extension DictionaryByWordsVC: UITableViewDataSource, UITableViewDelegate {
     }
     
 }
-
+extension DictionaryByWordsVC: NSFetchedResultsControllerDelegate {}
