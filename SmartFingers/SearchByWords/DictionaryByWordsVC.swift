@@ -247,14 +247,8 @@ extension DictionaryByWordsVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if filteredWordsList.count > 0 {
-//            if filteredData[0] == "none" {
-//                return 0
-//            }
-            return filteredWordsList.count
-        }
-        
-        return wordsList.count
+        guard let words = fetchedResultsController.fetchedObjects else {return 0}
+        return words.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
