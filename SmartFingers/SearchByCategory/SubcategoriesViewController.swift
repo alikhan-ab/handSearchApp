@@ -14,7 +14,7 @@ class SubcategoriesViewController: UIViewController, UINavigationBarDelegate {
     
     var tableView   : UITableView!
     let navbar      = UINavigationBar(frame: CGRect(x: 0, y: 25, width: UIScreen.main.bounds.width, height: 75))
-    var dataExample = ["Colours", "Measurements", "Emotions","Characteristics","Numbers","General: Time"]
+//    var dataExample = ["Colours", "Measurements", "Emotions","Characteristics","Numbers","General: Time"]
     var navItem = UINavigationItem()
     
     var subcategory: String?

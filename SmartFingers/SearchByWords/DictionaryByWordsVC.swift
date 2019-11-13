@@ -8,13 +8,12 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDelegate {
     
     //MARK:- Variables
-    var allWords = [Footballer]()
     let searchController = UISearchController(searchResultsController: nil)
-    var filteredFootballer = [Footballer]()
     
     var navbar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 75))
     var navItem = UINavigationItem()
@@ -23,7 +22,12 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
     var signPressed = false
     let screenSize: CGRect = UIScreen.main.bounds
     
+    var coredataData = [String]()
+    var filteredData = [String]()
     
+    var wordsList = [Word]()
+    var filteredWordsList = [Word]()
+
     let tableview: UITableView = {
         let tv = UITableView()
         tv.backgroundColor = UIColor.white
@@ -80,12 +84,40 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
         }
     }
     
+    //Load the data:
+    func loadWords() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Word")
+        let sortDescriptor = NSSortDescriptor(key: "translation", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        do {
+            let words = try managedContext.fetch(fetchRequest)
+            
+            for word in words {
+                guard let wordName = word.value(forKey: "translation") as? String else {
+                    fatalError("Couldn't get a word translation")
+                }
+                wordsList.append(word as! Word)
+                coredataData.append(wordName)
+            }
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+    }
+
     
 
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadWords()
         setupNavBar()
         setupTableView()
         self.hideKeyboardWhenTappedAround()
@@ -121,15 +153,28 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
     func searchBar(_ searchBar: UISearchBar, textDidChange textSearched: String) {
         //your code here....
         print("SEARCHIng...")
-        filteredFootballer = allPlayers.filter { footballer in
-            let isMatchingSearchText = footballer.name.lowercased().contains(textSearched.lowercased())// || textSearched.lowercased().count == 0
+//        filteredData = coredataData.filter { footballer in
+//            let isMatchingSearchText = footballer.lowercased().contains(textSearched.lowercased())// || textSearched.lowercased().count == 0
+//            //            print(isMatchingSearchText)
+//            if !isMatchingSearchText {
+//                filteredData = ["none"]
+//                tableview.reloadData()
+//            }
+//            return isMatchingSearchText
+//        }
+//        
+        
+        filteredWordsList = wordsList.filter { footballer in
+            let isMatchingSearchText = footballer.translation!.lowercased().contains(textSearched.lowercased())// || textSearched.lowercased().count == 0
             //            print(isMatchingSearchText)
             if !isMatchingSearchText {
-                filteredFootballer = [Footballer(name: "none", league: "")]
+                filteredWordsList = [Word]()
                 tableview.reloadData()
             }
             return isMatchingSearchText
         }
+        
+        
         tableview.reloadData()
     }
     
@@ -176,38 +221,41 @@ extension DictionaryByWordsVC: UISearchBarDelegate {
 extension DictionaryByWordsVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if filteredFootballer.count > 0 {
-            if filteredFootballer[0].name == "none" {
-                return 0
-            }
-            return filteredFootballer.count
+        
+        if filteredWordsList.count > 0 {
+//            if filteredData[0] == "none" {
+//                return 0
+//            }
+            return filteredWordsList.count
         }
-        return allPlayers.count
+        
+        return wordsList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // 2
         let cell = tableview.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! NameCell
-        let candy: Footballer
-        if filteredFootballer.isEmpty {
-            candy = allPlayers[indexPath.row]
+        let word: Word
+        if filteredWordsList.isEmpty {
+            word = wordsList[indexPath.row]
         } else {
-            candy = filteredFootballer[indexPath.row]
+            word = filteredWordsList[indexPath.row]
         }
-        cell.dayLabel.text = candy.name
+        cell.dayLabel.text = word.translation
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath.row)
         let destination = SignWordViewController()
-        let name: String
-        if filteredFootballer.isEmpty {
-            name = allPlayers[indexPath.row].name
+        let word: Word
+        if filteredWordsList.isEmpty {
+            word = wordsList[indexPath.row]
         } else {
-            name = filteredFootballer[indexPath.row].name
+            word = filteredWordsList[indexPath.row]
         }
-        destination.navItem.title = name //tableView.cellForRow(at: indexPath)?.textLabel!.text
+//        destination.navItem.title = name
+        destination.word = word  //tableView.cellForRow(at: indexPath)?.textLabel!.text
         self.present(destination, animated: true, completion: nil)
     }
     

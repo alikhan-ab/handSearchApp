@@ -17,7 +17,6 @@
 		9A0CB09A234F1D6600A756FE /* SignKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0CB099234F1D6600A756FE /* SignKeyboardView.swift */; };
 		9A179A962373621E003E33C9 /* HandShapeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A179A952373621E003E33C9 /* HandShapeVC.swift */; };
 		9A179A98237369C3003E33C9 /* HandShapeImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A179A97237369C3003E33C9 /* HandShapeImageCell.swift */; };
-		9A2448492330F0C40048E249 /* Footballer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2448482330F0C40048E249 /* Footballer.swift */; };
 		9A33C13A23336C1F003BFBE7 /* SignWordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A33C13923336C1F003BFBE7 /* SignWordViewController.swift */; };
 		9A715E8B2354CC6800784AB0 /* FavouritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A715E8A2354CC6800784AB0 /* FavouritesViewController.swift */; };
 		9A75B23F237B6F4A001145D2 /* HandShapeVideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A75B23E237B6F4A001145D2 /* HandShapeVideoCell.swift */; };
@@ -55,7 +54,6 @@
 		9A0CB099234F1D6600A756FE /* SignKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignKeyboardView.swift; sourceTree = "<group>"; };
 		9A179A952373621E003E33C9 /* HandShapeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandShapeVC.swift; sourceTree = "<group>"; };
 		9A179A97237369C3003E33C9 /* HandShapeImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandShapeImageCell.swift; sourceTree = "<group>"; };
-		9A2448482330F0C40048E249 /* Footballer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Footballer.swift; sourceTree = "<group>"; };
 		9A33C13923336C1F003BFBE7 /* SignWordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignWordViewController.swift; sourceTree = "<group>"; };
 		9A33C13B233373C8003BFBE7 /* video.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = video.mp4; sourceTree = "<group>"; };
 		9A715E8A2354CC6800784AB0 /* FavouritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesViewController.swift; sourceTree = "<group>"; };
@@ -161,7 +159,6 @@
 				19D665A0232FB2FB00F60640 /* DictionaryByWordsVC.swift */,
 				9A33C13923336C1F003BFBE7 /* SignWordViewController.swift */,
 				9AA63C2623321E2900B34F41 /* ThirdDayCell.swift */,
-				9A2448482330F0C40048E249 /* Footballer.swift */,
 				9A0CB099234F1D6600A756FE /* SignKeyboardView.swift */,
 			);
 			path = SearchByWords;
@@ -307,7 +304,6 @@
 				C32708C2234367840028940B /* SubcategoriesViewController.swift in Sources */,
 				DB6C9DC32348C07700BE5F3E /* Category+CoreDataClass.swift in Sources */,
 				DB6C9DCE2348C07F00BE5F3E /* SubcategoryJSON.swift in Sources */,
-				9A2448492330F0C40048E249 /* Footballer.swift in Sources */,
 				19D665A1232FB2FB00F60640 /* DictionaryByWordsVC.swift in Sources */,
 				19150E242320F57F00BF63DF /* Extensions.swift in Sources */,
 				9A75B241237B6F63001145D2 /* CameraVC.swift in Sources */,
