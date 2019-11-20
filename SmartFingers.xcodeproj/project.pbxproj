@@ -109,6 +109,7 @@
 		19150E0D2320F42E00BF63DF /* SmartFingers */ = {
 			isa = PBXGroup;
 			children = (
+				9A4A020723855EC0006EE7D5 /* Sample */,
 				19150E1D2320F42E00BF63DF /* Info.plist */,
 				DB5EBC06234AF31400E1A1DA /* Videos */,
 				DB6C9DBC2348C05A00BE5F3E /* CoreData Classes */,
@@ -117,11 +118,18 @@
 				C32708B9234354C40028940B /* SearchByWords */,
 				C32708BC234358360028940B /* SearchByCategory */,
 				C32708C3234377630028940B /* FingerSpelling */,
-				C3DC71DF2344D219002F2F3D /* Sign Recognition */,
+				C3DC71DF2344D219002F2F3D /* HandShape Recognition */,
 				9A715E892354CC4900784AB0 /* Favourite */,
 				C32708B7234352E60028940B /* Support */,
 			);
 			path = SmartFingers;
+			sourceTree = "<group>";
+		};
+		9A4A020723855EC0006EE7D5 /* Sample */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Sample;
 			sourceTree = "<group>";
 		};
 		9A715E892354CC4900784AB0 /* Favourite */ = {
@@ -182,7 +190,7 @@
 			path = FingerSpelling;
 			sourceTree = "<group>";
 		};
-		C3DC71DF2344D219002F2F3D /* Sign Recognition */ = {
+		C3DC71DF2344D219002F2F3D /* HandShape Recognition */ = {
 			isa = PBXGroup;
 			children = (
 				9A179A952373621E003E33C9 /* HandShapeVC.swift */,
@@ -190,7 +198,7 @@
 				9A75B23E237B6F4A001145D2 /* HandShapeVideoCell.swift */,
 				9A179A97237369C3003E33C9 /* HandShapeImageCell.swift */,
 			);
-			path = "Sign Recognition";
+			path = "HandShape Recognition";
 			sourceTree = "<group>";
 		};
 		DB6C9DBC2348C05A00BE5F3E /* CoreData Classes */ = {
