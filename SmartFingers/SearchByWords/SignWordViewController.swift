@@ -74,7 +74,7 @@ class SignWordViewController: UIViewController, UINavigationBarDelegate {
         //        playerLayer.frame = CGRect(x: (self.view.bounds.width-100)/2, y: (self.view.bounds.height-100)/2, width: self.view.bounds.width-20, height: self.view.bounds.height/3) // CGRect(origin: self.view.bounds.origin, size: CGSize(width: 100, height: 100))
         self.view.layer.borderWidth = 1
         self.view.layer.borderColor = UIColor(red:222/255.0, green:225/255.0, blue:227/255.0, alpha: 1.0).cgColor
-        playerLayer.frame = CGRect(x: 0, y: 150, width: self.view.bounds.width, height: 240)
+        playerLayer.frame = CGRect(x: 0, y: 110, width: self.view.bounds.width, height: 240)
         self.view.layer.addSublayer(playerLayer)
         player.play()
         play()
@@ -105,21 +105,27 @@ class SignWordViewController: UIViewController, UINavigationBarDelegate {
         addToFavourites.addGestureRecognizer(gesture)
         addToFavourites.isUserInteractionEnabled = true
         
-        
-        setImageFavourite()
-        
         [descriptionTextLabel, addToFavourites].forEach(self.view.addSubview)
         descriptionTextLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        descriptionTextLabel.centerYAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -100).isActive = true
+//        descriptionTextLabel.centerYAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -100).isActive = true
+        descriptionTextLabel.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -40).isActive = true
+
         descriptionTextLabel.heightAnchor.constraint(equalToConstant: 80).isActive = true
         descriptionTextLabel.widthAnchor.constraint(equalTo: self.view.widthAnchor, constant: -40).isActive = true
         
+        if starTapped {
+            addToFavourites.image = UIImage(named: "heart_infilled")
+            starTapped = false
+        } else {
+            addToFavourites.image = UIImage(named: "heart_filled1")
+            starTapped = true
+        }
         
         addToFavourites.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -self.view.frame.width/4).isActive = true
-        addToFavourites.bottomAnchor.constraint(equalTo: descriptionTextLabel.topAnchor, constant: -65).isActive = true
+        addToFavourites.bottomAnchor.constraint(equalTo: descriptionTextLabel.topAnchor, constant: -20).isActive = true //-65
         //        addToFavourites.centerYAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -100).isActive = true
-        addToFavourites.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        addToFavourites.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        addToFavourites.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        addToFavourites.widthAnchor.constraint(equalToConstant: 100).isActive = true
         
         
     }
@@ -127,10 +133,10 @@ class SignWordViewController: UIViewController, UINavigationBarDelegate {
     
     func setImageFavourite() {
         if starTapped {
-            addToFavourites.image = UIImage(named: "star_unfilled")
+            addToFavourites.image = UIImage(named: "heart_infilled")
             starTapped = false
         } else {
-            addToFavourites.image = UIImage(named: "star_filled")
+            addToFavourites.image = UIImage(named: "heart_filled1")
             starTapped = true
         }
         
