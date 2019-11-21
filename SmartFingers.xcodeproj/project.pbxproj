@@ -14,6 +14,8 @@
 		19150E1C2320F42E00BF63DF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 19150E1A2320F42E00BF63DF /* LaunchScreen.storyboard */; };
 		19150E242320F57F00BF63DF /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19150E232320F57F00BF63DF /* Extensions.swift */; };
 		19D665A1232FB2FB00F60640 /* DictionaryByWordsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D665A0232FB2FB00F60640 /* DictionaryByWordsVC.swift */; };
+		9A0478182386B21F00E63FF1 /* HomeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0478172386B21F00E63FF1 /* HomeTableViewController.swift */; };
+		9A04781A2386B86800E63FF1 /* HomeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0478192386B86800E63FF1 /* HomeCell.swift */; };
 		9A0CB09A234F1D6600A756FE /* SignKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0CB099234F1D6600A756FE /* SignKeyboardView.swift */; };
 		9A179A962373621E003E33C9 /* HandShapeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A179A952373621E003E33C9 /* HandShapeVC.swift */; };
 		9A179A98237369C3003E33C9 /* HandShapeImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A179A97237369C3003E33C9 /* HandShapeImageCell.swift */; };
@@ -51,6 +53,8 @@
 		19150E1D2320F42E00BF63DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		19150E232320F57F00BF63DF /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		19D665A0232FB2FB00F60640 /* DictionaryByWordsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryByWordsVC.swift; sourceTree = "<group>"; };
+		9A0478172386B21F00E63FF1 /* HomeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTableViewController.swift; sourceTree = "<group>"; };
+		9A0478192386B86800E63FF1 /* HomeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCell.swift; sourceTree = "<group>"; };
 		9A0CB099234F1D6600A756FE /* SignKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignKeyboardView.swift; sourceTree = "<group>"; };
 		9A179A952373621E003E33C9 /* HandShapeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandShapeVC.swift; sourceTree = "<group>"; };
 		9A179A97237369C3003E33C9 /* HandShapeImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandShapeImageCell.swift; sourceTree = "<group>"; };
@@ -109,7 +113,6 @@
 		19150E0D2320F42E00BF63DF /* SmartFingers */ = {
 			isa = PBXGroup;
 			children = (
-				9A4A020723855EC0006EE7D5 /* Sample */,
 				19150E1D2320F42E00BF63DF /* Info.plist */,
 				DB5EBC06234AF31400E1A1DA /* Videos */,
 				DB6C9DBC2348C05A00BE5F3E /* CoreData Classes */,
@@ -123,13 +126,6 @@
 				C32708B7234352E60028940B /* Support */,
 			);
 			path = SmartFingers;
-			sourceTree = "<group>";
-		};
-		9A4A020723855EC0006EE7D5 /* Sample */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Sample;
 			sourceTree = "<group>";
 		};
 		9A715E892354CC4900784AB0 /* Favourite */ = {
@@ -157,6 +153,8 @@
 			children = (
 				19150E0E2320F42E00BF63DF /* AppDelegate.swift */,
 				19150E102320F42E00BF63DF /* ViewController.swift */,
+				9A0478172386B21F00E63FF1 /* HomeTableViewController.swift */,
+				9A0478192386B86800E63FF1 /* HomeCell.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -314,8 +312,10 @@
 				DB6C9DCE2348C07F00BE5F3E /* SubcategoryJSON.swift in Sources */,
 				19D665A1232FB2FB00F60640 /* DictionaryByWordsVC.swift in Sources */,
 				19150E242320F57F00BF63DF /* Extensions.swift in Sources */,
+				9A04781A2386B86800E63FF1 /* HomeCell.swift in Sources */,
 				9A75B241237B6F63001145D2 /* CameraVC.swift in Sources */,
 				DB6C9DC82348C07700BE5F3E /* Subcategory+CoreDataProperties.swift in Sources */,
+				9A0478182386B21F00E63FF1 /* HomeTableViewController.swift in Sources */,
 				9A179A98237369C3003E33C9 /* HandShapeImageCell.swift in Sources */,
 				9A179A962373621E003E33C9 /* HandShapeVC.swift in Sources */,
 			);

@@ -100,7 +100,6 @@ class SignWordViewController: UIViewController, UINavigationBarDelegate {
     func setUpView(){
         self.view.backgroundColor = .white
         
-        
         let gesture = UITapGestureRecognizer(target: self, action: #selector(starTapped(tapGestureRecognizer:)))
         addToFavourites.addGestureRecognizer(gesture)
         addToFavourites.isUserInteractionEnabled = true
