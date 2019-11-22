@@ -4,6 +4,10 @@
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="over" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Subcategory" inverseName="under" inverseEntity="Subcategory"/>
     </entity>
+    <entity name="Handshape" representedClassName="Handshape" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="words" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Word" inverseName="handshapes" inverseEntity="Word"/>
+    </entity>
     <entity name="Subcategory" representedClassName="Subcategory" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="contains" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Word" inverseName="from" inverseEntity="Word"/>
@@ -15,10 +19,12 @@
         <attribute name="translation" optional="YES" attributeType="String"/>
         <attribute name="video" optional="YES" attributeType="String"/>
         <relationship name="from" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Subcategory" inverseName="contains" inverseEntity="Subcategory"/>
+        <relationship name="handshapes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Handshape" inverseName="words" inverseEntity="Handshape"/>
     </entity>
     <elements>
         <element name="Category" positionX="-36" positionY="9" width="128" height="73"/>
+        <element name="Handshape" positionX="0" positionY="90" width="128" height="73"/>
         <element name="Subcategory" positionX="0" positionY="45" width="128" height="88"/>
-        <element name="Word" positionX="27" positionY="72" width="128" height="118"/>
+        <element name="Word" positionX="27" positionY="72" width="128" height="133"/>
     </elements>
 </model>

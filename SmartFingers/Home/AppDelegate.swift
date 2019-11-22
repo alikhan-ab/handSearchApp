@@ -44,18 +44,58 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return categories
     }
     
+    func parseDatabaseFile() -> [String : [Int]]? {
+        let filename = "database_3"
+        
+        var shapes = [String]()
+        guard let url = Bundle.main.url(forResource: filename, withExtension: nil) else { return nil }
+        
+        do {
+            let data = try String(contentsOf: url, encoding: .utf8)
+            shapes = data.components(separatedBy: .newlines)
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+        
+        
+        var db = [String : [Int]]()
+        for line in shapes {
+            guard !line.isEmpty else { continue }
+             
+            let tokens = line.split(separator: ",").map { String($0) }
+            
+            let word = tokens[0]
+            var idArray = [Int]()
+            for id in tokens[1...] {
+                guard let idInt = Int(id) else { fatalError("Could not convert String to Int during database parsing") }
+                idArray.append(idInt)
+            }
+        
+            db.updateValue(idArray, forKey: word)
+        }
+            
+        
+        return db
+    }
+    
     
     func preloadDataModel() {
         guard let categories = parseVocabularyJSON() else {
             fatalError("parseJSON() returned nil")
         }
         
+        guard let database = parseDatabaseFile() else {
+            fatalError("parseDatabaseFile() returned nill")
+        }
+        
         deleteEnitiy("Word")
         deleteEnitiy("Subcategory")
         deleteEnitiy("Category")
+        deleteEnitiy("Handshape")
         
         let managedContext = persistentContainer.viewContext
         
+        var handshapes = Array(repeating: [Word](), count: 61)
         for category in categories {
             let categoryObject = Category(context: managedContext)
             categoryObject.name = category.name
@@ -73,6 +113,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     wordObject.translation = word.translation
                     wordObject.favourite = false
                     
+                    
+                    if let signsIds = database[word.video] {
+                        for i in signsIds {
+                            handshapes[i].append(wordObject)
+                        }
+                    } else {
+                        print("Could not find database line for \(word.video)")
+                    }
+                    
+                    
                     wordObjects.append(wordObject)
                 }
                 
@@ -81,13 +131,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             
             categoryObject.over = NSSet.init(array: subcategoryObjects)
-
             do {
                 try managedContext.save()
             } catch let error as NSError {
                 fatalError("Could not save. \(error), \(error.userInfo)")
             }
-            
+        }
+        
+        for (index, words) in handshapes.enumerated() {
+            let handshapeObject = Handshape(context: managedContext)
+            handshapeObject.id = Int16(index)
+            handshapeObject.words = NSSet.init(array: words)
+        }
+        
+        do {
+            try managedContext.save()
+        } catch let error as NSError {
+            fatalError("Could not save. \(error), \(error.userInfo)")
         }
     }
     
