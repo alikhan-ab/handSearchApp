@@ -38,12 +38,7 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
     let keyboardView = SignKeyboardView()
     var signPressed = false
     let screenSize: CGRect = UIScreen.main.bounds
-    
-    var coredataData = [String]()
-    var filteredData = [String]()
-    
-    var wordsList = [Word]()
-    var filteredWordsList = [Word]()
+
 
     let tableview: UITableView = {
         let tv = UITableView()
@@ -101,34 +96,6 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
         }
     }
     
-    //Load the data:
-    func loadWords() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            return
-        }
-        
-        let managedContext = appDelegate.persistentContainer.viewContext
-        
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Word")
-        let sortDescriptor = NSSortDescriptor(key: "translation", ascending: true)
-        fetchRequest.sortDescriptors = [sortDescriptor]
-        
-        do {
-            let words = try managedContext.fetch(fetchRequest)
-            
-            for word in words {
-                guard let wordName = word.value(forKey: "translation") as? String else {
-                    fatalError("Couldn't get a word translation")
-                }
-                wordsList.append(word as! Word)
-                coredataData.append(wordName)
-            }
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-        }
-    }
-    
-   
     
     override func viewDidLoad() {
         super.viewDidLoad()
