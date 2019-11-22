@@ -28,11 +28,16 @@
 		C32708C2234367840028940B /* SubcategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32708C1234367840028940B /* SubcategoriesViewController.swift */; };
 		C32708C52343778B0028940B /* FingerSpellingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32708C42343778B0028940B /* FingerSpellingViewController.swift */; };
 		C3CD866F233A2C5F00FBEC57 /* video.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 9A33C13B233373C8003BFBE7 /* video.mp4 */; };
+		DB47E92C23852B8600F0DBB5 /* database_3 in Resources */ = {isa = PBXBuildFile; fileRef = DB47E92923852B8600F0DBB5 /* database_3 */; };
+		DB47E92D23852B8600F0DBB5 /* database_5 in Resources */ = {isa = PBXBuildFile; fileRef = DB47E92A23852B8600F0DBB5 /* database_5 */; };
+		DB47E92E23852B8600F0DBB5 /* database_1 in Resources */ = {isa = PBXBuildFile; fileRef = DB47E92B23852B8600F0DBB5 /* database_1 */; };
+		DB47E93123852C9400F0DBB5 /* Handshape+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB47E92F23852C9400F0DBB5 /* Handshape+CoreDataClass.swift */; };
+		DB47E93223852C9400F0DBB5 /* Handshape+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB47E93023852C9400F0DBB5 /* Handshape+CoreDataProperties.swift */; };
+		DB47E93523852DD500F0DBB5 /* Word+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB47E93323852DD500F0DBB5 /* Word+CoreDataClass.swift */; };
+		DB47E93623852DD500F0DBB5 /* Word+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB47E93423852DD500F0DBB5 /* Word+CoreDataProperties.swift */; };
 		DB5EBC07234AF31500E1A1DA /* Videos in Resources */ = {isa = PBXBuildFile; fileRef = DB5EBC06234AF31400E1A1DA /* Videos */; };
 		DB6C9DC32348C07700BE5F3E /* Category+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6C9DBD2348C07700BE5F3E /* Category+CoreDataClass.swift */; };
 		DB6C9DC42348C07700BE5F3E /* Category+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6C9DBE2348C07700BE5F3E /* Category+CoreDataProperties.swift */; };
-		DB6C9DC52348C07700BE5F3E /* Word+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6C9DBF2348C07700BE5F3E /* Word+CoreDataClass.swift */; };
-		DB6C9DC62348C07700BE5F3E /* Word+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6C9DC02348C07700BE5F3E /* Word+CoreDataProperties.swift */; };
 		DB6C9DC72348C07700BE5F3E /* Subcategory+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6C9DC12348C07700BE5F3E /* Subcategory+CoreDataClass.swift */; };
 		DB6C9DC82348C07700BE5F3E /* Subcategory+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6C9DC22348C07700BE5F3E /* Subcategory+CoreDataProperties.swift */; };
 		DB6C9DCC2348C07F00BE5F3E /* WordJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6C9DC92348C07E00BE5F3E /* WordJSON.swift */; };
@@ -65,11 +70,16 @@
 		C32708BF23435B230028940B /* SectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionView.swift; sourceTree = "<group>"; };
 		C32708C1234367840028940B /* SubcategoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubcategoriesViewController.swift; sourceTree = "<group>"; };
 		C32708C42343778B0028940B /* FingerSpellingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FingerSpellingViewController.swift; sourceTree = "<group>"; };
+		DB47E92923852B8600F0DBB5 /* database_3 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = database_3; path = SmartFingers/Database_Files/database_3; sourceTree = SOURCE_ROOT; };
+		DB47E92A23852B8600F0DBB5 /* database_5 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = database_5; path = SmartFingers/Database_Files/database_5; sourceTree = SOURCE_ROOT; };
+		DB47E92B23852B8600F0DBB5 /* database_1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = database_1; path = SmartFingers/Database_Files/database_1; sourceTree = SOURCE_ROOT; };
+		DB47E92F23852C9400F0DBB5 /* Handshape+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Handshape+CoreDataClass.swift"; sourceTree = "<group>"; };
+		DB47E93023852C9400F0DBB5 /* Handshape+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Handshape+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		DB47E93323852DD500F0DBB5 /* Word+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Word+CoreDataClass.swift"; sourceTree = "<group>"; };
+		DB47E93423852DD500F0DBB5 /* Word+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Word+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		DB5EBC06234AF31400E1A1DA /* Videos */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Videos; sourceTree = "<group>"; };
 		DB6C9DBD2348C07700BE5F3E /* Category+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Category+CoreDataClass.swift"; sourceTree = "<group>"; };
 		DB6C9DBE2348C07700BE5F3E /* Category+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Category+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		DB6C9DBF2348C07700BE5F3E /* Word+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Word+CoreDataClass.swift"; sourceTree = "<group>"; };
-		DB6C9DC02348C07700BE5F3E /* Word+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Word+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		DB6C9DC12348C07700BE5F3E /* Subcategory+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Subcategory+CoreDataClass.swift"; sourceTree = "<group>"; };
 		DB6C9DC22348C07700BE5F3E /* Subcategory+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Subcategory+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		DB6C9DC92348C07E00BE5F3E /* WordJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordJSON.swift; sourceTree = "<group>"; };
@@ -135,6 +145,9 @@
 		C32708B7234352E60028940B /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				DB47E92B23852B8600F0DBB5 /* database_1 */,
+				DB47E92923852B8600F0DBB5 /* database_3 */,
+				DB47E92A23852B8600F0DBB5 /* database_5 */,
 				DB6C9DD1234AE67800BE5F3E /* vocabulary.json */,
 				19150E232320F57F00BF63DF /* Extensions.swift */,
 				19150E182320F42E00BF63DF /* Assets.xcassets */,
@@ -196,10 +209,12 @@
 		DB6C9DBC2348C05A00BE5F3E /* CoreData Classes */ = {
 			isa = PBXGroup;
 			children = (
+				DB47E92F23852C9400F0DBB5 /* Handshape+CoreDataClass.swift */,
+				DB47E93023852C9400F0DBB5 /* Handshape+CoreDataProperties.swift */,
+				DB47E93323852DD500F0DBB5 /* Word+CoreDataClass.swift */,
+				DB47E93423852DD500F0DBB5 /* Word+CoreDataProperties.swift */,
 				DB6C9DBD2348C07700BE5F3E /* Category+CoreDataClass.swift */,
 				DB6C9DBE2348C07700BE5F3E /* Category+CoreDataProperties.swift */,
-				DB6C9DBF2348C07700BE5F3E /* Word+CoreDataClass.swift */,
-				DB6C9DC02348C07700BE5F3E /* Word+CoreDataProperties.swift */,
 				DB6C9DC12348C07700BE5F3E /* Subcategory+CoreDataClass.swift */,
 				DB6C9DC22348C07700BE5F3E /* Subcategory+CoreDataProperties.swift */,
 				DB6C9DC92348C07E00BE5F3E /* WordJSON.swift */,
@@ -269,7 +284,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB5EBC07234AF31500E1A1DA /* Videos in Resources */,
+				DB47E92C23852B8600F0DBB5 /* database_3 in Resources */,
+				DB47E92E23852B8600F0DBB5 /* database_1 in Resources */,
 				C3CD866F233A2C5F00FBEC57 /* video.mp4 in Resources */,
+				DB47E92D23852B8600F0DBB5 /* database_5 in Resources */,
 				C32708BB234357E40028940B /* Default-568h@2x.png in Resources */,
 				19150E1C2320F42E00BF63DF /* LaunchScreen.storyboard in Resources */,
 				19150E192320F42E00BF63DF /* Assets.xcassets in Resources */,
@@ -286,11 +304,11 @@
 			files = (
 				9A715E8B2354CC6800784AB0 /* FavouritesViewController.swift in Sources */,
 				19150E112320F42E00BF63DF /* ViewController.swift in Sources */,
+				DB47E93123852C9400F0DBB5 /* Handshape+CoreDataClass.swift in Sources */,
 				19150E0F2320F42E00BF63DF /* AppDelegate.swift in Sources */,
-				DB6C9DC62348C07700BE5F3E /* Word+CoreDataProperties.swift in Sources */,
 				DB6C9DCD2348C07F00BE5F3E /* CategoryJSON.swift in Sources */,
 				C32708C023435B230028940B /* SectionView.swift in Sources */,
-				DB6C9DC52348C07700BE5F3E /* Word+CoreDataClass.swift in Sources */,
+				DB47E93223852C9400F0DBB5 /* Handshape+CoreDataProperties.swift in Sources */,
 				C32708BE234358810028940B /* CategoriesViewController.swift in Sources */,
 				9AA63C2723321E2900B34F41 /* ThirdDayCell.swift in Sources */,
 				C32708C52343778B0028940B /* FingerSpellingViewController.swift in Sources */,
@@ -305,7 +323,9 @@
 				DB6C9DC32348C07700BE5F3E /* Category+CoreDataClass.swift in Sources */,
 				DB6C9DCE2348C07F00BE5F3E /* SubcategoryJSON.swift in Sources */,
 				19D665A1232FB2FB00F60640 /* DictionaryByWordsVC.swift in Sources */,
+				DB47E93623852DD500F0DBB5 /* Word+CoreDataProperties.swift in Sources */,
 				19150E242320F57F00BF63DF /* Extensions.swift in Sources */,
+				DB47E93523852DD500F0DBB5 /* Word+CoreDataClass.swift in Sources */,
 				9A75B241237B6F63001145D2 /* CameraVC.swift in Sources */,
 				DB6C9DC82348C07700BE5F3E /* Subcategory+CoreDataProperties.swift in Sources */,
 				9A179A98237369C3003E33C9 /* HandShapeImageCell.swift in Sources */,

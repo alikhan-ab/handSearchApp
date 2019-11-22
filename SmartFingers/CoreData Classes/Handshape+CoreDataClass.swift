@@ -1,5 +1,5 @@
 //
-//  Word+CoreDataClass.swift
+//  Handshape+CoreDataClass.swift
 //  SmartFingers
 //
 //  Created by Alikhan Abutalip on 20/11/19.
@@ -10,7 +10,7 @@
 import Foundation
 import CoreData
 
-@objc(Word)
-public class Word: NSManagedObject {
+@objc(Handshape)
+public class Handshape: NSManagedObject {
 
 }

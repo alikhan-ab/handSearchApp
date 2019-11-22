@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class HandShapeVC: UIViewController, UINavigationBarDelegate {
+class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationControllerDelegate {
     
     //MARK:- Variables
     
@@ -51,6 +51,9 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate {
         return tv
     }()
     
+    
+    var wasLaunched = false
+    
     //MARK:- Methods:
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,13 +61,27 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate {
         setUpViews()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if !wasLaunched {
+            openCameraView()
+            wasLaunched = true
+        }
+    }
+    
     @objc func back(_ sender: UIButton){
         self.dismiss(animated: true, completion: nil)
     }
     
     @objc func changeCamera(_ sender: UIButton){
-        print("Open camera!")
-        self.present(CameraVC(), animated: true, completion: nil)
+        openCameraView()
+    }
+    
+    func openCameraView(){
+        let vc = UIImagePickerController()
+        vc.sourceType = .camera
+        vc.delegate = self
+        present(vc, animated: true)
     }
         
 
@@ -226,5 +243,19 @@ extension HandShapeVC: UITableViewDataSource, UITableViewDelegate {
         return 60
     }
     
+}
+
+extension HandShapeVC: UIImagePickerControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true)
+        
+        guard let image = info[.originalImage] as? UIImage else {
+            print("error, image not returned")
+            return
+        }
+                
+        sampleData.append(image)
+        collectionView.reloadData()
+    }
 }
 
