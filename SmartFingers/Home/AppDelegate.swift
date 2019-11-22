@@ -18,20 +18,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
-        window?.rootViewController = ViewController()
-        
+        window?.rootViewController = HomeTableViewController() //ViewController
         /* Check if vocabulary is already loaded into CoreData,
          if not, load it
         */
-        
-//        let defaults = UserDefaults.standard
-//        let isPreloaded = defaults.bool(forKey: "isPreloaded")
-//        if !isPreloaded {
-//            preloadDataModel()
-//            defaults.set(true, forKey: "isPreloaded")
-//        }
-        
-        preloadDataModel()
+        let defaults = UserDefaults.standard
+        let isPreloaded = defaults.bool(forKey: "isPreloaded")
+        if !isPreloaded {
+            preloadDataModel()
+            defaults.set(true, forKey: "isPreloaded")
+        }
         
         return true
     }

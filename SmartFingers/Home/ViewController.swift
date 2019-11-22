@@ -76,7 +76,7 @@ class ViewController: UIViewController {
     var starImageView: UIImageView = {
         let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.image = UIImage(named: "star")
+        view.image = UIImage(named: "heart_filled2")
         return view
     }()
     var catImageView: UIImageView = {
@@ -92,8 +92,10 @@ class ViewController: UIViewController {
     var gradientSet = [[CGColor]]()
     var currentGradient: Int = 0
     
-    let gradientOne = UIColor(red: 48/255, green: 62/255, blue: 103/255, alpha: 1).cgColor
-    let gradientTwo = UIColor(red: 244/255, green: 88/255, blue: 53/255, alpha: 1).cgColor
+//    let gradientOne = UIColor(red: 48/255, green: 62/255, blue: 103/255, alpha: 1).cgColor
+//    let gradientTwo = UIColor(red: 244/255, green: 88/255, blue: 53/255, alpha: 1).cgColor
+    let gradientOne = UIColor(red: 249/255, green: 149/255, blue: 127/255, alpha: 1).cgColor
+    let gradientTwo = UIColor(red: 242/255, green: 245/255, blue: 208/255, alpha: 1).cgColor
     let gradientThree = UIColor(red: 196/255, green: 70/255, blue: 107/255, alpha: 1).cgColor
     
     //MARK:- Methods
@@ -129,7 +131,7 @@ class ViewController: UIViewController {
     
     func setUpView(){
         self.view.backgroundColor = .yellow
-        [dictionaryWordsImageView, dictionaryWordsNameLabel, categoryImageView, categoryNameLabel, fingerSpellImageView, signImageView, fingerSpellNameLabel, signNameLabel, starImageView, catImageView].forEach(self.view.addSubview)
+        [dictionaryWordsImageView, dictionaryWordsNameLabel, categoryImageView, categoryNameLabel, signImageView, signNameLabel, starImageView].forEach(self.view.addSubview)
         let dist_width = self.view.bounds.width/4
         let distance = self.view.bounds.height/8//self.view.frame.minY + dictionaryWordsImageView.frame.minY
 
@@ -158,7 +160,7 @@ class ViewController: UIViewController {
         
 //        let const = self.view.topAnchor
 //        dictionaryWordsImageView.topAnchor
-        
+        /*
         //fingerSpelling:
         fingerSpellImageView.centerXAnchor.constraint(equalTo: dictionaryWordsImageView.centerXAnchor).isActive = true
         fingerSpellImageView.topAnchor.constraint(equalTo: dictionaryWordsNameLabel.bottomAnchor, constant: distance*0.8).isActive = true
@@ -171,10 +173,29 @@ class ViewController: UIViewController {
         fingerSpellNameLabel.topAnchor.constraint(equalTo: fingerSpellImageView.bottomAnchor, constant: 10).isActive = true
         fingerSpellNameLabel.heightAnchor.constraint(equalToConstant: 60).isActive = true
         fingerSpellNameLabel.widthAnchor.constraint(equalTo: fingerSpellImageView.widthAnchor).isActive = true
+        */
+        
+        // favourites:
+//        starImageView.centerXAnchor.constraint(equalTo: fingerSpellImageView.centerXAnchor).isActive = true
+//        starImageView.topAnchor.constraint(equalTo: signNameLabel.bottomAnchor, constant: distance*0.6).isActive = true
+//        starImageView.heightAnchor.constraint(equalToConstant: 80).isActive = true
+//        starImageView.widthAnchor.constraint(equalTo: starImageView.heightAnchor).isActive = true
+        
+        starImageView.centerXAnchor.constraint(equalTo: dictionaryWordsImageView.centerXAnchor).isActive = true
+        starImageView.topAnchor.constraint(equalTo: dictionaryWordsNameLabel.bottomAnchor, constant: distance*0.8).isActive = true
+//        starImageView.heightAnchor.constraint(equalTo: dictionaryWordsImageView.heightAnchor).isActive = true
+//        starImageView.widthAnchor.constraint(equalTo: dictionaryWordsImageView.widthAnchor).isActive = true
+        starImageView.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        starImageView.widthAnchor.constraint(equalTo: starImageView.heightAnchor).isActive = true
+        
+//        fingerSpellNameLabel.centerXAnchor.constraint(equalTo: fingerSpellImageView.centerXAnchor).isActive = true
+//        fingerSpellNameLabel.topAnchor.constraint(equalTo: fingerSpellImageView.bottomAnchor, constant: 10).isActive = true
+//        fingerSpellNameLabel.heightAnchor.constraint(equalToConstant: 60).isActive = true
+//        fingerSpellNameLabel.widthAnchor.constraint(equalTo: fingerSpellImageView.widthAnchor).isActive = true
         
         //sign recognition:
         signImageView.centerXAnchor.constraint(equalTo: categoryImageView.centerXAnchor).isActive = true
-        signImageView.centerYAnchor.constraint(equalTo: fingerSpellImageView.centerYAnchor).isActive = true
+        signImageView.centerYAnchor.constraint(equalTo: starImageView.centerYAnchor).isActive = true
         signImageView.heightAnchor.constraint(equalTo: dictionaryWordsImageView.heightAnchor).isActive = true
         signImageView.widthAnchor.constraint(equalTo: dictionaryWordsImageView.widthAnchor).isActive = true
         
@@ -183,25 +204,19 @@ class ViewController: UIViewController {
         signNameLabel.heightAnchor.constraint(equalToConstant: 60).isActive = true
         signNameLabel.widthAnchor.constraint(equalTo: signImageView.widthAnchor).isActive = true
         
-        // favourites:
-//        starImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant).isActive = true
-        starImageView.centerXAnchor.constraint(equalTo: fingerSpellImageView.centerXAnchor).isActive = true
-        starImageView.topAnchor.constraint(equalTo: signNameLabel.bottomAnchor, constant: distance*0.6).isActive = true
-//        starImageView.centerYAnchor.constraint(equalTo: fingerSpellImageView.centerYAnchor).isActive = true
-        starImageView.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        starImageView.widthAnchor.constraint(equalTo: starImageView.heightAnchor).isActive = true
+
         
         
-        catImageView.centerXAnchor.constraint(equalTo: signNameLabel.centerXAnchor).isActive = true
-//        catImageView.topAnchor.constraint(equalTo: signNameLabel.bottomAnchor, constant: distance*0.6).isActive = true
-        catImageView.centerYAnchor.constraint(equalTo: starImageView.centerYAnchor).isActive = true
-        catImageView.heightAnchor.constraint(equalToConstant: 150).isActive = true
-        catImageView.widthAnchor.constraint(equalToConstant: 150).isActive = true
+//        catImageView.centerXAnchor.constraint(equalTo: signNameLabel.centerXAnchor).isActive = true
+////        catImageView.topAnchor.constraint(equalTo: signNameLabel.bottomAnchor, constant: distance*0.6).isActive = true
+//        catImageView.centerYAnchor.constraint(equalTo: starImageView.centerYAnchor).isActive = true
+//        catImageView.heightAnchor.constraint(equalToConstant: 150).isActive = true
+//        catImageView.widthAnchor.constraint(equalToConstant: 150).isActive = true
         
-        [dictionaryWordsImageView, categoryImageView, fingerSpellImageView, signImageView].forEach { (view) in
+        [dictionaryWordsImageView, categoryImageView, signImageView].forEach { (view) in
             view.layer.masksToBounds = true
             view.layer.borderWidth = 1.5
-            view.layer.borderColor = UIColor.white.cgColor
+            view.layer.borderColor = gradientOne//UIColor.white.cgColor
             view.layer.cornerRadius = 35
             imageViews(imageView: view)
         }
@@ -213,13 +228,14 @@ class ViewController: UIViewController {
     
     func imageViews(imageView: UIImageView) {
         let imgListArray: NSMutableArray = []
-        for countValue in 1...10 {
-            let strImageName : String = "weather\(countValue)"
+        for countValue in 1...39 {
+            let strImageName : String = "word\(countValue)"
             let image = UIImage(named: strImageName)!
             imgListArray.add(image)
         }
         imageView.animationImages = imgListArray as? [UIImage]
-        imageView.animationDuration = 1.0
+        imageView.animationDuration = 3.5
+        imageView.contentMode = .scaleAspectFill
         imageView.startAnimating()
     }
     
@@ -253,8 +269,8 @@ class ViewController: UIViewController {
         super.viewDidAppear(animated)
         
         gradientSet.append([gradientOne, gradientTwo])
-        gradientSet.append([gradientTwo, gradientThree])
-        gradientSet.append([gradientThree, gradientOne])
+//        gradientSet.append([gradientTwo, gradientThree])
+//        gradientSet.append([gradientThree, gradientOne])
         
         
         gradient.frame = self.view.bounds

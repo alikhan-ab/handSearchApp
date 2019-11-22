@@ -8,10 +8,24 @@
 
 import Foundation
 import UIKit
+import AVFoundation
+import AVKit
 
 class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationControllerDelegate {
     
     //MARK:- Variables
+    /*Tasks:
+     - video in cell
+     - add plus cell if empty collectionView
+     - CoreData add
+     - Change overall design:
+     - remove fingerSpelling
+     - change favourites icon to fingerHeart
+     - change background color -> gradient
+     - Animation for icons
+     - position of save icon below the video
+     - 
+     */
     
     var navbar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 75))
     var navItem = UINavigationItem()
@@ -219,15 +233,18 @@ extension HandShapeVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // 2
         let cell = tableview.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! HandShapeVideoCell
-        //        let candy: Footballer
-        //        if filteredFootballer.isEmpty {
-        //            candy = allPlayers[indexPath.row]
-        //        } else {
-        //            candy = filteredFootballer[indexPath.row]
-        //        }
         cell.nameLabel.text = "Sample video #\(indexPath.row)"
+        
+//        let file = Bundle.main.path(forResource: "5", ofType: "mp4", inDirectory: "Videos")
+//        cell.videoPlayerItem = AVPlayerItem.init(url: URL(fileURLWithPath: file!))
+//        let playerLayer = AVPlayerLayer()
+//        let player = AVPlayer(url: URL(fileURLWithPath: file!))
+////        playerLayer.frame = cell.bounds
+//        playerLayer.frame = CGRect(x: 0, y: 150, width: 100, height: cell.bounds.height)
+//        cell.layer.addSublayer(playerLayer)
+//        player.play()
+        
         return cell
     }
     
@@ -240,9 +257,22 @@ extension HandShapeVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
+        return 100
     }
-    
+//    func playVideoOnTheCell(cell : HandShapeVideoCell, indexPath : IndexPath){
+//        cell.startPlayback()
+//    }
+//
+//    func stopPlayBack(cell : HandShapeVideoCell, indexPath : IndexPath){
+//        cell.stopPlayback()
+//    }
+//
+//    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+//        print("end = \(indexPath)")
+//        if let videoCell = cell as? HandShapeVideoCell {
+//            videoCell.stopPlayback()
+//        }
+//    }
 }
 
 extension HandShapeVC: UIImagePickerControllerDelegate {
