@@ -19,14 +19,14 @@ struct ExpandableSection {
 class CategoriesViewController: UIViewController, UINavigationBarDelegate {
     //MARK:- Variables
     var tableView: UITableView!
-    let navbar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 75))
+    let navbar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 55))
     var navItem = UINavigationItem()
     lazy var searchBar: UISearchBar = UISearchBar()
-    
-    var dataExample = [ExpandableSection(isExpanded: true, name: "Generalities", subsections: ["Colours", "Measurements", "Emotions","Characteristics","Numbers","General: Time"]),
-                       ExpandableSection(isExpanded: true, name: "Sentences", subsections: ["Greeting & standard phrases", "Questions", "Idioms & expressions"]),
-                       ExpandableSection(isExpanded: true, name: "Religion", subsections: ["Magic & myths", "Sins, negative actions & emotions", "Theological studies","Artifacts & Symbols"]),
-                       ExpandableSection(isExpanded: true, name: "Pedagogy", subsections: ["Grades&Certificates", "Child care", "Education & Learning"])]
+//
+//    var dataExample = [ExpandableSection(isExpanded: true, name: "Generalities", subsections: ["Colours", "Measurements", "Emotions","Characteristics","Numbers","General: Time"]),
+//                       ExpandableSection(isExpanded: true, name: "Sentences", subsections: ["Greeting & standard phrases", "Questions", "Idioms & expressions"]),
+//                       ExpandableSection(isExpanded: true, name: "Religion", subsections: ["Magic & myths", "Sins, negative actions & emotions", "Theological studies","Artifacts & Symbols"]),
+//                       ExpandableSection(isExpanded: true, name: "Pedagogy", subsections: ["Grades&Certificates", "Child care", "Education & Learning"])]
     var coredataData = [ExpandableSection]()
     var filteredData = [ExpandableSection]()
     //MARK:- Methods
@@ -93,9 +93,10 @@ class CategoriesViewController: UIViewController, UINavigationBarDelegate {
         tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
-        
+        tableView.backgroundColor = UIColor(r: 86, g: 89, b: 122)
+
         let constraints:[NSLayoutConstraint] = [
-            tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 75),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 55),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -112,18 +113,21 @@ class CategoriesViewController: UIViewController, UINavigationBarDelegate {
         let navItem = UINavigationItem()
         //        navItem.title = "Categories"
         navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(back))
-        
+        navItem.leftBarButtonItem?.tintColor = UIColor(red: 255/255, green: 247/255, blue: 214/255, alpha: 1)
+
         searchBar.searchBarStyle = UISearchBar.Style.prominent
         searchBar.placeholder = " Search..."
         searchBar.sizeToFit()
         searchBar.isTranslucent = false
         searchBar.backgroundImage = UIImage()
         searchBar.delegate = self
+        searchBar.backgroundColor = UIColor(red: 62/255, green: 66/255, blue: 97/255, alpha: 1)
+        searchBar.tintColor = UIColor(red: 93/255, green: 96/255, blue: 130/255, alpha: 1)
         navItem.titleView = searchBar
         
         navbar.items = [navItem]
         view.addSubview(navbar)
-        self.view.frame = CGRect(x: 0, y: 75, width: UIScreen.main.bounds.width, height: (UIScreen.main.bounds.height - 75))
+        self.view.frame = CGRect(x: 0, y: 55, width: UIScreen.main.bounds.width, height: (UIScreen.main.bounds.height - 55))
     }
     
     @objc func back(_ sender: UIButton){
@@ -171,10 +175,11 @@ extension CategoriesViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = SectionView()
         view.section = section
-        
-
+        view.backgroundColor = UIColor(r: 86, g: 89, b: 122)
         view.nameLabel.text = coredataData[section].name
+        view.nameLabel.textColor = UIColor(r: 247, g: 208, b: 111)
         view.expandCloseButton.setTitle("Open", for: .normal)
+        view.expandCloseButton.setTitleColor(UIColor(r: 239, g: 134, b: 176), for: .normal)
         view.expandCloseButton.addTarget(self, action: #selector(handleExpandClose), for: .touchUpInside)
         view.expandCloseButton.tag = section
         return view
@@ -220,7 +225,9 @@ extension CategoriesViewController: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath) as! NameCell
                 
         let name = filteredData[indexPath.section].subsections[indexPath.row]
-        
+        cell.backgroundColor = UIColor(r: 180, g: 199, b: 231)
+        cell.dayLabel.textColor = UIColor(r: 87, g: 69, b: 93)
+
 //        let name = dataExample[indexPath.section].subsections[indexPath.row]
         cell.dayLabel.text = name
         return cell

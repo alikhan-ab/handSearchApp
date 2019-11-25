@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <deployment version="4144" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -14,38 +11,38 @@
         <scene sceneID="EHf-IW-A2E">
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="cib-lz-ypN"/>
+                        <viewControllerLayoutGuide type="bottom" id="nPv-w7-uQV"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="ginger-cat-welcome" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4VX-NK-ZfK">
-                                <rect key="frame" x="-10" y="262" width="435" height="347"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="welcome" translatesAutoresizingMaskIntoConstraints="NO" id="rW1-OD-zym">
+                                <rect key="frame" x="12" y="271" width="390" height="355"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tvj-ce-yZa">
-                                <rect key="frame" x="84" y="617" width="246" height="109"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="109" id="Kjw-G5-bAU"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="37"/>
-                                <color key="textColor" red="0.80784313725490198" green="0.39215686274509803" blue="0.29803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Welcome!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tvj-ce-yZa">
+                                <rect key="frame" x="112" y="634" width="190" height="111"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="41"/>
+                                <color key="textColor" red="0.9678460955619812" green="0.81947594881057739" blue="0.43519142270088196" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" red="0.83137254901960789" green="0.83137254901960789" blue="0.90980392156862744" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.33763915300369263" green="0.3468177318572998" blue="0.47844797372817993" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <accessibility key="accessibilityConfiguration">
                             <accessibilityTraits key="traits" button="YES" image="YES" staticText="YES" adjustable="YES"/>
                             <bool key="isElement" value="YES"/>
                         </accessibility>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Tvj-ce-yZa" secondAttribute="bottom" constant="136" id="0u9-QE-4Yj"/>
-                            <constraint firstItem="Tvj-ce-yZa" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="84" id="3uL-Tm-8sc"/>
-                            <constraint firstItem="4VX-NK-ZfK" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="-30" id="BuX-w5-wKO"/>
-                            <constraint firstItem="4VX-NK-ZfK" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="218" id="JS6-c8-MLq"/>
-                            <constraint firstItem="4VX-NK-ZfK" firstAttribute="centerX" secondItem="Tvj-ce-yZa" secondAttribute="centerX" id="Soa-ju-E5X"/>
-                            <constraint firstItem="Tvj-ce-yZa" firstAttribute="top" secondItem="4VX-NK-ZfK" secondAttribute="bottom" constant="8" symbolic="YES" id="bza-vT-ha0"/>
-                            <constraint firstItem="4VX-NK-ZfK" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="i6g-dF-ieD"/>
+                            <constraint firstItem="rW1-OD-zym" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Cc5-iN-byJ"/>
+                            <constraint firstItem="nPv-w7-uQV" firstAttribute="top" secondItem="Tvj-ce-yZa" secondAttribute="bottom" constant="117" id="FwD-p3-SS7"/>
+                            <constraint firstItem="rW1-OD-zym" firstAttribute="centerX" secondItem="Tvj-ce-yZa" secondAttribute="centerX" id="OdT-wI-i9g"/>
+                            <constraint firstItem="rW1-OD-zym" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="12" id="PB8-YF-rUX"/>
+                            <constraint firstItem="rW1-OD-zym" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Qnc-h2-jrM"/>
+                            <constraint firstItem="Tvj-ce-yZa" firstAttribute="top" secondItem="rW1-OD-zym" secondAttribute="bottom" constant="8" id="lrc-Ce-bdw"/>
+                            <constraint firstItem="rW1-OD-zym" firstAttribute="top" secondItem="cib-lz-ypN" secondAttribute="bottom" constant="227" id="n4C-Od-t7b"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -54,6 +51,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ginger-cat-welcome" width="1216" height="912"/>
+        <image name="welcome" width="1284" height="912"/>
     </resources>
 </document>

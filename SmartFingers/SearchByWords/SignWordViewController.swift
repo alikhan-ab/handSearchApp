@@ -13,28 +13,37 @@ import AVKit
 
 class SignWordViewController: UIViewController, UINavigationBarDelegate {
     
-    var navbar = UINavigationBar(frame: CGRect(x: 0, y: 25, width: UIScreen.main.bounds.width, height: 75))
+    var navbar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 55))
     var navItem = UINavigationItem()
     var text = ""
     var tapped = false
     var player = AVPlayer()
     var playerLayer = AVPlayerLayer()
-    
+    let filledImage = UIImage(named: "star_filled")
+    let unfilledImage = UIImage(named: "star_unfilled")
     var starTapped = false
     
     var word: Word?
     
+    lazy var errorImageView: UIImageView = {
+        let view = UIImageView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.image = UIImage(named: "fatal-error")
+        view.contentMode = .scaleAspectFit
+        return view
+    }()
+    
     var descriptionTextLabel: UILabel = {
         let label = UILabel()
         label.text = "Text"
-        label.textColor = .white
+        label.textColor = UIColor(r: 87, g: 69, b: 93)
         label.textAlignment = .center
         label.layer.cornerRadius = 10
         label.layer.masksToBounds = true
         label.font = UIFont.boldSystemFont(ofSize: 30)
         label.numberOfLines = 10
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = .red
+        label.backgroundColor = UIColor(r: 180, g: 199, b: 231)
         return label
     }()
     
@@ -52,14 +61,43 @@ class SignWordViewController: UIViewController, UINavigationBarDelegate {
     }
     
     func setupNavBar() {
-        let height: CGFloat = 75
+        let height: CGFloat = 55
         navbar.backgroundColor = UIColor.white
         navbar.delegate = self
+//        navbar.appe
+//        var navigationBarAppearace = navbar.compactAppearance
+//        navigationBarAppearace.colo .tintColor = UIColor(red: 62/255, green: 66/255, blue: 97/255, alpha: 1)
+//        navigationBarAppearace.barTintColor = UIColor(red: 62/255, green: 66/255, blue: 97/255, alpha: 1)
+        if #available(iOS 13.0, *) {
+            let coloredAppearance = UINavigationBarAppearance()
+            coloredAppearance.configureWithOpaqueBackground()
+            coloredAppearance.backgroundColor = UIColor(r: 48, g: 52, b: 83)//rgb(69, 70, 85)
+            coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor(red: 255/255, green: 247/255, blue: 214/255, alpha: 1)]
+            coloredAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor(red: 255/255, green: 247/255, blue: 214/255, alpha: 1)]
+                   
+            navbar.standardAppearance = coloredAppearance
+            navbar.scrollEdgeAppearance = coloredAppearance
+        } else {
+            // Fallback on earlier versions
+        }
+        
+//        navbar.barTintColor = UIColor(r: 69, g: 70, b: 85) //(red: 62/255, green: 66/255, blue: 97/255, alpha: 1)rgb(69, 70, 85)
+//        navItem.title.
         navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(back))
+        navItem.leftBarButtonItem?.tintColor = UIColor(red: 255/255, green: 247/255, blue: 214/255, alpha: 1)
         navbar.items = [navItem]
-        navItem.title = word?.translation
+//        navItem.title = word?.translation
         descriptionTextLabel.text = word?.translation
         view.addSubview(navbar)
+        NSLayoutConstraint.activate([
+            navbar.topAnchor.constraint(equalTo: self.view.topAnchor),
+//            navbar.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            navbar.rightAnchor.constraint(equalTo: self.view.rightAnchor),
+//            navbar.heightAnchor.constraint(equalToConstant: 60),
+            navbar.leftAnchor.constraint(equalTo: self.view.leftAnchor)
+            ])
+
+        
         self.view.frame = CGRect(x: 0, y: height, width: UIScreen.main.bounds.width, height: (UIScreen.main.bounds.height - height))
     }
     
@@ -67,8 +105,17 @@ class SignWordViewController: UIViewController, UINavigationBarDelegate {
         guard let videoName = word?.video else { return }
         guard let path = Bundle.main.path(forResource: videoName, ofType:"mp4", inDirectory: "Videos") else {
             print("video not found")
+            self.view.addSubview(errorImageView)
+            errorImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+            errorImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -50).isActive = true
+            errorImageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+            errorImageView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 25).isActive = true
+            errorImageView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -25).isActive = true
+            errorImageView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+//            errorImageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
             return
         }
+        addStarImage()
         player = AVPlayer(url: URL(fileURLWithPath: path))
         playerLayer = AVPlayerLayer(player: player)
         //        playerLayer.frame = CGRect(x: (self.view.bounds.width-100)/2, y: (self.view.bounds.height-100)/2, width: self.view.bounds.width-20, height: self.view.bounds.height/3) // CGRect(origin: self.view.bounds.origin, size: CGSize(width: 100, height: 100))
@@ -98,13 +145,13 @@ class SignWordViewController: UIViewController, UINavigationBarDelegate {
     }
     
     func setUpView(){
-        self.view.backgroundColor = .white
-        
+        self.view.backgroundColor = UIColor(r: 86, g: 89, b: 122)
+
         let gesture = UITapGestureRecognizer(target: self, action: #selector(starTapped(tapGestureRecognizer:)))
         addToFavourites.addGestureRecognizer(gesture)
         addToFavourites.isUserInteractionEnabled = true
         
-        [descriptionTextLabel, addToFavourites].forEach(self.view.addSubview)
+        [descriptionTextLabel].forEach(self.view.addSubview)
         descriptionTextLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
 //        descriptionTextLabel.centerYAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -100).isActive = true
         descriptionTextLabel.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -40).isActive = true
@@ -112,12 +159,20 @@ class SignWordViewController: UIViewController, UINavigationBarDelegate {
         descriptionTextLabel.heightAnchor.constraint(equalToConstant: 80).isActive = true
         descriptionTextLabel.widthAnchor.constraint(equalTo: self.view.widthAnchor, constant: -40).isActive = true
         
+
+        
+        
+    }
+    
+    func addStarImage(){
+        [addToFavourites].forEach(self.view.addSubview)
+
+        //check is it in array:
+        // download array and />
         if starTapped {
-            addToFavourites.image = UIImage(named: "heart_infilled")
-            starTapped = false
+            addToFavourites.image = filledImage
         } else {
-            addToFavourites.image = UIImage(named: "heart_filled1")
-            starTapped = true
+            addToFavourites.image = unfilledImage
         }
         
         addToFavourites.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -self.view.frame.width/4).isActive = true
@@ -125,17 +180,14 @@ class SignWordViewController: UIViewController, UINavigationBarDelegate {
         //        addToFavourites.centerYAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -100).isActive = true
         addToFavourites.heightAnchor.constraint(equalToConstant: 100).isActive = true
         addToFavourites.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        
-        
     }
-    
     
     func setImageFavourite() {
         if starTapped {
-            addToFavourites.image = UIImage(named: "heart_infilled")
+            addToFavourites.image = unfilledImage
             starTapped = false
         } else {
-            addToFavourites.image = UIImage(named: "heart_filled1")
+            addToFavourites.image = filledImage
             starTapped = true
         }
         
