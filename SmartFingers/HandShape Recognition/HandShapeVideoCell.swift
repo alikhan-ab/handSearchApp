@@ -13,15 +13,15 @@ import AVKit
 
 class HandShapeVideoCell: UITableViewCell {
   
-    var avPlayer: AVPlayer?
-    var avPlayerLayer: AVPlayerLayer?
+    var avPlayer: AVPlayer? = nil
+    var avPlayerLayer: AVPlayerLayer? = nil
     var paused: Bool = false
     
     var word: Word?
     
     let nameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Day 1"
+        label.text = ""
         label.textColor = .darkGray
         label.font = UIFont.boldSystemFont(ofSize: 16)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -71,43 +71,47 @@ class HandShapeVideoCell: UITableViewCell {
         videoView.leftAnchor.constraint(equalTo: nameLabel.rightAnchor, constant: 30).isActive = true
         videoView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -15).isActive = true
         print("Interesting")
-
-        guard let file = Bundle.main.path(forResource: "5", ofType: "mp4", inDirectory: "Videos") else {
-            print("\n----- Didn't find ---- \n")
-            return
+    }
+    
+    func deployWord() {
+        guard let word = word else {
+                    print("Could not get the word")
+                    return
+            
         }
-        avPlayer = AVPlayer(url: URL(fileURLWithPath: file))
-        avPlayerLayer = AVPlayerLayer(player: avPlayer)
-        //        You need to have different variations
-        //        according to the device so as the avplayer fits well
-//        if UIScreen.main.bounds.width == 375 {
-//            let widthRequired = videoView.frame.size.width - 20
-//            avPlayerLayer?.frame = CGRect.init(x: 0, y: 0, width: widthRequired, height: widthRequired/1.78)
-//        }else if UIScreen.main.bounds.width == 320 {
-//            avPlayerLayer?.frame = CGRect.init(x: 0, y: 0, width: (videoView.frame.size.width - 20), height: videoView.frame.size.height)
-//        }else{
-//            let widthRequired = videoView.frame.size.width
-//            avPlayerLayer?.frame = CGRect.init(x: 0, y: 0, width: widthRequired, height: videoView.frame.size.height)
-//        }
+        nameLabel.text = word.translation
 
-        avPlayerLayer?.frame = CGRect.init(x: 0, y: -15, width: 100, height: 80)
-        self.backgroundColor = .clear
+        guard let file = Bundle.main.path(forResource: word.video, ofType: "mp4", inDirectory: "Videos") else { print("could not find video")
+                    return }
+                
+        let playerItem = AVPlayerItem(url: URL(fileURLWithPath: file))
+        if avPlayer == nil && avPlayerLayer == nil {
+            avPlayer = AVPlayer(playerItem: playerItem)
+            avPlayerLayer = AVPlayerLayer(player: avPlayer)
 
-        avPlayerLayer?.videoGravity = AVLayerVideoGravity.resizeAspect
-        avPlayer?.volume = 3
-        avPlayer?.actionAtItemEnd = .none
-        videoView.layer.insertSublayer(avPlayerLayer!, at: 0)
-//        videoView.layer.addSublayer(avPlayerLayer!)
+
+            avPlayerLayer?.frame = CGRect.init(x: 0, y: -15, width: 100, height: 80)
+            self.backgroundColor = .clear
+
+            avPlayerLayer?.videoGravity = AVLayerVideoGravity.resizeAspect
+            avPlayer?.volume = 3
+            avPlayer?.actionAtItemEnd = .none
+            videoView.layer.insertSublayer(avPlayerLayer!, at: 0)
+        } else {
+            avPlayer?.replaceCurrentItem(with: playerItem)
+        }
+        
         avPlayer?.play()
 
         // This notification is fired when the video ends, you can handle it in the method.
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(self.playerItemDidReachEnd(notification:)),
-                                               name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
-                                               object: avPlayer?.currentItem)
+                                                selector: #selector(self.playerItemDidReachEnd(notification:)),
+                                                name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
+                                                object: avPlayer?.currentItem)
         
         
     }
+    
     func stopPlayback(){
         self.avPlayer?.pause()
     }
@@ -115,15 +119,12 @@ class HandShapeVideoCell: UITableViewCell {
     func startPlayback(){
         self.avPlayer?.play()
     }
+    
 
     // A notification is fired and seeker is sent to the beginning to loop the video again
     @objc func playerItemDidReachEnd(notification: Notification) {
         let p: AVPlayerItem = notification.object as! AVPlayerItem
         p.seek(to: CMTime.zero)
     }
-
-
-    
-    
 }
 

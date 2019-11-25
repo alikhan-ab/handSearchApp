@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import AVFoundation
 import AVKit
+import CoreData
 
 class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationControllerDelegate {
     
@@ -55,7 +56,7 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
 //        CustomData(title: "Sample", url: "wiki", backgroundImage: #imageLiteral(resourceName: "sample1")),
 //    ]
     
-    var sampleData = [#imageLiteral(resourceName: "sample1"), #imageLiteral(resourceName: "sample1"), #imageLiteral(resourceName: "sample3"), #imageLiteral(resourceName: "sample1"), #imageLiteral(resourceName: "sample3")]
+    var handshapePhotos = [UIImage]()
     
     let tableview: UITableView = {
         let tv = UITableView()
@@ -63,6 +64,20 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.separatorColor = UIColor.white
         return tv
+    }()
+    
+    private let persistentContainer = NSPersistentContainer(name: "SmartFingers")
+    lazy var fetchedResultsController: NSFetchedResultsController<Word> = {
+        
+        let fetchRequest: NSFetchRequest<Word> = Word.fetchRequest()
+        
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "translation", ascending: true)]
+        
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        fetchedResultsController.delegate = self
+        
+        return fetchedResultsController
     }()
     
     
@@ -73,6 +88,20 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
         super.viewDidLoad()
         self.view.backgroundColor = .white
         setUpViews()
+        
+        persistentContainer.loadPersistentStores { (NSPersistentStoreDescription, error) in
+            if let error = error {
+                print("Unable to Load Persistent Store")
+                print("\(error), \(error.localizedDescription)")
+            } else {
+                do {
+                    try self.fetchedResultsController.performFetch()
+                } catch {
+                    let error = error as NSError
+                    print("\(error), \(error.localizedDescription)")
+                }
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -168,7 +197,7 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
         let alert = UIAlertController(title: "Image #\(indexPath.row)", message: "What to do?", preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Add image", style: .default, handler: { (_) in
             print("Adding the image!")
-            self.sampleData.insert(#imageLiteral(resourceName: "sample3"), at: indexPath.row)
+            self.handshapePhotos.insert(#imageLiteral(resourceName: "sample3"), at: indexPath.row)
             self.collectionView.insertItems(at: [indexPath])
         }))
         
@@ -176,7 +205,7 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
             print("User click Delete button")
 //            collectionView.delegate?.collectionView!(collectionView, performAction: #selector(onPan(_:)), forItemAt: indexPath, withSender: nil)
 
-            self.sampleData.remove(at: indexPath.row)
+            self.handshapePhotos.remove(at: indexPath.row)
             self.collectionView.deleteItems(at: [indexPath])
             
         }))
@@ -202,12 +231,12 @@ extension HandShapeVC: UICollectionViewDelegateFlowLayout, UICollectionViewDataS
         return CGSize(width: collectionView.frame.width/2.5, height: collectionView.frame.width/3)
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return sampleData.count
+        return handshapePhotos.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! HandShapeImageCell
-        cell.data = self.sampleData[indexPath.item]
+        cell.data = self.handshapePhotos[indexPath.item]
         return cell
     }
     
@@ -229,21 +258,16 @@ extension HandShapeVC: UICollectionViewDelegateFlowLayout, UICollectionViewDataS
 extension HandShapeVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10//allPlayers.count
+        guard let words = fetchedResultsController.fetchedObjects else { return 0}
+        return words.count
+        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableview.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! HandShapeVideoCell
-        cell.nameLabel.text = "Sample video #\(indexPath.row)"
-        
-//        let file = Bundle.main.path(forResource: "5", ofType: "mp4", inDirectory: "Videos")
-//        cell.videoPlayerItem = AVPlayerItem.init(url: URL(fileURLWithPath: file!))
-//        let playerLayer = AVPlayerLayer()
-//        let player = AVPlayer(url: URL(fileURLWithPath: file!))
-////        playerLayer.frame = cell.bounds
-//        playerLayer.frame = CGRect(x: 0, y: 150, width: 100, height: cell.bounds.height)
-//        cell.layer.addSublayer(playerLayer)
-//        player.play()
+        let word = fetchedResultsController.object(at: indexPath)
+        cell.word = word
+        cell.deployWord()
         
         return cell
     }
@@ -251,8 +275,9 @@ extension HandShapeVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath.row)
         let destination = SignWordViewController()
-        let name = "Sample"
-        destination.navItem.title = name //tableView.cellForRow(at: indexPath)?.textLabel!.text
+        let word = fetchedResultsController.object(at: indexPath)
+        print(word.translation ?? "no word")
+        destination.word = word
         self.present(destination, animated: true, completion: nil)
     }
     
@@ -284,8 +309,10 @@ extension HandShapeVC: UIImagePickerControllerDelegate {
             return
         }
                 
-        sampleData.append(image)
+        handshapePhotos.append(image)
         collectionView.reloadData()
     }
 }
+
+extension HandShapeVC: NSFetchedResultsControllerDelegate {}
 
