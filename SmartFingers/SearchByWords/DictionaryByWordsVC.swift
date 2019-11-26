@@ -20,13 +20,9 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
     lazy var fetchedResultsController: NSFetchedResultsController<Word> = {
         
         let fetchRequest: NSFetchRequest<Word> = Word.fetchRequest()
-        
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "translation", ascending: true)]
-        
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        
         fetchedResultsController.delegate = self
-        
         return fetchedResultsController
     }()
     
@@ -35,7 +31,7 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
     var navbar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 55))
     var navItem = UINavigationItem()
     lazy var searchBar: UISearchBar = UISearchBar()
-    let keyboardView = SignKeyboardView()
+    var keyboardView = SignKeyboardView()
     var signPressed = false
     let screenSize: CGRect = UIScreen.main.bounds
 
@@ -62,14 +58,14 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
                 //Frame Option 2:
                 //self.myView.center = CGPoint(x: self.view.frame.width / 2, y: self.view.frame.height / 4)
                 self.keyboardView.backgroundColor = .blue
-                
+//                self.tableview.addSubview(self.keyboardView)
             }, completion: nil)
             
-            UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseIn, animations: {
-                //Frame Option 1:
-//                self.tableview.frame = CGRect(x: self.tableview.frame.origin.x, y: self.tableview.frame.origin.y, width: self.tableview.frame.width, height: self.screenSize.height-75-self.screenSize.width)
-                self.tableview.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -self.screenSize.width)
-            }, completion: nil)
+//            UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseIn, animations: {
+//                //Frame Option 1:
+////                self.tableview.frame = CGRect(x: self.tableview.frame.origin.x, y: self.tableview.frame.origin.y, width: self.tableview.frame.width, height: self.screenSize.height-75-self.screenSize.width)
+////                self.tableview.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -self.screenSize.width).isActive = true
+//            }, completion: nil)
             signPressed = true
 
             
@@ -80,15 +76,15 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
                 //Frame Option 2:
                 //self.myView.center = CGPoint(x: self.view.frame.width / 2, y: self.view.frame.height / 4)
                 self.keyboardView.backgroundColor = .blue
-                
+//                self.keyboardView.removeFromSuperview()
             }, completion: nil)
             
-            UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseIn, animations: {
-                //Frame Option 1:
-//                self.tableview.frame = CGRect(x: self.tableview.frame.origin.x, y: self.tableview.frame.origin.y, width: self.tableview.frame.width, height: self.screenSize.height-75)
-                self.tableview.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
-
-            }, completion: nil)
+//            UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseIn, animations: {
+//                //Frame Option 1:
+////                self.tableview.frame = CGRect(x: self.tableview.frame.origin.x, y: self.tableview.frame.origin.y, width: self.tableview.frame.width, height: self.screenSize.height-75)
+////                self.tableview.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+//
+//            }, completion: nil)
             
             signPressed = false
             
@@ -172,6 +168,7 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
     }
     
     func didPressButton(button: LetterButton) {
+        print("Keyboard pressed!")
         guard let letter = button.letter else {
             return
         }
@@ -195,7 +192,7 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
         keyboardView.delegate = self
         keyboardView.translatesAutoresizingMaskIntoConstraints = false
         keyboardView.backgroundColor = .white
-        view.addSubview(keyboardView)
+        self.view.addSubview(keyboardView)
         NSLayoutConstraint.activate([
             //             keyboardView.topAnchor.constraint(equalTo: tableview.bottomAnchor),
             keyboardView.topAnchor.constraint(equalTo: self.view.bottomAnchor),
@@ -216,7 +213,6 @@ extension DictionaryByWordsVC: UISearchBarDelegate {
 extension DictionaryByWordsVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         guard let words = fetchedResultsController.fetchedObjects else {return 0}
         return words.count
     }

@@ -238,8 +238,6 @@ extension FavouriteViewController: UITableViewDataSource, UITableViewDelegate {
             backImageView.layer.frame = CGRect(x: self.view.frame.midX, y: self.view.frame.midY+20, width: 80, height: 80)
             
             tableView.backgroundView = backImageView
-            
-            
             tableView.backgroundView?.addSubview(noDataLabel)
         }
         return dataExample.count
