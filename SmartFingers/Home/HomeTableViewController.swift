@@ -79,6 +79,7 @@ extension HomeTableViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableview.deselectRow(at: indexPath, animated: true)
         if indexPath.row == 0 {
             let dictionaryByWordsVC = DictionaryByWordsVC()
 //            let transition = CATransition()

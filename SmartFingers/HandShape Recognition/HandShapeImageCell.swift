@@ -23,10 +23,20 @@ class HandShapeImageCell: UICollectionViewCell {
 //        }
 //    }
     
-    var data: UIImage? {
+    var data: Shape? {
         didSet {
             guard let data = data else { return }
-            bg.image = data
+            bg.image = data.image
+            if data.status == .loading {
+                bg.layer.borderColor = UIColor.gray.cgColor
+            } else if data.status == .accepted {
+                bg.layer.borderColor = UIColor.green.cgColor
+                
+            } else {
+                bg.layer.borderColor = UIColor.red.cgColor
+            }
+            
+            bg.layer.borderWidth = 1.5
         }
     }
     

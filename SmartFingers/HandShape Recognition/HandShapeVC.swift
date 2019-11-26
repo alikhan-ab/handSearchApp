@@ -32,12 +32,6 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
     var navItem = UINavigationItem()
     let screenSize: CGRect = UIScreen.main.bounds
     
-//    var cameraView: UIView = {
-//        let view = UIView()
-//        view.backgroundColor = .darkGray
-//        view.translatesAutoresizingMaskIntoConstraints = false
-//        return view
-//    }()
     
     fileprivate let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -56,7 +50,9 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
 //        CustomData(title: "Sample", url: "wiki", backgroundImage: #imageLiteral(resourceName: "sample1")),
 //    ]
     
-    var handshapePhotos = [UIImage]()
+    var handshapes = [Shape]()
+    
+    let searchLimit = 5
     
     let tableview: UITableView = {
         let tv = UITableView()
@@ -80,6 +76,7 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
         return fetchedResultsController
     }()
     
+    var predicateSigns = [[Int]]()
     
     var wasLaunched = false
     
@@ -117,12 +114,15 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
     }
     
     @objc func changeCamera(_ sender: UIButton){
-        openCameraView()
+        if handshapes.count < searchLimit {
+           openCameraView()
+        }
     }
     
     func openCameraView(){
         let vc = UIImagePickerController()
         vc.sourceType = .camera
+        vc.cameraDevice = .front
         vc.delegate = self
         present(vc, animated: true)
     }
@@ -156,15 +156,6 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
         ])
         self.view.frame = CGRect(x: 0, y: 75, width: UIScreen.main.bounds.width, height: (UIScreen.main.bounds.height - 75))
         
-        //Camera:
-//        view.addSubview(cameraView)
-//        let cameraHeight = screenSize.height*0.4
-//        NSLayoutConstraint.activate([
-//            cameraView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 75),
-//            cameraView.heightAnchor.constraint(equalToConstant: cameraHeight),
-//            cameraView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
-//            cameraView.leftAnchor.constraint(equalTo: self.view.leftAnchor)
-//        ])
         
         //CollectionView:
         view.addSubview(collectionView)
@@ -194,19 +185,15 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
     
     func showActionSheet(controller: UIViewController, indexPath: IndexPath) {
         
-        let alert = UIAlertController(title: "Image #\(indexPath.row)", message: "What to do?", preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Add image", style: .default, handler: { (_) in
-            print("Adding the image!")
-            self.handshapePhotos.insert(#imageLiteral(resourceName: "sample3"), at: indexPath.row)
-            self.collectionView.insertItems(at: [indexPath])
-        }))
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { (_) in
             print("User click Delete button")
-//            collectionView.delegate?.collectionView!(collectionView, performAction: #selector(onPan(_:)), forItemAt: indexPath, withSender: nil)
 
-            self.handshapePhotos.remove(at: indexPath.row)
+
+            self.handshapes.remove(at: indexPath.row)
             self.collectionView.deleteItems(at: [indexPath])
+            self.newFetch()
             
         }))
         
@@ -220,7 +207,40 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
     }
     
     
-    
+    func newFetch() {
+        var predicate: NSPredicate?
+        if handshapes.count == 0 {
+            predicate = nil
+        } else {
+            var predicates = [NSPredicate]()
+            for shape in handshapes {
+                guard shape.status == .accepted else { continue }
+                guard let signs = shape.signs else { continue }
+//                let localPredicate = NSPredicate(format: "(ANY handshapes.id == %i) OR (ANY handshapes.id == %i) OR (ANY handshapes.id == %i)", signs[0], signs[1], signs[2])
+                let localPredicate = NSPredicate(format: "(ANY handshapes.id == %i) OR (ANY handshapes.id == %i)", signs[0], signs[1])
+                predicates.append(localPredicate)
+            }
+            print("test:\(predicates.count)")
+            print("test1")
+            predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+            print(predicate.debugDescription)
+            print("test2")
+        }
+        
+        
+        fetchedResultsController.fetchRequest.predicate = predicate
+        
+        do {
+            print("test3")
+            try fetchedResultsController.performFetch()
+            print("test4")
+            tableview.reloadData()
+            print("test5")
+        } catch {
+            let error = error as NSError
+            print("\(error), \(error.localizedDescription)")
+        }
+    }
 }
 
 
@@ -231,12 +251,12 @@ extension HandShapeVC: UICollectionViewDelegateFlowLayout, UICollectionViewDataS
         return CGSize(width: collectionView.frame.width/2.5, height: collectionView.frame.width/3)
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return handshapePhotos.count
+        return handshapes.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! HandShapeImageCell
-        cell.data = self.handshapePhotos[indexPath.item]
+        cell.data = self.handshapes[indexPath.item]
         return cell
     }
     
@@ -273,7 +293,7 @@ extension HandShapeVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath.row)
+        tableview.deselectRow(at: indexPath, animated: true)
         let destination = SignWordViewController()
         let word = fetchedResultsController.object(at: indexPath)
         print(word.translation ?? "no word")
@@ -284,22 +304,9 @@ extension HandShapeVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
     }
-//    func playVideoOnTheCell(cell : HandShapeVideoCell, indexPath : IndexPath){
-//        cell.startPlayback()
-//    }
-//
-//    func stopPlayBack(cell : HandShapeVideoCell, indexPath : IndexPath){
-//        cell.stopPlayback()
-//    }
-//
-//    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-//        print("end = \(indexPath)")
-//        if let videoCell = cell as? HandShapeVideoCell {
-//            videoCell.stopPlayback()
-//        }
-//    }
 }
 
+// MARK: - UIImagePickerController Delegate
 extension HandShapeVC: UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true)
@@ -308,11 +315,72 @@ extension HandShapeVC: UIImagePickerControllerDelegate {
             print("error, image not returned")
             return
         }
-                
-        handshapePhotos.append(image)
+        
+        guard let imageToSend = recizeImage(image: image, percentage: 0.3) else { fatalError("Couldn't recize an image")}
+        let uuid = UUID()
+        
+        handshapes.append(Shape(image: imageToSend, id: uuid, signs: nil, status: .loading))
         collectionView.reloadData()
+        
+        
+        let handShapeRequest = HandShapeRequest()
+        handShapeRequest.getHandShape(image: imageToSend) { [weak self] (result: [Int]?) in
+            DispatchQueue.main.async {
+                if let result = result {
+                    print(result)
+                    print(uuid.uuidString)
+                    
+                    if let index = self?.handshapes.firstIndex(where: { (shape) -> Bool in
+                        return shape.id == uuid
+                    }) {
+                        self?.handshapes[index].signs = result
+                        self?.handshapes[index].status = .accepted
+                        self?.collectionView.reloadData()
+                    }
+                    
+                    self?.newFetch()
+                    
+                } else {
+                    if let presentedVC = self?.presentedViewController as? UIAlertController {
+                        presentedVC.dismiss(animated: true, completion: nil)
+                    }
+                    
+                    if let index = self?.handshapes.firstIndex(where: { (shape) -> Bool in
+                        return shape.id == uuid
+                    }) {
+                        // Add deletion shake
+                        let indexPath = IndexPath(row: index, section: 0)
+                        self?.collectionView.cellForItem(at: indexPath)
+                        
+                        self?.handshapes.remove(at: index)
+                        self?.collectionView.deleteItems(at: [indexPath])
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    func recizeImage(image: UIImage, percentage: CGFloat) -> UIImage? {
+        let canvas = CGSize(width: image.size.width * percentage, height: image.size.height * percentage)
+        return UIGraphicsImageRenderer(size: canvas, format: image.imageRendererFormat).image { _ in
+            image.draw(in: CGRect(origin: .zero, size: canvas))
+        }
     }
 }
 
 extension HandShapeVC: NSFetchedResultsControllerDelegate {}
 
+struct Shape {
+    var image: UIImage
+    var id: UUID
+    var signs: [Int]?
+    var status: shapeStatus
+    
+}
+
+enum shapeStatus {
+    case loading
+    case accepted
+    case failed
+}
