@@ -82,12 +82,6 @@ extension HomeTableViewController: UITableViewDataSource, UITableViewDelegate {
         tableview.deselectRow(at: indexPath, animated: true)
         if indexPath.row == 0 {
             let dictionaryByWordsVC = DictionaryByWordsVC()
-//            let transition = CATransition()
-//            transition.duration = 0.5
-//            transition.type = CATransitionType.push
-//            transition.subtype = CATransitionSubtype.fromRight
-//            transition.timingFunction = CAMediaTimingFunction(name:CAMediaTimingFunctionName.easeInEaseOut)
-//            view.window!.layer.add(transition, forKey: kCATransition)
             self.present(dictionaryByWordsVC, animated: true, completion: nil)
         }
         if indexPath.row == 1 {
