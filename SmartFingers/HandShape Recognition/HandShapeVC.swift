@@ -78,7 +78,7 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if !wasLaunched {
-//            openCameraView()
+            openCameraView()
             wasLaunched = true
         }
     }
