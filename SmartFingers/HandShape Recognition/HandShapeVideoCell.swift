@@ -30,7 +30,7 @@ class HandShapeVideoCell: UITableViewCell {
     
     let videoImageView: UIImageView = {
         let view = UIImageView()
-        view.backgroundColor = UIColor.red
+        view.backgroundColor = UIColor(r: 87, g: 69, b: 93)
         view.layer.cornerRadius = 10
         view.image = #imageLiteral(resourceName: "sample1")
         view.contentMode = .scaleToFill
@@ -40,7 +40,7 @@ class HandShapeVideoCell: UITableViewCell {
     
     let videoView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.red
+        view.backgroundColor = UIColor(r: 87, g: 69, b: 93)
         view.layer.cornerRadius = 10
         view.translatesAutoresizingMaskIntoConstraints = false
         return view

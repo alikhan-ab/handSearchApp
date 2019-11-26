@@ -27,10 +27,10 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
      - 
      */
     
-    var navbar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 75))
+    var navbar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 55))
     var navItem = UINavigationItem()
     let screenSize: CGRect = UIScreen.main.bounds
-    
+    var dataExample = [String]()
 //    var cameraView: UIView = {
 //        let view = UIView()
 //        view.backgroundColor = .darkGray
@@ -78,7 +78,7 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if !wasLaunched {
-            openCameraView()
+//            openCameraView()
             wasLaunched = true
         }
     }
@@ -100,7 +100,6 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
         
 
     func setUpViews() {
-        
         //NavigationBar:
         navbar.backgroundColor = UIColor.white
         navbar.delegate = self
@@ -116,6 +115,20 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
 //
 //        navItem.rightBarButtonItems = [negativeSpacer, cameraItem]
         navItem.rightBarButtonItem = cameraItem
+        navItem.leftBarButtonItem?.tintColor = UIColor(red: 255/255, green: 247/255, blue: 214/255, alpha: 1)
+        navItem.rightBarButtonItem?.tintColor = UIColor(red: 255/255, green: 247/255, blue: 214/255, alpha: 1)
+        if #available(iOS 13.0, *) {
+            let coloredAppearance = UINavigationBarAppearance()
+            coloredAppearance.configureWithOpaqueBackground()
+            coloredAppearance.backgroundColor = UIColor(r: 86, g: 89, b: 122)
+            coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor(r: 247, g: 208, b: 111)]
+            coloredAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor(r: 247, g: 208, b: 111)]
+                   
+            navbar.standardAppearance = coloredAppearance
+            navbar.scrollEdgeAppearance = coloredAppearance
+        } else {
+            // Fallback on earlier versions
+        }
         
         navbar.items = [navItem]
         view.addSubview(navbar)
@@ -125,24 +138,16 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
             navbar.rightAnchor.constraint(equalTo: self.view.rightAnchor),
             navbar.leftAnchor.constraint(equalTo: self.view.leftAnchor)
         ])
-        self.view.frame = CGRect(x: 0, y: 75, width: UIScreen.main.bounds.width, height: (UIScreen.main.bounds.height - 75))
-        
-        //Camera:
-//        view.addSubview(cameraView)
-//        let cameraHeight = screenSize.height*0.4
-//        NSLayoutConstraint.activate([
-//            cameraView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 75),
-//            cameraView.heightAnchor.constraint(equalToConstant: cameraHeight),
-//            cameraView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
-//            cameraView.leftAnchor.constraint(equalTo: self.view.leftAnchor)
-//        ])
+        self.view.frame = CGRect(x: 0, y: 55, width: UIScreen.main.bounds.width, height: (UIScreen.main.bounds.height - 55))
         
         //CollectionView:
         view.addSubview(collectionView)
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = UIColor(red: 69/255, green: 70/255, blue: 85/255, alpha: 1)//UIColor(r: 86, g: 89, b: 122)//UIColor(r: 116, g: 162, b: 214)
+        self.view.backgroundColor = UIColor(red: 69/255, green: 70/255, blue: 85/255, alpha: 1)//UIColor(r: 86, g: 89, b: 122)
+
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 75).isActive = true
+        collectionView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 60).isActive = true
         collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15).isActive = true
         collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15).isActive = true
         collectionView.heightAnchor.constraint(equalToConstant: view.frame.width/3).isActive = true
@@ -152,7 +157,8 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
         tableview.dataSource = self
         tableview.register(HandShapeVideoCell.self, forCellReuseIdentifier: "cellId")
         view.addSubview(tableview)
-        
+        tableview.backgroundColor = UIColor(r: 180, g: 199, b: 231)
+        tableview.separatorColor = UIColor(r: 87, g: 69, b: 93)
         NSLayoutConstraint.activate([
             tableview.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 10),
             tableview.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
@@ -202,12 +208,20 @@ extension HandShapeVC: UICollectionViewDelegateFlowLayout, UICollectionViewDataS
         return CGSize(width: collectionView.frame.width/2.5, height: collectionView.frame.width/3)
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        if sampleData.isEmpty {
+//            return 1
+//        }
         return sampleData.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! HandShapeImageCell
+//        if sampleData.isEmpty {
+//            cell.isEmpty = true
+//        } else {
+//        cell.isEmpty = false
         cell.data = self.sampleData[indexPath.item]
+//        }
         return cell
     }
     
@@ -215,26 +229,34 @@ extension HandShapeVC: UICollectionViewDelegateFlowLayout, UICollectionViewDataS
         guard let cell = collectionView.cellForItem(at: indexPath) else { return }
         showActionSheet(controller: self, indexPath: indexPath)
         
-//        performSegue(withIdentifier: "showDetail", sender: cell)
     }
-    
-//    func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
-//      sampleData.remove(at: indexPath.row)
-//      collectionView.deleteItems(at: [indexPath])
-//    }
-    
+
 }
 
 // MARK: - UITableView Delegate
 extension HandShapeVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10//allPlayers.count
+        // MARK:- To check for empty case comment the line below
+        dataExample = ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
+        if dataExample.isEmpty {
+            let noDataLabel = UILabel(frame: CGRect(x: self.screenSize.width/4, y: 0, width: self.tableview.bounds.width/2, height: self.tableview.bounds.height))
+            noDataLabel.text             = "No results"
+            noDataLabel.numberOfLines    = 3
+            noDataLabel.textColor        = UIColor(red: 69/255, green: 70/255, blue: 85/255, alpha: 1)//UIColor(r: 87, g: 69, b: 93)//UIColor(r: 247, g: 208, b: 111)
+            noDataLabel.textAlignment    = .center
+            let font                     = UIFont(name: "Avenir-Heavy", size: 40)
+            noDataLabel.font             = font
+            tableView.separatorStyle     = .none
+            tableView.addSubview(noDataLabel)
+        }
+        return dataExample.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableview.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! HandShapeVideoCell
         cell.nameLabel.text = "Sample video #\(indexPath.row)"
+        cell.nameLabel.textColor = UIColor(r: 87, g: 69, b: 93)
         
 //        let file = Bundle.main.path(forResource: "5", ofType: "mp4", inDirectory: "Videos")
 //        cell.videoPlayerItem = AVPlayerItem.init(url: URL(fileURLWithPath: file!))
