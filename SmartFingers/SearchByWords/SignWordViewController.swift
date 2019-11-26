@@ -47,6 +47,20 @@ class SignWordViewController: UIViewController, UINavigationBarDelegate {
         return label
     }()
     
+    var favouritesLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Add to Favourites"
+        label.textColor = UIColor(r: 247, g: 208, b: 111)
+        label.textAlignment = .center
+//        label.layer.cornerRadius = 10
+//        label.layer.masksToBounds = true
+        label.font = UIFont.italicSystemFont(ofSize: 18) //.systemFont(ofSize: 18)
+        label.numberOfLines = 2
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.backgroundColor = .clear
+        return label
+    }()
+    
     var addToFavourites: UIImageView = {
         let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -165,7 +179,7 @@ class SignWordViewController: UIViewController, UINavigationBarDelegate {
     }
     
     func addStarImage(){
-        [addToFavourites].forEach(self.view.addSubview)
+        [addToFavourites,favouritesLabel].forEach(self.view.addSubview)
 
         //check is it in array:
         // download array and />
@@ -175,11 +189,17 @@ class SignWordViewController: UIViewController, UINavigationBarDelegate {
             addToFavourites.image = unfilledImage
         }
         
-        addToFavourites.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -self.view.frame.width/4).isActive = true
-        addToFavourites.bottomAnchor.constraint(equalTo: descriptionTextLabel.topAnchor, constant: -20).isActive = true //-65
-        //        addToFavourites.centerYAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -100).isActive = true
-        addToFavourites.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        addToFavourites.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        addToFavourites.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: self.view.frame.width/4).isActive = true
+        addToFavourites.bottomAnchor.constraint(equalTo: descriptionTextLabel.topAnchor, constant: -45).isActive = true //-65
+//                addToFavourites.centerYAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -100).isActive = true
+        addToFavourites.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        addToFavourites.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        
+        favouritesLabel.centerYAnchor.constraint(equalTo: self.addToFavourites.centerYAnchor).isActive = true
+        favouritesLabel.leftAnchor.constraint(equalTo: descriptionTextLabel.leftAnchor).isActive = true
+        favouritesLabel.rightAnchor.constraint(equalTo: addToFavourites.leftAnchor).isActive = true
+        favouritesLabel.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        
     }
     
     func setImageFavourite() {

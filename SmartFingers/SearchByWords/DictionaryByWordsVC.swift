@@ -255,8 +255,10 @@ extension DictionaryByWordsVC: UITableViewDataSource, UITableViewDelegate {
         let cell = tableview.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! NameCell
         let word = fetchedResultsController.object(at: indexPath)
         cell.dayLabel.text = word.translation
-        cell.backgroundColor = UIColor(red: 93/255, green: 96/255, blue: 130/255, alpha: 1)
-        cell.dayLabel.textColor = UIColor(r: 247, g: 208, b: 111)
+//        cell.backgroundColor = UIColor(red: 93/255, green: 96/255, blue: 130/255, alpha: 1)
+//        cell.dayLabel.textColor = UIColor(r: 247, g: 208, b: 111)
+        cell.backgroundColor = UIColor(r: 180, g: 199, b: 231)
+        cell.dayLabel.textColor = UIColor(r: 87, g: 69, b: 93)
         return cell
     }
     
