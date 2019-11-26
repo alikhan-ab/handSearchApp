@@ -13,7 +13,7 @@ import CoreData
 class SubcategoriesViewController: UIViewController, UINavigationBarDelegate {
     
     var tableView   : UITableView!
-    let navbar      = UINavigationBar(frame: CGRect(x: 0, y: 25, width: UIScreen.main.bounds.width, height: 75))
+    let navbar      = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 55))
 //    var dataExample = ["Colours", "Measurements", "Emotions","Characteristics","Numbers","General: Time"]
     var navItem = UINavigationItem()
     
@@ -64,9 +64,9 @@ class SubcategoriesViewController: UIViewController, UINavigationBarDelegate {
         tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
-        
+        tableView.backgroundColor = UIColor(r: 180, g: 199, b: 231)
         let constraints:[NSLayoutConstraint] = [
-            tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 75),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 55),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -78,15 +78,29 @@ class SubcategoriesViewController: UIViewController, UINavigationBarDelegate {
     }
     
     func setupNavBar() {
-        let height: CGFloat = 75
-//        navbar.backgroundColor =  UIColor.white
+        let height: CGFloat = 55
+        navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(back))
+        navItem.leftBarButtonItem?.tintColor = UIColor(red: 255/255, green: 247/255, blue: 214/255, alpha: 1)
+        if #available(iOS 13.0, *) {
+            let coloredAppearance = UINavigationBarAppearance()
+            coloredAppearance.configureWithOpaqueBackground()
+            coloredAppearance.backgroundColor = UIColor(r: 86, g: 89, b: 122)
+            coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor(r: 247, g: 208, b: 111)]
+            coloredAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor(r: 247, g: 208, b: 111)]
+                   
+            navbar.standardAppearance = coloredAppearance
+            navbar.scrollEdgeAppearance = coloredAppearance
+        } else {
+            // Fallback on earlier versions
+        }
+        
         navbar.delegate = self
 //        navItem.title =
-        navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(back))
+
         navbar.items = [navItem]
         navItem.title = subcategory
         view.addSubview(navbar)
-        self.view.frame = CGRect(x: 0, y: height+25, width: UIScreen.main.bounds.width, height: (UIScreen.main.bounds.height - height-25))
+        self.view.frame = CGRect(x: 0, y: height, width: UIScreen.main.bounds.width, height: (UIScreen.main.bounds.height - height))
         navItem.title = subcategory
     }
 
@@ -118,8 +132,9 @@ extension SubcategoriesViewController: UITableViewDataSource, UITableViewDelegat
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath) as! NameCell
-        
         let word = fetchedResultsController.object(at: indexPath)
+        cell.backgroundColor = UIColor(r: 180, g: 199, b: 231)
+        cell.dayLabel.textColor = UIColor(r: 87, g: 69, b: 93)
         cell.dayLabel.text = word.translation
         return cell
     }

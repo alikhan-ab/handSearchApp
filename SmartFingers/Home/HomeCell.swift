@@ -65,12 +65,12 @@ class HomeCell: UITableViewCell {
         self.selectedBackgroundView = bgColorView
         
         leftImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        leftImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 40).isActive = true
-        leftImageView.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        leftImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 15).isActive = true
+        leftImageView.widthAnchor.constraint(equalToConstant: 80).isActive = true
         leftImageView.heightAnchor.constraint(equalTo: leftImageView.widthAnchor).isActive = true
         
         nameLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        nameLabel.leftAnchor.constraint(equalTo: leftImageView.rightAnchor, constant: 25).isActive = true
+        nameLabel.leftAnchor.constraint(equalTo: leftImageView.rightAnchor, constant: 20).isActive = true
         nameLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -40).isActive = true
         nameLabel.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
 

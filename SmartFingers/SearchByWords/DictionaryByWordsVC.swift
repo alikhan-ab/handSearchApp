@@ -32,7 +32,7 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
     
     
     
-    var navbar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 75))
+    var navbar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 55))
     var navItem = UINavigationItem()
     lazy var searchBar: UISearchBar = UISearchBar()
     let keyboardView = SignKeyboardView()
@@ -113,8 +113,6 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
                 }
             }
         }
-        
-        
         setupNavBar()
         setupTableView()
         self.hideKeyboardWhenTappedAround()
@@ -125,7 +123,8 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
         navbar.delegate = self
         navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(back))
         navItem.rightBarButtonItem = UIBarButtonItem(title: "Sign", style: .plain, target: self, action: #selector(signToLetter))
-        
+        searchBar.backgroundColor = UIColor(red: 62/255, green: 66/255, blue: 97/255, alpha: 1)
+        searchBar.tintColor = UIColor(red: 93/255, green: 96/255, blue: 130/255, alpha: 1) //247, 208, 111
         searchBar.searchBarStyle = UISearchBar.Style.prominent
         searchBar.placeholder = " Search..."
         searchBar.sizeToFit()
@@ -133,17 +132,19 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
         searchBar.backgroundImage = UIImage()
         searchBar.delegate = self
         navItem.titleView = searchBar
-        
+        navItem.leftBarButtonItem?.tintColor = UIColor(red: 255/255, green: 247/255, blue: 214/255, alpha: 1)
+        navItem.rightBarButtonItem?.tintColor = UIColor(red: 255/255, green: 247/255, blue: 214/255, alpha: 1)
         navbar.items = [navItem]
         view.addSubview(navbar)
         
         NSLayoutConstraint.activate([
             navbar.topAnchor.constraint(equalTo: self.view.topAnchor),
-            navbar.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+//            navbar.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
             navbar.rightAnchor.constraint(equalTo: self.view.rightAnchor),
+//            navbar.heightAnchor.constraint(equalToConstant: 60),
             navbar.leftAnchor.constraint(equalTo: self.view.leftAnchor)
             ])
-        self.view.frame = CGRect(x: 0, y: 75, width: UIScreen.main.bounds.width, height: (UIScreen.main.bounds.height - 75))
+        self.view.frame = CGRect(x: 0, y: 55, width: UIScreen.main.bounds.width, height: (UIScreen.main.bounds.height - 55))
     }
     
     
@@ -180,10 +181,12 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
     func setupTableView() {
         tableview.delegate = self
         tableview.dataSource = self
+        tableview.backgroundColor = UIColor(red: 93/255, green: 96/255, blue: 130/255, alpha: 1)
+
         tableview.register(NameCell.self, forCellReuseIdentifier: "cellId")
         view.addSubview(tableview)
         NSLayoutConstraint.activate([
-            tableview.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 75),
+            tableview.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 55),
             tableview.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),//, constant: -screenSize.width),
             tableview.rightAnchor.constraint(equalTo: self.view.rightAnchor),
             tableview.leftAnchor.constraint(equalTo: self.view.leftAnchor)
@@ -223,6 +226,8 @@ extension DictionaryByWordsVC: UITableViewDataSource, UITableViewDelegate {
         let cell = tableview.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! NameCell
         let word = fetchedResultsController.object(at: indexPath)
         cell.dayLabel.text = word.translation
+        cell.backgroundColor = UIColor(red: 93/255, green: 96/255, blue: 130/255, alpha: 1)
+        cell.dayLabel.textColor = UIColor(r: 247, g: 208, b: 111)
         return cell
     }
     

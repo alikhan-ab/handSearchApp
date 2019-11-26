@@ -18,10 +18,10 @@ class HomeTableViewController: UIViewController, UINavigationBarDelegate {
     let gradientThree = UIColor(red: 62/255, green: 66/255, blue: 97/255, alpha: 1)
     let gradientFour = UIColor(red: 48/255, green: 52/255, blue: 83/255, alpha: 1)
 
-    let image1 = UIImage(named: "satellite")
-    let image2 = UIImage(named: "observatory")
-    let image3 = UIImage(named: "space-ship")
-    let image4 = UIImage(named: "comet")
+    let image1 = UIImage(named: "icons8-alpha-100")//satellite
+    let image2 = UIImage(named: "icons8-list-100")//observatory
+    let image3 = UIImage(named: "icons8-sign-language-i-100")//space-ship
+    let image4 = UIImage(named: "icons8-favorite-folder-100")//comet
 
     let tableview: UITableView = {
         let tv = UITableView()
