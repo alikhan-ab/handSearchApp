@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 class FavouriteViewController: UIViewController, UINavigationBarDelegate {//, KeyboardDelegate {
     
@@ -17,6 +18,17 @@ class FavouriteViewController: UIViewController, UINavigationBarDelegate {//, Ke
     //    var filteredFootballer = [Footballer]()
     //    var dataExample = ["A", "B", "C"]
     var dataExample = [String]()
+    
+    private let persistentContainer = NSPersistentContainer(name: "SmartFingers")
+    lazy var fetchedResultsController: NSFetchedResultsController<Word> = {
+        
+        let fetchRequest: NSFetchRequest<Word> = Word.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "translation", ascending: true)]
+        fetchRequest.predicate = NSPredicate(format: "favourite == 1")
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController.delegate = self
+        return fetchedResultsController
+    }()
     
     
     var navbar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 55))
@@ -106,6 +118,20 @@ class FavouriteViewController: UIViewController, UINavigationBarDelegate {//, Ke
         setupNavBar()
         setupTableView()
         self.hideKeyboardWhenTappedAround()
+        
+        persistentContainer.loadPersistentStores { (NSPersistentStoreDescription, error) in
+            if let error = error {
+                print("Unable to Load Persistent Store")
+                print("\(error), \(error.localizedDescription)")
+            } else {
+                do {
+                    try self.fetchedResultsController.performFetch()
+                } catch {
+                    let error = error as NSError
+                    print("\(error), \(error.localizedDescription)")
+                }
+            }
+        }
     }
     
     func setupNavBar() {
@@ -205,6 +231,8 @@ extension FavouriteViewController: UISearchBarDelegate {
 // MARK: - UITableView Delegate
 extension FavouriteViewController: UITableViewDataSource, UITableViewDelegate {
     
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //        if filteredFootballer.count > 0 {
         //            if filteredFootballer[0].name == "none" {
@@ -213,8 +241,8 @@ extension FavouriteViewController: UITableViewDataSource, UITableViewDelegate {
         //            return filteredFootballer.count
         //        }
         //        return allPlayers.count
-        
-        if dataExample.isEmpty {
+        guard let words = fetchedResultsController.fetchedObjects else { return 0}
+        if words.isEmpty {
             let noDataLabel = UILabel(frame: CGRect(x: self.screenSize.width/4, y: 0, width: self.tableview.bounds.width/2, height: self.tableview.bounds.height/4))
             noDataLabel.text             = "Seems like you didn't add anything here"
             noDataLabel.numberOfLines    = 3
@@ -240,16 +268,15 @@ extension FavouriteViewController: UITableViewDataSource, UITableViewDelegate {
             tableView.backgroundView = backImageView
             tableView.backgroundView?.addSubview(noDataLabel)
         }
-        return dataExample.count
+        return words.count
         
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // 2
         let cell = tableview.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! NameCell
-
-        cell.dayLabel.text = dataExample[indexPath.row]
-        
+        let word = fetchedResultsController.object(at: indexPath)
+        cell.dayLabel.text = word.translation
         return cell
     }
     
@@ -263,7 +290,8 @@ extension FavouriteViewController: UITableViewDataSource, UITableViewDelegate {
         //            name = filteredFootballer[indexPath.row].name
         //        }
         //        destination.navItem.title = name //tableView.cellForRow(at: indexPath)?.textLabel!.text
-        destination.navItem.title = dataExample[indexPath.row]
+        let word = fetchedResultsController.object(at:indexPath)
+        destination.word = word
         self.present(destination, animated: true, completion: nil)
     }
     
@@ -272,4 +300,6 @@ extension FavouriteViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
 }
+
+extension FavouriteViewController: NSFetchedResultsControllerDelegate {}
 

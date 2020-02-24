@@ -52,6 +52,8 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
     
     var handshapes = [Shape]()
     
+    var noResults = true
+    
     let searchLimit = 5
     
     let tableview: UITableView = {
@@ -70,6 +72,7 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "translation", ascending: true)]
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        fetchRequest.fetchBatchSize = 20
         
         fetchedResultsController.delegate = self
         
@@ -286,24 +289,35 @@ extension HandShapeVC: UICollectionViewDelegateFlowLayout, UICollectionViewDataS
 // MARK: - UITableView Delegate
 extension HandShapeVC: UITableViewDataSource, UITableViewDelegate {
     
+    func addNoResultsLabel() {
+        let noDataLabel = UILabel(frame: CGRect(x: self.screenSize.width/4, y: 0, width: self.tableview.bounds.width/2, height: self.tableview.bounds.height))
+        noDataLabel.text             = "No results"
+        noDataLabel.numberOfLines    = 3
+        noDataLabel.textColor        = UIColor(red: 69/255, green: 70/255, blue: 85/255, alpha: 1)//UIColor(r: 87, g: 69, b: 93)//UIColor(r: 247, g: 208, b: 111)
+        noDataLabel.textAlignment    = .center
+        let font                     = UIFont(name: "Avenir-Heavy", size: 40)
+        noDataLabel.font             = font
+        noDataLabel.tag = 100
+        tableview.separatorStyle     = .none
+        tableview.addSubview(noDataLabel)
+        noResults = true
+    }
+    
+    func removeNoResultsLabel() {
+        noResults = false
+        guard let tagView = self.view.viewWithTag(100) else { return }
+        tagView.removeFromSuperview()
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // MARK:- To check for empty case comment the line below
-        dataExample = ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
-        if dataExample.isEmpty {
-            let noDataLabel = UILabel(frame: CGRect(x: self.screenSize.width/4, y: 0, width: self.tableview.bounds.width/2, height: self.tableview.bounds.height))
-            noDataLabel.text             = "No results"
-            noDataLabel.numberOfLines    = 3
-            noDataLabel.textColor        = UIColor(red: 69/255, green: 70/255, blue: 85/255, alpha: 1)//UIColor(r: 87, g: 69, b: 93)//UIColor(r: 247, g: 208, b: 111)
-            noDataLabel.textAlignment    = .center
-            let font                     = UIFont(name: "Avenir-Heavy", size: 40)
-            noDataLabel.font             = font
-            tableView.separatorStyle     = .none
-            tableView.addSubview(noDataLabel)
-        }
-        return dataExample.count
         guard let words = fetchedResultsController.fetchedObjects else { return 0}
+        if words.isEmpty {
+            addNoResultsLabel()
+        } else if noResults {
+            removeNoResultsLabel()
+        }
         return words.count
-        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -311,18 +325,7 @@ extension HandShapeVC: UITableViewDataSource, UITableViewDelegate {
         let word = fetchedResultsController.object(at: indexPath)
         cell.word = word
         cell.deployWord()
-        cell.nameLabel.text = "Sample video #\(indexPath.row)"
         cell.nameLabel.textColor = UIColor(r: 87, g: 69, b: 93)
-        
-//        let file = Bundle.main.path(forResource: "5", ofType: "mp4", inDirectory: "Videos")
-//        cell.videoPlayerItem = AVPlayerItem.init(url: URL(fileURLWithPath: file!))
-//        let playerLayer = AVPlayerLayer()
-//        let player = AVPlayer(url: URL(fileURLWithPath: file!))
-////        playerLayer.frame = cell.bounds
-//        playerLayer.frame = CGRect(x: 0, y: 150, width: 100, height: cell.bounds.height)
-//        cell.layer.addSublayer(playerLayer)
-//        player.play()
-        
         return cell
     }
     

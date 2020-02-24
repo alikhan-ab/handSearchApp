@@ -68,7 +68,6 @@ extension HomeTableViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableview.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! HomeCell
-//        cell.dayLabel.text = word.translation
         let cellBackground = [gradientOne, gradientTwo, gradientThree, gradientFour]
         let titles = ["Words", "Categories", "Hand Shape", "Favourites"]
         let images = [image1, image2, image3, image4]

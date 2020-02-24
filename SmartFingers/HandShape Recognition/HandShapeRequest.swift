@@ -8,7 +8,7 @@
 
 import UIKit
 class HandShapeRequest {
-    let url = URL(string: "http://10.101.4.254:5000/getshape")!
+    let url = URL(string: "http://192.168.8.101:5000/getshape")!
     
     func getHandShape(image: UIImage, withCompletion completion: @escaping ([Int]?) -> Void) {
         
