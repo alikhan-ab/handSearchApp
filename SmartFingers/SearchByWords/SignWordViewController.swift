@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 import AVFoundation
 import AVKit
+import CoreData
+
 
 class SignWordViewController: UIViewController, UINavigationBarDelegate {
     
@@ -142,6 +144,7 @@ class SignWordViewController: UIViewController, UINavigationBarDelegate {
         
     }
     
+    
     func pause() {
         player.pause()
     }
@@ -160,6 +163,10 @@ class SignWordViewController: UIViewController, UINavigationBarDelegate {
     
     func setUpView(){
         self.view.backgroundColor = UIColor(r: 86, g: 89, b: 122)
+        
+        guard let isFavorite = word?.favourite else { return }
+        starTapped = isFavorite
+        print("\(starTapped)")
 
         let gesture = UITapGestureRecognizer(target: self, action: #selector(starTapped(tapGestureRecognizer:)))
         addToFavourites.addGestureRecognizer(gesture)
@@ -206,9 +213,43 @@ class SignWordViewController: UIViewController, UINavigationBarDelegate {
         if starTapped {
             addToFavourites.image = unfilledImage
             starTapped = false
+            print("zz:\(starTapped)")
         } else {
             addToFavourites.image = filledImage
             starTapped = true
+        }
+        update()
+    }
+    
+    func update() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        
+        print("1")
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Word")
+        print("2")
+        let predicate = NSPredicate(format: "id == %i", word!.id)
+        fetchRequest.predicate = predicate
+        do {
+            let words = try managedContext.fetch(fetchRequest)
+            print("3")
+            print("\(words.count)")
+            if words.count == 1 {
+                let wordObject = words.first as! Word
+                wordObject.favourite = starTapped
+                do {
+                    print("4")
+                    try managedContext.save()
+                } catch {
+                    print(error)
+                }
+            }
+            
+            
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
         }
         
     }

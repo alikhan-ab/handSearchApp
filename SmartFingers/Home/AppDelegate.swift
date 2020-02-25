@@ -45,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func parseDatabaseFile() -> [String : [Int]]? {
-        let filename = "database_3"
+        let filename = "database_1"
         
         var shapes = [String]()
         guard let url = Bundle.main.url(forResource: filename, withExtension: nil) else { return nil }

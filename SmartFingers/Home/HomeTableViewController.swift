@@ -68,7 +68,6 @@ extension HomeTableViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableview.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! HomeCell
-//        cell.dayLabel.text = word.translation
         let cellBackground = [gradientOne, gradientTwo, gradientThree, gradientFour]
         let titles = ["Words", "Categories", "Hand Shape", "Favourites"]
         let images = [image1, image2, image3, image4]
@@ -79,17 +78,10 @@ extension HomeTableViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath.row)
-
+        tableview.deselectRow(at: indexPath, animated: true)
         if indexPath.row == 0 {
             let dictionaryByWordsVC = DictionaryByWordsVC()
-            let transition = CATransition()
-            transition.duration = 0.5
-            transition.type = CATransitionType.push
-            transition.subtype = CATransitionSubtype.fromRight
-            transition.timingFunction = CAMediaTimingFunction(name:CAMediaTimingFunctionName.easeInEaseOut)
-            view.window!.layer.add(transition, forKey: kCATransition)
-            self.present(dictionaryByWordsVC, animated: false, completion: nil)
+            self.present(dictionaryByWordsVC, animated: true, completion: nil)
         }
         if indexPath.row == 1 {
             let categoryVC = CategoriesViewController()
