@@ -14,7 +14,7 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
     
     /* Plan:
      - remove some unused code +
-     - Merge and upload 
+     - Merge and upload +
      - Done button add target opening table with videos
      
       finish in 1 hour! then do assignment

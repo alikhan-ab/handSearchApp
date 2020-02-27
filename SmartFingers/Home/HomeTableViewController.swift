@@ -63,14 +63,14 @@ extension HomeTableViewController: UITableViewDataSource, UITableViewDelegate {
 
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return 5
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableview.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! HomeCell
-        let cellBackground = [gradientOne, gradientTwo, gradientThree, gradientFour]
-        let titles = ["Words", "Categories", "Hand Shape", "FingerSpelling"]
-        let images = [image1, image2, image3, image4]
+        let cellBackground = [gradientOne, gradientTwo, gradientThree, gradientFour, gradientThree]
+        let titles = ["Words", "Categories", "Hand Shape", "FingerSpelling", "Favourites"]
+        let images = [image1, image2, image3, image3, image4]
         cell.nameLabel.text = titles[indexPath.row]
         cell.leftImageView.image = images[indexPath.row]
         cell.backgroundColor = cellBackground[indexPath.row]
@@ -92,13 +92,17 @@ extension HomeTableViewController: UITableViewDataSource, UITableViewDelegate {
             self.present(signVC, animated: true, completion: nil)
         }
         if indexPath.row == 3 {
-            let signVC = FingerSpellingViewController()//FavouriteViewController()
+            let signVC = FingerSpellingViewController()
+            self.present(signVC, animated: true, completion: nil)
+        }
+        if indexPath.row == 4 {
+            let signVC = FavouriteViewController()
             self.present(signVC, animated: true, completion: nil)
         }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return screenSize.height/4
+        return screenSize.height/5
     }
     
 }

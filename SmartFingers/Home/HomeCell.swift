@@ -34,7 +34,7 @@ class HomeCell: UITableViewCell {
         let label = UILabel()
         label.text = "Day 1"
         label.textColor = UIColor(red: 255/255, green: 247/255, blue: 214/255, alpha: 1)
-        let font = UIFont(name: "Avenir-Heavy", size: 40)
+        let font = UIFont(name: "Avenir-Heavy", size: 30)
         label.font = font
         label.numberOfLines = 2
         label.layer.shadowColor = UIColor(red: 69/255, green: 70/255, blue: 85/255, alpha: 1).cgColor
