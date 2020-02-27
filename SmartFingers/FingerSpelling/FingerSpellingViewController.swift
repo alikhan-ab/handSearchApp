@@ -13,14 +13,7 @@ import AVFoundation
 class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     /* Plan:
-     - remove some unused code +
-     - Merge and upload +
-     - Done button add target opening table with videos
-     
-      finish in 1 hour! then do assignment
-     
-     - Change menu to 5
-     -
+     - If Ъ/Ь 2nd line and for others
      */
     //MARK:- Variables
     
@@ -34,18 +27,12 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    var textView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .darkGray
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
+
     var stackView = UIStackView()
 
     var doneButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Add", for: .normal)
+        button.setTitle("Done", for: .normal)
         button.backgroundColor = UIColor(red: 48/255, green: 52/255, blue: 83/255, alpha: 1)
         button.setTitleColor(UIColor(red: 255/255, green: 247/255, blue: 214/255, alpha: 1), for: .normal)
         let font = UIFont(name: "Avenir-Heavy", size: 35)
@@ -56,8 +43,8 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
         button.titleLabel?.layer.shadowOffset = CGSize(width: 2, height: 2)
         button.titleLabel?.layer.masksToBounds = false
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.layer.borderColor = UIColor.red.cgColor //UIColor(red: 69/255, green: 70/255, blue: 85/255, alpha: 1).cgColor
-        button.layer.borderWidth = 15
+        button.layer.borderColor = UIColor(red: 255/255, green: 247/255, blue: 214/255, alpha: 1).cgColor 
+        button.layer.borderWidth = 5
         button.layer.cornerRadius = 6
         return button
     }()
@@ -67,12 +54,11 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
     var sessionOutputSetting = AVCapturePhotoSettings(format: [AVVideoCodecKey:AVVideoCodecType.jpeg])
     var previewLayer = AVCaptureVideoPreviewLayer()
     
-    var sampleData = ["C", "A", "T"]
+    var sampleData = ["C", "A", "T", "B", "D", "E", "F", "G"]
     
     var buttonCount = 0
     var buttonArray = [UIButton]()
-    var tempArray = [UIButton]()
-    var isFirst = true
+    //var isFirst = true
 
     //MARK:- Methods
     /*
@@ -81,6 +67,38 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
      setUpView()
      }
      */
+    
+    override func viewWillAppear(_ animated: Bool) {
+        setUpView()
+        let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInDualCamera, AVCaptureDevice.DeviceType.builtInTelephotoCamera,AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.unspecified)
+        for device in (deviceDiscoverySession.devices) {
+            if(device.position == AVCaptureDevice.Position.front){
+                do{
+                    let input = try AVCaptureDeviceInput(device: device)
+                    if(captureSession.canAddInput(input)){
+                        captureSession.addInput(input);
+                        
+                        if(captureSession.canAddOutput(sessionOutput)){
+                            captureSession.addOutput(sessionOutput);
+                            previewLayer = AVCaptureVideoPreviewLayer(session: captureSession);
+                            previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill;
+                            previewLayer.connection?.videoOrientation = AVCaptureVideoOrientation.portrait;
+                            cameraView.layer.addSublayer(previewLayer);
+                        }
+                    }
+                }
+                catch{
+                    print("exception!");
+                }
+            }
+        }
+        captureSession.startRunning()
+    }
+        
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        previewLayer.frame = cameraView.bounds
+    }
     
     func setUpView() {
         self.view.backgroundColor = UIColor(red: 48/255, green: 52/255, blue: 83/255, alpha: 1)//UIColor(red: 69/255, green: 70/255, blue: 85/255, alpha: 1)
@@ -103,7 +121,6 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
         cameraView.heightAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
         cameraView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
 
-        //setupTextView()
         setupButtonsStackView()
         
         doneButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: screenSize.width/4).isActive = true
@@ -112,14 +129,15 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
         doneButton.heightAnchor.constraint(equalToConstant: 55).isActive = true
         doneButton.widthAnchor.constraint(equalToConstant: 115).isActive = true
         doneButton.tag = 0
-        doneButton.addTarget(self, action: #selector(letterButtonPressed), for: .touchUpInside) // for now only
+        doneButton.addTarget(self, action: #selector(doneButtonPressed), for: .touchUpInside)
     }
     
     @objc func doneButtonPressed(_ sender: UIButton){
         print("\n Done!\n")
-        
+        self.present(FingerSpellingWordSearchVC(), animated: true, completion: nil)
     }
     
+    //MARK: StackView Making methods
     func addButton(sender: UIButton) {
         buttonCount += 1
         buttonArray.append(sender)
@@ -142,7 +160,6 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
         updateStackView()
     }
     
-    //MARK: View Making methods
     func makeLetterButton(letter: String) -> UIButton {
         let button = UIButton()
         button.frame = CGRect(x: 30, y: 30, width: 150, height: 150)
@@ -172,12 +189,12 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
             print("Adding another letter!")
             let letter = self.sampleData.randomElement()!
             let button = self.makeLetterButton(letter: letter)
-           /* if self.isFirst {
+            if self.buttonArray.isEmpty {
                  button.tag = 0
-                self.isFirst = false
+                //self.isFirst = false
             } else {
                 button.tag = sender.tag+1
-            } */
+            }
             self.addButton(sender: button)
         }))
         
@@ -215,6 +232,11 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
         stackView.backgroundColor = .clear
         self.view.addSubview(stackView)
 
+                
+        let gesture1 = UITapGestureRecognizer(target: self, action: #selector(stackAction(tapGestureRecognizer:)))
+        stackView.addGestureRecognizer(gesture1)
+        stackView.isUserInteractionEnabled = true
+        
         stackView.topAnchor.constraint(equalTo: cameraView.bottomAnchor, constant: 5).isActive = true
         stackView.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -5).isActive = true
         stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15).isActive = true
@@ -237,39 +259,28 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
         }
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        setUpView()
-        let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInDualCamera, AVCaptureDevice.DeviceType.builtInTelephotoCamera,AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.unspecified)
-        for device in (deviceDiscoverySession.devices) {
-            if(device.position == AVCaptureDevice.Position.front){
-                do{
-                    let input = try AVCaptureDeviceInput(device: device)
-                    if(captureSession.canAddInput(input)){
-                        captureSession.addInput(input);
-                        
-                        if(captureSession.canAddOutput(sessionOutput)){
-                            captureSession.addOutput(sessionOutput);
-                            previewLayer = AVCaptureVideoPreviewLayer(session: captureSession);
-                            previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill;
-                            previewLayer.connection?.videoOrientation = AVCaptureVideoOrientation.portrait;
-                            cameraView.layer.addSublayer(previewLayer);
-                        }
-                    }
-                }
-                catch{
-                    print("exception!");
-                }
-            }
+    @objc func stackAction(tapGestureRecognizer: UITapGestureRecognizer) {
+        if self.buttonArray.isEmpty {
+            let alert = UIAlertController(title: "Letter adition?", message: "", preferredStyle: .actionSheet)
+            alert.addAction(UIAlertAction(title: "Add letter", style: .default, handler: { (_) in
+                print("Adding another letter!")
+                let letter = self.sampleData.randomElement()!
+                let button = self.makeLetterButton(letter: letter)
+                button.tag = 0
+                self.addButton(sender: button)
+            }))
+            
+            alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: { (_) in
+                print("User click Dismiss button")
+            }))
+            
+            self.present(alert, animated: true, completion: {
+                print("completion block")
+            })
+            //self.isFirst = false
         }
-        captureSession.startRunning()
     }
-    
 
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        previewLayer.frame = cameraView.bounds
-    }
 }
 
 extension FingerSpellingViewController: UINavigationBarDelegate {}

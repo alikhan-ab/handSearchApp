@@ -14,6 +14,7 @@
 		19150E1C2320F42E00BF63DF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 19150E1A2320F42E00BF63DF /* LaunchScreen.storyboard */; };
 		19150E242320F57F00BF63DF /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19150E232320F57F00BF63DF /* Extensions.swift */; };
 		19D665A1232FB2FB00F60640 /* DictionaryByWordsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D665A0232FB2FB00F60640 /* DictionaryByWordsVC.swift */; };
+		822CA0AA2408419F0099F9B9 /* FingerSpellingWordSearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 822CA0A92408419F0099F9B9 /* FingerSpellingWordSearchVC.swift */; };
 		9A0478182386B21F00E63FF1 /* HomeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0478172386B21F00E63FF1 /* HomeTableViewController.swift */; };
 		9A04781A2386B86800E63FF1 /* HomeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0478192386B86800E63FF1 /* HomeCell.swift */; };
 		9A0CB09A234F1D6600A756FE /* SignKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0CB099234F1D6600A756FE /* SignKeyboardView.swift */; };
@@ -58,6 +59,7 @@
 		19150E1D2320F42E00BF63DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		19150E232320F57F00BF63DF /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		19D665A0232FB2FB00F60640 /* DictionaryByWordsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryByWordsVC.swift; sourceTree = "<group>"; };
+		822CA0A92408419F0099F9B9 /* FingerSpellingWordSearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FingerSpellingWordSearchVC.swift; sourceTree = "<group>"; };
 		9A0478172386B21F00E63FF1 /* HomeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTableViewController.swift; sourceTree = "<group>"; };
 		9A0478192386B86800E63FF1 /* HomeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCell.swift; sourceTree = "<group>"; };
 		9A0CB099234F1D6600A756FE /* SignKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignKeyboardView.swift; sourceTree = "<group>"; };
@@ -197,6 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				C32708C42343778B0028940B /* FingerSpellingViewController.swift */,
+				822CA0A92408419F0099F9B9 /* FingerSpellingWordSearchVC.swift */,
 			);
 			path = FingerSpelling;
 			sourceTree = "<group>";
@@ -319,6 +322,7 @@
 				C32708BE234358810028940B /* CategoriesViewController.swift in Sources */,
 				9AA63C2723321E2900B34F41 /* ThirdDayCell.swift in Sources */,
 				C32708C52343778B0028940B /* FingerSpellingViewController.swift in Sources */,
+				822CA0AA2408419F0099F9B9 /* FingerSpellingWordSearchVC.swift in Sources */,
 				9A0CB09A234F1D6600A756FE /* SignKeyboardView.swift in Sources */,
 				DB6C9DC72348C07700BE5F3E /* Subcategory+CoreDataClass.swift in Sources */,
 				9A33C13A23336C1F003BFBE7 /* SignWordViewController.swift in Sources */,

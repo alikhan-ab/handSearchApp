@@ -222,8 +222,6 @@ class ViewController: UIViewController {
         }
         
         
-        
-        
     }
     
     func imageViews(imageView: UIImageView) {
