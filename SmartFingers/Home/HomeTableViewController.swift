@@ -69,7 +69,7 @@ extension HomeTableViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableview.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! HomeCell
         let cellBackground = [gradientOne, gradientTwo, gradientThree, gradientFour]
-        let titles = ["Words", "Categories", "Hand Shape", "Favourites"]
+        let titles = ["Words", "Categories", "Hand Shape", "FingerSpelling"]
         let images = [image1, image2, image3, image4]
         cell.nameLabel.text = titles[indexPath.row]
         cell.leftImageView.image = images[indexPath.row]
@@ -92,7 +92,7 @@ extension HomeTableViewController: UITableViewDataSource, UITableViewDelegate {
             self.present(signVC, animated: true, completion: nil)
         }
         if indexPath.row == 3 {
-            let signVC = FavouriteViewController()
+            let signVC = FingerSpellingViewController()//FavouriteViewController()
             self.present(signVC, animated: true, completion: nil)
         }
     }
