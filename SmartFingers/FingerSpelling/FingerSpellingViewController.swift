@@ -140,10 +140,12 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
     //MARK: StackView Making methods
     func addButton(sender: UIButton) {
         buttonCount += 1
-        buttonArray.append(sender)
+
+        buttonArray.insert(sender, at: sender.tag)
+        
         updateStackView()
     }
-    
+    // We may need it for starting over
     func resetButton(sender:UIButton){
         buttonCount = 0
         buttonArray.removeAll()
@@ -151,12 +153,13 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
     }
     
     func removeButton(sender: UIButton) {
-        if buttonCount > 1 {
+        //if buttonCount > 1 {
             buttonCount -= 1
             buttonArray.remove(at: sender.tag)
-        } else {
+       // }
+        /*else {
             buttonCount = 0
-        }
+        } */
         updateStackView()
     }
     
@@ -200,10 +203,10 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
         
         alert.addAction(UIAlertAction(title: "Edit", style: .destructive, handler: { (_) in
             print("User click Edit button")
-            self.removeButton(sender: sender)
             let letter = self.sampleData.randomElement()!
             let button = self.makeLetterButton(letter: letter)
-           // button.tag = sender.tag
+            button.tag = sender.tag
+            self.removeButton(sender: sender)
             self.addButton(sender: button)
         }))
         
@@ -231,7 +234,6 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
         stackView.spacing = 0
         stackView.backgroundColor = .clear
         self.view.addSubview(stackView)
-
                 
         let gesture1 = UITapGestureRecognizer(target: self, action: #selector(stackAction(tapGestureRecognizer:)))
         stackView.addGestureRecognizer(gesture1)
