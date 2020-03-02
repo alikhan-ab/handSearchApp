@@ -69,6 +69,13 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
     
     var sampleData = ["C", "A", "T", "B", "D", "E", "F", "G"]
     
+    
+    let alphabet = ["А", "Б", "В", "Г", "Д", "Е", "Ж", "З", "И/Й", "К", "Л", "М",
+                    "Н", "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш/Щ",
+                    "Ы", "Ь/Ъ", "Э", "Ю", "Я"]
+    
+    var predictions = [Int]()
+    
     var buttonCount = 0
     var buttonArray = [UIButton]()
     //var isFirst = true
@@ -341,25 +348,8 @@ extension FingerSpellingViewController {
                     fatalError("Unexcpected results type")
                 }
                 
-                guard let resultsFirst = results.first else {
-                    fatalError("Could not get first results from request results")
-                }
-                
-                guard let array = resultsFirst.featureValue.multiArrayValue else {
-                    fatalError("No multiarray in results")
-                }
-                
-                let length = array.count
-                let doublePtr =  array.dataPointer.bindMemory(to: Double.self, capacity: length)
-                let doubleBuffer = UnsafeBufferPointer(start: doublePtr, count: length)
-                let output = Array(doubleBuffer)
-                
-                
                 DispatchQueue.main.async {
-                    if let maxValue = output.max(), let index = output.firstIndex(of: maxValue) {
-                        print("\(output)")
-                        print(index)
-                    }
+                    self.voteForSign(results)
                 }
             }
             
@@ -395,4 +385,59 @@ extension FingerSpellingViewController {
     func captureOutput(_ captureOutput: AVCaptureOutput, didDrop didDropSampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
          // print("frame dropped")
      }
+}
+
+extension FingerSpellingViewController {
+    func voteForSign(_ results: [VNCoreMLFeatureValueObservation]) {
+        
+        // Parse the CoreML's results
+        guard let resultsFirst = results.first else {
+            fatalError("Could not get first results from request results")
+        }
+        
+        guard let array = resultsFirst.featureValue.multiArrayValue else {
+            fatalError("No multiarray in results")
+        }
+        
+        let length = array.count
+        let doublePtr =  array.dataPointer.bindMemory(to: Double.self, capacity: length)
+        let doubleBuffer = UnsafeBufferPointer(start: doublePtr, count: length)
+        let output = Array(doubleBuffer)
+        
+        guard let maxValue = output.max(), let index = output.firstIndex(of: maxValue) else {
+            fatalError("Could not find Top-1 signs")
+        }
+        
+        predictions.append(index)
+        
+        if predictions.count == 30 {
+            guard let (value, number) = findMostFrequentSign() else {
+                fatalError("findMostFrequentSign returned nil")
+            }
+            
+            if number > 25 {
+                addButton(sender: makeLetterButton(letter: alphabet[value]))
+                print(predictions)
+                predictions.removeAll()
+            } else {
+                predictions.removeFirst()
+            }
+        }
+    
+        
+//        if buttonCount <= 15 {
+//            print(index)
+//            addButton(sender: makeLetterButton(letter: alphabet[index]))
+//        }
+    }
+    
+    func findMostFrequentSign() -> (value: Int, count: Int)? {
+        let counts = predictions.reduce(into: [:]) { $0[$1, default: 0] += 1 }
+        
+        if let (value, count) = counts.max(by: { $0.1 < $1.1 }) {
+            return (value, count)
+        }
+        
+        return nil
+    }
 }
