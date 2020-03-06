@@ -9,8 +9,9 @@ import Foundation
 import UIKit
 import CoreML
 import AVFoundation
+import Vision
 
-class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate {
     
     /* Plan:
      - If Ъ/Ь 2nd line and for others
@@ -51,50 +52,97 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
 
     var captureSession = AVCaptureSession()
     var sessionOutput = AVCapturePhotoOutput()
+    var videoDataOutput = AVCaptureVideoDataOutput()
     var sessionOutputSetting = AVCapturePhotoSettings(format: [AVVideoCodecKey:AVVideoCodecType.jpeg])
-    var previewLayer = AVCaptureVideoPreviewLayer()
+    
+    private let videoDataOutputQueue = DispatchQueue(label: "VideoDataOutput", qos: .userInitiated,
+                                                     attributes: [], autoreleaseFrequency: .workItem)
+    
+    
+    
+    
+    private var requests = [VNRequest]()
+    
+    var bufferSize: CGSize = .zero
+   
+    var previewLayer: AVCaptureVideoPreviewLayer! = nil
     
     var sampleData = ["C", "A", "T", "B", "D", "E", "F", "G"]
+    
+    
+    let alphabet = ["А", "Б", "В", "Г", "Д", "Е", "Ж", "З", "И/Й", "К", "Л", "М",
+                    "Н", "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш/Щ",
+                    "Ы", "Ь/Ъ", "Э", "Ю", "Я"]
+    
+    var predictions = [Int]()
     
     var buttonCount = 0
     var buttonArray = [UIButton]()
     //var isFirst = true
 
     //MARK:- Methods
-    /*
-     override func viewDidLoad() {
-     super.viewDidLoad()
-     setUpView()
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupVision()
      }
-     */
     
     override func viewWillAppear(_ animated: Bool) {
         setUpView()
-        let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInDualCamera, AVCaptureDevice.DeviceType.builtInTelephotoCamera,AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.unspecified)
-        for device in (deviceDiscoverySession.devices) {
-            if(device.position == AVCaptureDevice.Position.front){
-                do{
-                    let input = try AVCaptureDeviceInput(device: device)
-                    if(captureSession.canAddInput(input)){
-                        captureSession.addInput(input);
-                        
-                        if(captureSession.canAddOutput(sessionOutput)){
-                            captureSession.addOutput(sessionOutput);
-                            previewLayer = AVCaptureVideoPreviewLayer(session: captureSession);
-                            previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill;
-                            previewLayer.connection?.videoOrientation = AVCaptureVideoOrientation.portrait;
-                            cameraView.layer.addSublayer(previewLayer);
-                        }
-                    }
-                }
-                catch{
-                    print("exception!");
-                }
-            }
+        
+        var deviceInput: AVCaptureDeviceInput!
+//        let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInDualCamera, AVCaptureDevice.DeviceType.builtInTelephotoCamera,AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.unspecified)
+        
+        
+        let videoDevice = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .front).devices.first
+        do {
+            deviceInput = try AVCaptureDeviceInput(device: videoDevice!)
+        } catch {
+            print("Could not create video device input: \(error)")
+            return
         }
+        
+        captureSession.beginConfiguration()
+        captureSession.sessionPreset = .vga640x480
+        
+        if (captureSession.canAddInput(deviceInput)) {
+            captureSession.addInput(deviceInput)
+        } else {
+            print("exception!")
+            captureSession.commitConfiguration()
+            return
+        }
+        
+        if captureSession.canAddOutput(videoDataOutput) {
+            captureSession.addOutput(videoDataOutput)
+            
+            videoDataOutput.alwaysDiscardsLateVideoFrames = true
+            videoDataOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)]
+            videoDataOutput.setSampleBufferDelegate(self, queue: videoDataOutputQueue)
+        } else {
+            print("Could not add video data output to the session")
+            captureSession.commitConfiguration()
+            return
+        }
+        
+        let captureConnection = videoDataOutput.connection(with: .video)
+        captureConnection?.isEnabled = true
+        do {
+            try videoDevice!.lockForConfiguration()
+            let dimensions = CMVideoFormatDescriptionGetDimensions((videoDevice?.activeFormat.formatDescription)!)
+            bufferSize.width = CGFloat(dimensions.width)
+            bufferSize.height = CGFloat(dimensions.height)
+            videoDevice!.unlockForConfiguration()
+        } catch {
+            print(error)
+        }
+        captureSession.commitConfiguration()
+        previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+        previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+        previewLayer.connection?.videoOrientation = AVCaptureVideoOrientation.portrait
+        cameraView.layer.addSublayer(previewLayer)
         captureSession.startRunning()
     }
-        
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         previewLayer.frame = cameraView.bounds
@@ -286,3 +334,110 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
 }
 
 extension FingerSpellingViewController: UINavigationBarDelegate {}
+
+extension FingerSpellingViewController {
+    @discardableResult
+    func setupVision() -> NSError? {
+        let error: NSError! = nil
+        
+        do {
+            let model = try VNCoreMLModel(for: fingerspelling_v1().model)
+            let objectRecognitionRequest = VNCoreMLRequest(model: model) { (request, error) in
+                
+                guard let results = request.results as? [VNCoreMLFeatureValueObservation] else {
+                    fatalError("Unexcpected results type")
+                }
+                
+                DispatchQueue.main.async {
+                    self.voteForSign(results)
+                }
+            }
+            
+            objectRecognitionRequest.imageCropAndScaleOption = .scaleFit
+            
+            requests = [objectRecognitionRequest]
+        } catch let error as NSError {
+            print("Model loading went wrong: \(error)")
+        }
+        
+        
+        
+        return error
+    }
+    
+    
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        // to be implemented in the subclass
+        
+        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+            return
+        }
+        
+        let imageRequestHandler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:])
+        do {
+            try imageRequestHandler.perform(self.requests)
+        } catch {
+            print(error)
+        }
+    }
+    
+    
+    func captureOutput(_ captureOutput: AVCaptureOutput, didDrop didDropSampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+         // print("frame dropped")
+     }
+}
+
+extension FingerSpellingViewController {
+    func voteForSign(_ results: [VNCoreMLFeatureValueObservation]) {
+        
+        // Parse the CoreML's results
+        guard let resultsFirst = results.first else {
+            fatalError("Could not get first results from request results")
+        }
+        
+        guard let array = resultsFirst.featureValue.multiArrayValue else {
+            fatalError("No multiarray in results")
+        }
+        
+        let length = array.count
+        let doublePtr =  array.dataPointer.bindMemory(to: Double.self, capacity: length)
+        let doubleBuffer = UnsafeBufferPointer(start: doublePtr, count: length)
+        let output = Array(doubleBuffer)
+        
+        guard let maxValue = output.max(), let index = output.firstIndex(of: maxValue) else {
+            fatalError("Could not find Top-1 signs")
+        }
+        
+        predictions.append(index)
+        
+        if predictions.count == 30 {
+            guard let (value, number) = findMostFrequentSign() else {
+                fatalError("findMostFrequentSign returned nil")
+            }
+            
+            if number > 25 {
+                addButton(sender: makeLetterButton(letter: alphabet[value]))
+                print(predictions)
+                predictions.removeAll()
+            } else {
+                predictions.removeFirst()
+            }
+        }
+    
+        
+//        if buttonCount <= 15 {
+//            print(index)
+//            addButton(sender: makeLetterButton(letter: alphabet[index]))
+//        }
+    }
+    
+    func findMostFrequentSign() -> (value: Int, count: Int)? {
+        let counts = predictions.reduce(into: [:]) { $0[$1, default: 0] += 1 }
+        
+        if let (value, count) = counts.max(by: { $0.1 < $1.1 }) {
+            return (value, count)
+        }
+        
+        return nil
+    }
+}
