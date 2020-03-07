@@ -11,7 +11,7 @@ import CoreML
 import AVFoundation
 import Vision
 
-class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate {
+class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, UIAdaptivePresentationControllerDelegate {
     
     /* Plan:
      - If Ъ/Ь 2nd line and for others
@@ -114,9 +114,8 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
         
         if captureSession.canAddOutput(videoDataOutput) {
             captureSession.addOutput(videoDataOutput)
-            
             videoDataOutput.alwaysDiscardsLateVideoFrames = true
-            videoDataOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)]
+            videoDataOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_32BGRA)]
             videoDataOutput.setSampleBufferDelegate(self, queue: videoDataOutputQueue)
         } else {
             print("Could not add video data output to the session")
@@ -126,6 +125,9 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
         
         let captureConnection = videoDataOutput.connection(with: .video)
         captureConnection?.isEnabled = true
+        captureConnection?.isVideoMirrored = false
+        captureConnection?.videoOrientation = .portrait
+        
         do {
             try videoDevice!.lockForConfiguration()
             let dimensions = CMVideoFormatDescriptionGetDimensions((videoDevice?.activeFormat.formatDescription)!)
@@ -146,6 +148,10 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         previewLayer.frame = cameraView.bounds
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
     }
     
     func setUpView() {
@@ -181,8 +187,16 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
     }
     
     @objc func doneButtonPressed(_ sender: UIButton){
-        print("\n Done!\n")
-        self.present(FingerSpellingWordSearchVC(), animated: true, completion: nil)
+        
+        let vc = FingerSpellingWordSearchVC()
+        vc.letters = getLettersFromButtons()
+        vc.presentationController?.delegate = self
+        
+        self.present(vc, animated: true) {
+            self.resetButtons()
+            self.predictions.removeAll()
+            self.captureSession.stopRunning()
+        }
     }
     
     //MARK: StackView Making methods
@@ -194,7 +208,7 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
         updateStackView()
     }
     // We may need it for starting over
-    func resetButton(sender:UIButton){
+    func resetButtons(){
         buttonCount = 0
         buttonArray.removeAll()
         updateStackView()
@@ -330,6 +344,18 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
             //self.isFirst = false
         }
     }
+    
+//    func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
+//
+//    }
+    
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        continuePredictiong()
+    }
+    
+    func continuePredictiong() {
+        captureSession.startRunning()
+    }
 
 }
 
@@ -342,7 +368,7 @@ extension FingerSpellingViewController {
         
         do {
             let model = try VNCoreMLModel(for: fingerspelling_v1().model)
-            let objectRecognitionRequest = VNCoreMLRequest(model: model) { (request, error) in
+            let objectRecognitionRequest = VNCoreMLRequest(model: model) { [unowned self] (request, error) in
                 
                 guard let results = request.results as? [VNCoreMLFeatureValueObservation] else {
                     fatalError("Unexcpected results type")
@@ -360,22 +386,51 @@ extension FingerSpellingViewController {
             print("Model loading went wrong: \(error)")
         }
         
-        
-        
         return error
     }
     
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        // to be implemented in the subclass
         
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
             return
         }
         
-        let imageRequestHandler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:])
+//        guard let outputImage = self.getImageFromSampleBuffer(pixelBuffer: pixelBuffer) else {
+//            return
+//        }
+        
+        CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly)
+        
+        let baseAddress = CVPixelBufferGetBaseAddress(pixelBuffer)
+        let bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer)
+        let cropWidth = 350
+        let cropHeight = 350
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        
+        // calculate start position
+        let bytesPerPixel = 4
+        let startPoint = [ "x": 80, "y": 150 ]
+        let startAddress = baseAddress! + startPoint["y"]! * bytesPerRow + startPoint["x"]! * bytesPerPixel
+
+        let context = CGContext(data: startAddress, width: cropWidth, height: cropHeight, bitsPerComponent: 8, bytesPerRow: bytesPerRow, space: colorSpace, bitmapInfo: CGImageAlphaInfo.noneSkipFirst.rawValue | CGBitmapInfo.byteOrder32Little.rawValue)
+        // now the cropped image is inside the context.
+        // you can convert it back to CVPixelBuffer
+        // using CVPixelBufferCreateWithBytes if you want.
+
+        CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly)
+
+        // create image
+        let cgImage: CGImage = context!.makeImage()!
+        
+        
+        
+//        let exifOrientation = exifOrientationFromDeviceOrientation()
+        
+//        let imageRequestHandler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:])
+        let imageRequestHandler2 = VNImageRequestHandler(cgImage: cgImage, options: [:])
         do {
-            try imageRequestHandler.perform(self.requests)
+            try imageRequestHandler2.perform(requests)
         } catch {
             print(error)
         }
@@ -385,6 +440,27 @@ extension FingerSpellingViewController {
     func captureOutput(_ captureOutput: AVCaptureOutput, didDrop didDropSampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
          // print("frame dropped")
      }
+    
+    
+    func getImageFromSampleBuffer(pixelBuffer: CVImageBuffer) ->UIImage? {
+        CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly)
+        let baseAddress = CVPixelBufferGetBaseAddress(pixelBuffer)
+        let width = CVPixelBufferGetWidth(pixelBuffer)
+        let height = CVPixelBufferGetHeight(pixelBuffer)
+        let bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer)
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedFirst.rawValue | CGBitmapInfo.byteOrder32Little.rawValue)
+        guard let context = CGContext(data: baseAddress, width: width, height: height, bitsPerComponent: 8, bytesPerRow: bytesPerRow, space: colorSpace, bitmapInfo: bitmapInfo.rawValue) else {
+            return nil
+        }
+        guard let cgImage = context.makeImage() else {
+            return nil
+        }
+        let image = UIImage(cgImage: cgImage, scale: 1, orientation:.right)
+        CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly)
+        return image
+    }
+    
 }
 
 extension FingerSpellingViewController {
@@ -410,25 +486,21 @@ extension FingerSpellingViewController {
         
         predictions.append(index)
         
-        if predictions.count == 30 {
+        if predictions.count == 35 {
             guard let (value, number) = findMostFrequentSign() else {
                 fatalError("findMostFrequentSign returned nil")
             }
             
-            if number > 25 {
-                addButton(sender: makeLetterButton(letter: alphabet[value]))
+            if number > 30 {
+                let button = makeLetterButton(letter: alphabet[value])
+                button.tag = buttonCount
+                addButton(sender: button)
                 print(predictions)
                 predictions.removeAll()
             } else {
                 predictions.removeFirst()
             }
         }
-    
-        
-//        if buttonCount <= 15 {
-//            print(index)
-//            addButton(sender: makeLetterButton(letter: alphabet[index]))
-//        }
     }
     
     func findMostFrequentSign() -> (value: Int, count: Int)? {
@@ -439,5 +511,18 @@ extension FingerSpellingViewController {
         }
         
         return nil
+    }
+    
+    func getLettersFromButtons() -> [String] {
+        var letters = [String]()
+        
+        for button in buttonArray {
+            guard let letter = button.currentTitle else {
+                continue
+            }
+            letters.append(letter)
+        }
+        
+        return letters
     }
 }
