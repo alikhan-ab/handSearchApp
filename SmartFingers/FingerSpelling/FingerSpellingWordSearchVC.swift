@@ -12,7 +12,7 @@ import AVFoundation
 import AVKit
 import CoreData
 
-class FingerSpellingWordSearchVC: UIViewController, UINavigationBarDelegate, UINavigationControllerDelegate {
+class FingerSpellingWordSearchVC: UIViewController, UINavigationBarDelegate, UINavigationControllerDelegate, NSFetchedResultsControllerDelegate {
     
     //MARK:- Variables
 
@@ -24,14 +24,15 @@ class FingerSpellingWordSearchVC: UIViewController, UINavigationBarDelegate, UIN
     
     let searchLimit = 5
     
-    let tableview: UITableView = {
-        let tv = UITableView()
-        tv.backgroundColor = UIColor.white
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.separatorColor = UIColor.white
-        return tv
-    }()
-    /*
+    let alphabet = ["А", "Б", "В", "Г", "Д", "Е", "Ж", "З", "И/Й", "К", "Л", "М",
+                    "Н", "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш/Щ",
+                    "Ы", "Ь/Ъ", "Э", "Ю", "Я"]
+    
+    
+    var letters = [String]()
+    var words = [String]()
+    
+    
     private let persistentContainer = NSPersistentContainer(name: "SmartFingers")
     lazy var fetchedResultsController: NSFetchedResultsController<Word> = {
         
@@ -40,26 +41,48 @@ class FingerSpellingWordSearchVC: UIViewController, UINavigationBarDelegate, UIN
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "translation", ascending: true)]
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        
         fetchRequest.fetchBatchSize = 20
         
         fetchedResultsController.delegate = self
         
         return fetchedResultsController
     }()
-    */
+    
+    let tableview: UITableView = {
+        let tv = UITableView()
+        tv.backgroundColor = UIColor.white
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.separatorColor = UIColor.white
+        return tv
+    }()
+
 
     //MARK:- Methods:
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         setUpViews()
-        /*
+        
+        words = calculateWordsFromLetters(letters: letters)
+        print(words)
+        
         persistentContainer.loadPersistentStores { (NSPersistentStoreDescription, error) in
             if let error = error {
                 print("Unable to Load Persistent Store")
                 print("\(error), \(error.localizedDescription)")
             } else {
                 do {
+                    
+                    var predicates = [NSPredicate]()
+                    for word in self.words {
+                        let p = NSPredicate(format: "(translation contains[cd] %@)", word)
+                        predicates.append(p)
+                    }
+                    
+                    let predicate = NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
+                    
+                    self.fetchedResultsController.fetchRequest.predicate = predicate
                     try self.fetchedResultsController.performFetch()
                 } catch {
                     let error = error as NSError
@@ -67,12 +90,17 @@ class FingerSpellingWordSearchVC: UIViewController, UINavigationBarDelegate, UIN
                 }
             }
         }
- */
     }
 
     
     @objc func back(_ sender: UIButton){
-        self.dismiss(animated: true, completion: nil)
+        self.dismiss(animated: true)
+    }
+    
+    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        super.dismiss(animated: flag, completion: completion)
+        guard #available(iOS 13.0, *) else { return }
+        presentationController?.delegate?.presentationControllerDidDismiss?(presentationController!)
     }
 
     func setUpViews() {
@@ -123,59 +151,65 @@ class FingerSpellingWordSearchVC: UIViewController, UINavigationBarDelegate, UIN
         
     }
 
-    /*
-    
-    func newFetch() {
-        var predicate: NSPredicate?
-        if handshapes.count == 0 {
-            predicate = nil
-        } else {
-            var predicates = [NSPredicate]()
-            for shape in handshapes {
-                guard shape.status == .accepted else { continue }
-                guard let signs = shape.signs else { continue }
-//                let localPredicate = NSPredicate(format: "(ANY handshapes.id == %i) OR (ANY handshapes.id == %i) OR (ANY handshapes.id == %i)", signs[0], signs[1], signs[2])
-                let localPredicate = NSPredicate(format: "(ANY handshapes.id == %i) OR (ANY handshapes.id == %i)", signs[0], signs[1])
-                predicates.append(localPredicate)
+   
+    func calculateWordsFromLetters(letters: [String]) -> [String] {
+        
+        let textChecker = UITextChecker()
+        
+        var words = [String]()
+        
+        for letter in letters {
+            
+            if letter == alphabet[8] || letter == alphabet[23] || letter == alphabet[25] {
+                let letters = letter.components(separatedBy: "/")
+                if words.isEmpty {
+                    
+                    words.append(letters[0])
+                    words.append(letters[1])
+                } else {
+                    let wordsCount = words.count
+                    for index in 0..<wordsCount {
+                        words.append(words[index] + letters[1])
+                        words[index] = words[index] + letters[0]
+                    }
+                }
+            } else {
+                if words.isEmpty {
+                    words.append(letter)
+                } else {
+                    for index in 0..<words.count {
+                        words[index] = words[index] + letter
+                    }
+                }
             }
-            print("test:\(predicates.count)")
-            print("test1")
-            predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
-            print(predicate.debugDescription)
-            print("test2")
         }
         
-        
-        fetchedResultsController.fetchRequest.predicate = predicate
-        
-        do {
-            print("test3")
-            try fetchedResultsController.performFetch()
-            print("test4")
-            tableview.reloadData()
-            print("test5")
-        } catch {
-            let error = error as NSError
-            print("\(error), \(error.localizedDescription)")
+        for index in 0..<words.count {
+            let word = words[index].lowercased()
+            let misspelledRange = textChecker.rangeOfMisspelledWord(in: word, range: NSRange(0..<word.utf16.count), startingAt: 0, wrap: false, language: "ru")
+            if misspelledRange.location != NSNotFound,
+              let guesses = textChecker.guesses(forWordRange: misspelledRange, in: word, language: "ru") {
+                print("Mispell for \(word)")
+                guard let firstGuess = guesses.first else {
+                    continue
+                }
+                print("First guess: \(firstGuess)")
+                words.remove(at: index)
+                words.append(contentsOf: guesses)
+            }
         }
+        
+        return words
     }
- 
- */
 }
 
 
 // MARK: - UITableView Delegate
 extension FingerSpellingWordSearchVC: UITableViewDataSource, UITableViewDelegate {
-    /*
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // MARK:- To check for empty case comment the line below
-        guard let words = fetchedResultsController.fetchedObjects else { return 0}
-        if words.isEmpty {
-            addNoResultsLabel()
-        } else if noResults {
-            removeNoResultsLabel()
-        }
-        return words.count
+        guard let signs = fetchedResultsController.fetchedObjects else { return 0}
+        return signs.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -183,8 +217,14 @@ extension FingerSpellingWordSearchVC: UITableViewDataSource, UITableViewDelegate
         let word = fetchedResultsController.object(at: indexPath)
         cell.word = word
         cell.deployWord()
+        
         cell.nameLabel.textColor = UIColor(r: 87, g: 69, b: 93)
+        cell.nameLabel.text = word.translation
         return cell
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -194,30 +234,6 @@ extension FingerSpellingWordSearchVC: UITableViewDataSource, UITableViewDelegate
         print(word.translation ?? "no word")
         destination.word = word
         self.present(destination, animated: true, completion: nil)
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
-    }
- 
- */
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // MARK:- To check for empty case comment the line below
-        return 5
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableview.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! HandShapeVideoCell
-    //    let word = fetchedResultsController.object(at: indexPath)
-     //   cell.word = word
-      //  cell.deployWord()
-        cell.nameLabel.textColor = UIColor(r: 87, g: 69, b: 93)
-        cell.nameLabel.text = "Test Word"
-        return cell
-    }
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
     }
     
 }
