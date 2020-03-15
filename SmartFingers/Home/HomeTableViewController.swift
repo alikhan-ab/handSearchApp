@@ -69,7 +69,8 @@ extension HomeTableViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableview.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! HomeCell
         let cellBackground = [gradientOne, gradientTwo, gradientThree, gradientFour, gradientThree]
-        let titles = ["Words", "Categories", "Hand Shape", "FingerSpelling", "Favourites"]
+        
+        let titles = [kText.wordsRU, "Categories", "Hand Shape", "FingerSpelling", "Favourites"]
         let images = [image1, image2, image3, image3, image4]
         cell.nameLabel.text = titles[indexPath.row]
         cell.leftImageView.image = images[indexPath.row]
