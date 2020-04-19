@@ -26,6 +26,12 @@
 		9A75B23F237B6F4A001145D2 /* HandShapeVideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A75B23E237B6F4A001145D2 /* HandShapeVideoCell.swift */; };
 		9AA63C2723321E2900B34F41 /* ThirdDayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA63C2623321E2900B34F41 /* ThirdDayCell.swift */; };
 		BE1579FC240D97CC00E81EAF /* fingerspelling-v1.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = BE1579FB240D97CC00E81EAF /* fingerspelling-v1.mlmodel */; };
+		BE93872D2445ECE80017DF3F /* database_1_v35 in Resources */ = {isa = PBXBuildFile; fileRef = BE93872A2445ECE70017DF3F /* database_1_v35 */; };
+		BE93872E2445ECE80017DF3F /* database_3_v35 in Resources */ = {isa = PBXBuildFile; fileRef = BE93872B2445ECE70017DF3F /* database_3_v35 */; };
+		BE93872F2445ECE80017DF3F /* database_5_v35 in Resources */ = {isa = PBXBuildFile; fileRef = BE93872C2445ECE80017DF3F /* database_5_v35 */; };
+		BEDD20EC2445B6180056D9AC /* TestStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BEDD20EB2445B6180056D9AC /* TestStoryboard.storyboard */; };
+		BEDD20EE2445B6710056D9AC /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDD20ED2445B6710056D9AC /* TestViewController.swift */; };
+		BEDD20F02445DD060056D9AC /* Handshapes35v2.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = BEDD20EF2445DD060056D9AC /* Handshapes35v2.mlmodel */; };
 		C32708BB234357E40028940B /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C32708BA234357E40028940B /* Default-568h@2x.png */; };
 		C32708BE234358810028940B /* CategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32708BD234358810028940B /* CategoriesViewController.swift */; };
 		C32708C023435B230028940B /* SectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32708BF23435B230028940B /* SectionView.swift */; };
@@ -74,6 +80,12 @@
 		9A75B23E237B6F4A001145D2 /* HandShapeVideoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandShapeVideoCell.swift; sourceTree = "<group>"; };
 		9AA63C2623321E2900B34F41 /* ThirdDayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdDayCell.swift; sourceTree = "<group>"; };
 		BE1579FB240D97CC00E81EAF /* fingerspelling-v1.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = "fingerspelling-v1.mlmodel"; sourceTree = "<group>"; };
+		BE93872A2445ECE70017DF3F /* database_1_v35 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = database_1_v35; sourceTree = "<group>"; };
+		BE93872B2445ECE70017DF3F /* database_3_v35 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = database_3_v35; sourceTree = "<group>"; };
+		BE93872C2445ECE80017DF3F /* database_5_v35 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = database_5_v35; sourceTree = "<group>"; };
+		BEDD20EB2445B6180056D9AC /* TestStoryboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TestStoryboard.storyboard; sourceTree = "<group>"; };
+		BEDD20ED2445B6710056D9AC /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
+		BEDD20EF2445DD060056D9AC /* Handshapes35v2.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = Handshapes35v2.mlmodel; sourceTree = "<group>"; };
 		C32708BA234357E40028940B /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		C32708BD234358810028940B /* CategoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewController.swift; sourceTree = "<group>"; };
 		C32708BF23435B230028940B /* SectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionView.swift; sourceTree = "<group>"; };
@@ -131,6 +143,7 @@
 			children = (
 				19150E1D2320F42E00BF63DF /* Info.plist */,
 				BE1579FB240D97CC00E81EAF /* fingerspelling-v1.mlmodel */,
+				BEDD20EF2445DD060056D9AC /* Handshapes35v2.mlmodel */,
 				DB5EBC06234AF31400E1A1DA /* Videos */,
 				DB6C9DBC2348C05A00BE5F3E /* CoreData Classes */,
 				9A33C13B233373C8003BFBE7 /* video.mp4 */,
@@ -159,6 +172,9 @@
 				DB47E92B23852B8600F0DBB5 /* database_1 */,
 				DB47E92923852B8600F0DBB5 /* database_3 */,
 				DB47E92A23852B8600F0DBB5 /* database_5 */,
+				BE93872A2445ECE70017DF3F /* database_1_v35 */,
+				BE93872B2445ECE70017DF3F /* database_3_v35 */,
+				BE93872C2445ECE80017DF3F /* database_5_v35 */,
 				DB6C9DD1234AE67800BE5F3E /* vocabulary.json */,
 				19150E232320F57F00BF63DF /* Extensions.swift */,
 				19150E182320F42E00BF63DF /* Assets.xcassets */,
@@ -217,6 +233,8 @@
 				DB4438B1238CB7D400A225C5 /* HandShapeRequest.swift */,
 				9A75B23E237B6F4A001145D2 /* HandShapeVideoCell.swift */,
 				9A179A97237369C3003E33C9 /* HandShapeImageCell.swift */,
+				BEDD20ED2445B6710056D9AC /* TestViewController.swift */,
+				BEDD20EB2445B6180056D9AC /* TestStoryboard.storyboard */,
 			);
 			path = "HandShape Recognition";
 			sourceTree = "<group>";
@@ -298,13 +316,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE93872D2445ECE80017DF3F /* database_1_v35 in Resources */,
 				DB5EBC07234AF31500E1A1DA /* Videos in Resources */,
 				DB47E92C23852B8600F0DBB5 /* database_3 in Resources */,
 				DB47E92E23852B8600F0DBB5 /* database_1 in Resources */,
 				C3CD866F233A2C5F00FBEC57 /* video.mp4 in Resources */,
 				DB47E92D23852B8600F0DBB5 /* database_5 in Resources */,
+				BE93872E2445ECE80017DF3F /* database_3_v35 in Resources */,
 				C32708BB234357E40028940B /* Default-568h@2x.png in Resources */,
+				BE93872F2445ECE80017DF3F /* database_5_v35 in Resources */,
 				19150E1C2320F42E00BF63DF /* LaunchScreen.storyboard in Resources */,
+				BEDD20EC2445B6180056D9AC /* TestStoryboard.storyboard in Resources */,
 				19150E192320F42E00BF63DF /* Assets.xcassets in Resources */,
 				DB6C9DD2234AE67800BE5F3E /* vocabulary.json in Resources */,
 			);
@@ -319,6 +341,7 @@
 			files = (
 				9A715E8B2354CC6800784AB0 /* FavouritesViewController.swift in Sources */,
 				19150E112320F42E00BF63DF /* ViewController.swift in Sources */,
+				BEDD20EE2445B6710056D9AC /* TestViewController.swift in Sources */,
 				DB47E93123852C9400F0DBB5 /* Handshape+CoreDataClass.swift in Sources */,
 				19150E0F2320F42E00BF63DF /* AppDelegate.swift in Sources */,
 				DB6C9DCD2348C07F00BE5F3E /* CategoryJSON.swift in Sources */,
@@ -342,6 +365,7 @@
 				DB6C9DCE2348C07F00BE5F3E /* SubcategoryJSON.swift in Sources */,
 				19D665A1232FB2FB00F60640 /* DictionaryByWordsVC.swift in Sources */,
 				DB47E93623852DD500F0DBB5 /* Word+CoreDataProperties.swift in Sources */,
+				BEDD20F02445DD060056D9AC /* Handshapes35v2.mlmodel in Sources */,
 				19150E242320F57F00BF63DF /* Extensions.swift in Sources */,
 				DB47E93523852DD500F0DBB5 /* Word+CoreDataClass.swift in Sources */,
 				9A04781A2386B86800E63FF1 /* HomeCell.swift in Sources */,

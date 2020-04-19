@@ -45,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func parseDatabaseFile() -> [String : [Int]]? {
-        let filename = "database_1"
+        let filename = "database_1_v35"
         
         var shapes = [String]()
         guard let url = Bundle.main.url(forResource: filename, withExtension: nil) else { return nil }
@@ -70,6 +70,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 guard let idInt = Int(id) else { fatalError("Could not convert String to Int during database parsing") }
                 idArray.append(idInt)
             }
+            
+            //            print(word)
+            //            print(idArray)
         
             db.updateValue(idArray, forKey: word)
         }
