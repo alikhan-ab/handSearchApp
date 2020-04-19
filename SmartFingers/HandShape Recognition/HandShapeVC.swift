@@ -11,6 +11,7 @@ import UIKit
 import AVFoundation
 import AVKit
 import CoreData
+import Vision
 
 class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationControllerDelegate {
     
@@ -69,7 +70,7 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
         
         let fetchRequest: NSFetchRequest<Word> = Word.fetchRequest()
         
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "translation", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "translation", ascending: true, selector: #selector(NSString.caseInsensitiveCompare))]
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         fetchRequest.fetchBatchSize = 20
@@ -81,6 +82,9 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
     
     var predicateSigns = [[Int]]()
     
+
+    
+    
     var wasLaunched = false
     
     //MARK:- Methods:
@@ -88,6 +92,7 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
         super.viewDidLoad()
         self.view.backgroundColor = .white
         setUpViews()
+        setupVision()
         
         persistentContainer.loadPersistentStores { (NSPersistentStoreDescription, error) in
             if let error = error {
@@ -259,6 +264,59 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
             print("\(error), \(error.localizedDescription)")
         }
     }
+    
+    func processClassification(_ request: VNRequest, _ error: Error?, _ uuid: UUID) {
+        guard let results = request.results as? [VNCoreMLFeatureValueObservation] else {
+            fatalError("Unexcpected results type")
+        }
+        
+        DispatchQueue.main.async {
+            // Parse the CoreML's results
+            guard let resultsFirst = results.first else {
+                fatalError("Could not get first results from request results")
+            }
+            
+            guard let array = resultsFirst.featureValue.multiArrayValue else {
+                fatalError("No multiarray in results")
+            }
+            
+            let length = array.count
+            let doublePtr =  array.dataPointer.bindMemory(to: Double.self, capacity: length)
+            let doubleBuffer = UnsafeBufferPointer(start: doublePtr, count: length)
+            var output = Array(doubleBuffer)
+            
+            
+            guard let firstMaxValue = output.max(), let firstIndex = output.firstIndex(of: firstMaxValue) else {
+                fatalError("Could not find Top-1 sign")
+            }
+            
+            output[firstIndex] = -1.0
+            
+            guard let secondMaxValue = output.max(), let secondIndex = output.firstIndex(of: secondMaxValue) else {
+                fatalError("Could not find Top-2 sign")
+            }
+            
+            if let index = self.handshapes.firstIndex(where: { (shape) -> Bool in
+                return shape.id == uuid
+            }) {
+                self.handshapes[index].signs = [firstIndex, secondIndex]
+                self.handshapes[index].status = .accepted
+                self.collectionView.reloadData()
+            }
+
+            self.newFetch()
+            
+            
+            
+            
+        }
+        
+    }
+    
+    
+    func setupVision() {
+        
+    }
 }
 
 
@@ -359,42 +417,85 @@ extension HandShapeVC: UIImagePickerControllerDelegate {
         handshapes.append(Shape(image: imageToSend, id: uuid, signs: nil, status: .loading))
         collectionView.reloadData()
         
+        // Crop the image for test prep
+        let croppedCGImage = cropImage(image: image)
+//        let croppedUIimage = UIImage(cgImage: croppedCGImage, scale: CGFloat(1.0), orientation: .right)
         
-        let handShapeRequest = HandShapeRequest()
-        handShapeRequest.getHandShape(image: imageToSend) { [weak self] (result: [Int]?) in
-            DispatchQueue.main.async {
-                if let result = result {
-                    print(result)
-                    print(uuid.uuidString)
-                    
-                    if let index = self?.handshapes.firstIndex(where: { (shape) -> Bool in
-                        return shape.id == uuid
-                    }) {
-                        self?.handshapes[index].signs = result
-                        self?.handshapes[index].status = .accepted
-                        self?.collectionView.reloadData()
-                    }
-                    
-                    self?.newFetch()
-                    
-                } else {
-                    if let presentedVC = self?.presentedViewController as? UIAlertController {
-                        presentedVC.dismiss(animated: true, completion: nil)
-                    }
-                    
-                    if let index = self?.handshapes.firstIndex(where: { (shape) -> Bool in
-                        return shape.id == uuid
-                    }) {
-                        // Add deletion shake
-                        let indexPath = IndexPath(row: index, section: 0)
-                        self?.collectionView.cellForItem(at: indexPath)
-                        
-                        self?.handshapes.remove(at: index)
-                        self?.collectionView.deleteItems(at: [indexPath])
-                    }
-                }
+        // Test cropping
+        let strodyBoardBundle = Bundle(for: HandShapeVC.self)
+//        let storyBoard = UIStoryboard(name: "TestStoryboard", bundle: strodyBoardBundle)
+//        if #available(iOS 13.0, *) {
+//            let testViewController = storyBoard.instantiateViewController(identifier: "testView") as! TestViewController
+//            testViewController.image = croppedUIimage
+//            self.present(testViewController, animated: true, completion: nil)
+//
+//        } else {
+//            // Fallback on earlier versions
+//            fatalError("Could not test by creating storyborad")
+//        }
+        
+        var requests = [VNRequest]()
+        do {
+            let model = try VNCoreMLModel(for: Handshapes35v2().model)
+            let request = VNCoreMLRequest(model: model, completionHandler: { [weak self] (request, error) in
+                self?.processClassification(request, error, uuid)
+            })
+            request.imageCropAndScaleOption = .scaleFill
+            requests = [request]
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            let handler = VNImageRequestHandler(cgImage: croppedCGImage, options: [:])
+            do {
+                try handler.perform(requests)
+            } catch {
+                /*
+                 This handler catches general image processing errors. The `classificationRequest`'s
+                 completion handler `processClassifications(_:error:)` catches errors specific
+                 to processing that request.
+                 */
+                print("Failed to perform classification.\n\(error.localizedDescription)")
+                fatalError("Failed to perform classification.\n\(error.localizedDescription)")
             }
         }
+        
+//        let handShapeRequest = HandShapeRequest()
+//        handShapeRequest.getHandShape(image: imageToSend) { [weak self] (result: [Int]?) in
+//            DispatchQueue.main.async {
+//                if let result = result {
+//                    print(result)
+//                    print(uuid.uuidString)
+//
+//                    if let index = self?.handshapes.firstIndex(where: { (shape) -> Bool in
+//                        return shape.id == uuid
+//                    }) {
+//                        self?.handshapes[index].signs = result
+//                        self?.handshapes[index].status = .accepted
+//                        self?.collectionView.reloadData()
+//                    }
+//
+//                    self?.newFetch()
+//
+//                } else {
+//                    if let presentedVC = self?.presentedViewController as? UIAlertController {
+//                        presentedVC.dismiss(animated: true, completion: nil)
+//                    }
+//
+//                    if let index = self?.handshapes.firstIndex(where: { (shape) -> Bool in
+//                        return shape.id == uuid
+//                    }) {
+//                        // Add deletion shake
+//                        let indexPath = IndexPath(row: index, section: 0)
+//                        self?.collectionView.cellForItem(at: indexPath)
+//
+//                        self?.handshapes.remove(at: index)
+//                        self?.collectionView.deleteItems(at: [indexPath])
+//                    }
+//                }
+//            }
+//        }
     }
     
     
@@ -403,6 +504,15 @@ extension HandShapeVC: UIImagePickerControllerDelegate {
         return UIGraphicsImageRenderer(size: canvas, format: image.imageRendererFormat).image { _ in
             image.draw(in: CGRect(origin: .zero, size: canvas))
         }
+    }
+    
+    func cropImage(image: UIImage) -> CGImage {
+        let rect = CGRect(x: 1700, y: 700, width: 1000, height: 1000)
+        
+        let cgImage = image.cgImage!
+        let croppedCGImage = cgImage.cropping(to: rect)
+        return croppedCGImage!
+//        return UIImage(cgImage: croppedCGImage!, scale: CGFloat(1.0), orientation: .right)
     }
 }
 
