@@ -12,5 +12,13 @@ import CoreData
 
 @objc(Word)
 public class Word: NSManagedObject {
+    
+    @objc dynamic var initialTranslation: String {
+        self.willAccessValue(forKey: "initialTranslation")
+        let initial = self.translation!.first!.uppercased()
+        let test = String(initial.utf8)
+        self.didAccessValue(forKey: "initialTranslation")
+        return test
+    }
 
 }
