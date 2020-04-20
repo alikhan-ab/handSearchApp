@@ -32,6 +32,8 @@ class FingerSpellingWordSearchVC: UIViewController, UINavigationBarDelegate, UIN
     var letters = [String]()
     var words = [String]()
     
+    let language = UserDefaults.standard.string(forKey: "language")!
+    
     
     private let persistentContainer = NSPersistentContainer(name: "SmartFingers")
     lazy var fetchedResultsController: NSFetchedResultsController<Word> = {
@@ -107,8 +109,8 @@ class FingerSpellingWordSearchVC: UIViewController, UINavigationBarDelegate, UIN
         //NavigationBar:
         navbar.backgroundColor = UIColor.white
         navbar.delegate = self
-        navItem.title = "FingerSpelling Recognition"
-        navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(back))
+        navItem.title = kText.languages[language]?["fingerSpellingRecognition"] ?? "FingerSpelling Recognition"
+        navItem.leftBarButtonItem = UIBarButtonItem(title: kText.languages[language]?["back"] ?? "Back", style: .plain, target: self, action: #selector(back))
 
         navItem.leftBarButtonItem?.tintColor = UIColor(red: 255/255, green: 247/255, blue: 214/255, alpha: 1)
         if #available(iOS 13.0, *) {

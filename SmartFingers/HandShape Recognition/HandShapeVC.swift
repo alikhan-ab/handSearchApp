@@ -83,7 +83,7 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
     var predicateSigns = [[Int]]()
     
 
-    
+    let language = UserDefaults.standard.string(forKey: "language")!
     
     var wasLaunched = false
     
@@ -140,9 +140,9 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
         //NavigationBar:
         navbar.backgroundColor = UIColor.white
         navbar.delegate = self
-        navItem.title = "HandShape Recognition"
-        navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(back))
-        let cameraItem = UIBarButtonItem(title: "Camera", style: .plain, target: self, action: #selector(changeCamera))
+        navItem.title = kText.languages[language]?["handshapeRecognition"] ?? "HandShape Recognition"
+        navItem.leftBarButtonItem = UIBarButtonItem(title: kText.languages[language]?["back"] ?? "Back", style: .plain, target: self, action: #selector(back))
+        let cameraItem = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(changeCamera))
 //        navItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "flip2"), style: .plain, target: self, action: #selector(changeCamera))
         //UIBarButtonItem(title: "Change camera", style: .plain, target: self, action: #selector(changeCamera))//#selector(signToLetter))
 //        UIBarButtonItem(image: UIImage(named: "camera_flip"), style: .plain, target: self, action: #selector(changeCamera))
@@ -210,7 +210,7 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
         
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
-        alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { (_) in
+        alert.addAction(UIAlertAction(title: kText.languages[language]?["delete"] ?? "Delete", style: .destructive, handler: { (_) in
             print("User click Delete button")
 
 
@@ -220,7 +220,7 @@ class HandShapeVC: UIViewController, UINavigationBarDelegate, UINavigationContro
             
         }))
         
-        alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: { (_) in
+        alert.addAction(UIAlertAction(title: kText.languages[language]?["dismiss"] ?? "Dismiss", style: .cancel, handler: { (_) in
             print("User click Dismiss button")
         }))
         
@@ -349,7 +349,7 @@ extension HandShapeVC: UITableViewDataSource, UITableViewDelegate {
     
     func addNoResultsLabel() {
         let noDataLabel = UILabel(frame: CGRect(x: self.screenSize.width/4, y: 0, width: self.tableview.bounds.width/2, height: self.tableview.bounds.height))
-        noDataLabel.text             = "No results"
+        noDataLabel.text             = kText.languages[language]?["noResults"] ?? "No results"
         noDataLabel.numberOfLines    = 3
         noDataLabel.textColor        = UIColor(red: 69/255, green: 70/255, blue: 85/255, alpha: 1)//UIColor(r: 87, g: 69, b: 93)//UIColor(r: 247, g: 208, b: 111)
         noDataLabel.textAlignment    = .center
@@ -422,7 +422,7 @@ extension HandShapeVC: UIImagePickerControllerDelegate {
 //        let croppedUIimage = UIImage(cgImage: croppedCGImage, scale: CGFloat(1.0), orientation: .right)
         
         // Test cropping
-        let strodyBoardBundle = Bundle(for: HandShapeVC.self)
+//        let strodyBoardBundle = Bundle(for: HandShapeVC.self)
 //        let storyBoard = UIStoryboard(name: "TestStoryboard", bundle: strodyBoardBundle)
 //        if #available(iOS 13.0, *) {
 //            let testViewController = storyBoard.instantiateViewController(identifier: "testView") as! TestViewController

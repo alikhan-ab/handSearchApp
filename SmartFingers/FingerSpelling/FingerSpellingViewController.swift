@@ -33,18 +33,25 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
 
     var doneButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Done", for: .normal)
+
+        if #available(iOS 13.0, *) {
+            let image = UIImage(systemName: "magnifyingglass", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30, weight: .bold, scale: .large))?.withTintColor(UIColor(red: 255/255, green: 247/255, blue: 214/255, alpha: 1), renderingMode: .alwaysOriginal)
+            button.setImage(image, for: .normal)
+        } else {
+            // Fallback on earlier versions
+            button.setTitle("Done", for: .normal)
+        }
         button.backgroundColor = UIColor(red: 48/255, green: 52/255, blue: 83/255, alpha: 1)
         button.setTitleColor(UIColor(red: 255/255, green: 247/255, blue: 214/255, alpha: 1), for: .normal)
         let font = UIFont(name: "Avenir-Heavy", size: 35)
         button.titleLabel?.font = font
-        button.titleLabel?.layer.shadowColor = UIColor(red: 69/255, green: 70/255, blue: 85/255, alpha: 1).cgColor
+//        button.titleLabel?.layer.shadowColor = UIColor(red: 69/255, green: 70/255, blue: 85/255, alpha: 1).cgColor
         button.titleLabel?.layer.shadowRadius = 1.0
         button.titleLabel?.layer.shadowOpacity = 7.0
         button.titleLabel?.layer.shadowOffset = CGSize(width: 2, height: 2)
         button.titleLabel?.layer.masksToBounds = false
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.layer.borderColor = UIColor(red: 255/255, green: 247/255, blue: 214/255, alpha: 1).cgColor 
+        button.layer.borderColor = UIColor(red: 48/255, green: 52/255, blue: 83/255, alpha: 1).cgColor
         button.layer.borderWidth = 5
         button.layer.cornerRadius = 6
         return button
@@ -79,6 +86,8 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
     var buttonCount = 0
     var buttonArray = [UIButton]()
     //var isFirst = true
+    
+    let language = UserDefaults.standard.string(forKey: "language")!
 
     //MARK:- Methods
     override func viewDidLoad() {
@@ -157,7 +166,7 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
     func setUpView() {
         self.view.backgroundColor = UIColor(red: 48/255, green: 52/255, blue: 83/255, alpha: 1)//UIColor(red: 69/255, green: 70/255, blue: 85/255, alpha: 1)
         navbar.delegate = self
-        navItem.title = "FingerSpelling Recognition"
+        navItem.title = kText.languages[language]?["fingerSpellingRecognition"] ?? "FingerSpelling Recognition"
         //add right button item to change the camera
         navbar.items = [navItem]
         view.addSubview(navbar)
@@ -168,6 +177,10 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
             navbar.leftAnchor.constraint(equalTo: self.view.leftAnchor)
         ])
         
+        if doneButton.titleLabel?.text != nil {
+            doneButton.titleLabel?.text = kText.languages[language]?["done"] ?? "Done"
+        }
+        
         [cameraView, doneButton].forEach(self.view.addSubview)
         
         cameraView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
@@ -177,7 +190,7 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
 
         setupButtonsStackView()
         
-        doneButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: screenSize.width/4).isActive = true
+        doneButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         doneButton.topAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -65).isActive = true
         doneButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -10).isActive = true
         doneButton.heightAnchor.constraint(equalToConstant: 55).isActive = true
@@ -249,8 +262,8 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
     
     @objc func letterButtonPressed(_ sender: UIButton){
         print("\n Letter! \n")
-        let alert = UIAlertController(title: "Letter at \(sender.tag)", message: "", preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Add letter", style: .default, handler: { (_) in
+        let alert = UIAlertController(title: "\(kText.languages[language]?["letterAt"] ?? "Letter at") \(sender.tag)", message: "", preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "\(kText.languages[language]?["addLetter"] ?? "Add letter")", style: .default, handler: { (_) in
             print("Adding another letter!")
             let letter = self.sampleData.randomElement()!
             let button = self.makeLetterButton(letter: letter)
@@ -263,7 +276,7 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
             self.addButton(sender: button)
         }))
         
-        alert.addAction(UIAlertAction(title: "Edit", style: .destructive, handler: { (_) in
+        alert.addAction(UIAlertAction(title: kText.languages[language]?["edit"] ?? "Edit", style: .destructive, handler: { (_) in
             print("User click Edit button")
             let letter = self.sampleData.randomElement()!
             let button = self.makeLetterButton(letter: letter)
@@ -272,12 +285,12 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
             self.addButton(sender: button)
         }))
         
-        alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { (_) in
+        alert.addAction(UIAlertAction(title: kText.languages[language]?["delete"] ?? "Delete", style: .destructive, handler: { (_) in
             print("User click Delete button")
             self.removeButton(sender: sender)
         }))
                 
-        alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: { (_) in
+        alert.addAction(UIAlertAction(title: kText.languages[language]?["dimiss"] ?? "Dismiss", style: .cancel, handler: { (_) in
             print("User click Dismiss button")
         }))
         
@@ -325,8 +338,8 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
 
     @objc func stackAction(tapGestureRecognizer: UITapGestureRecognizer) {
         if self.buttonArray.isEmpty {
-            let alert = UIAlertController(title: "Letter adition?", message: "", preferredStyle: .actionSheet)
-            alert.addAction(UIAlertAction(title: "Add letter", style: .default, handler: { (_) in
+            let alert = UIAlertController(title: "\(kText.languages[language]?["addLetter"] ?? "Letter adition")?" , message: "", preferredStyle: .actionSheet)
+            alert.addAction(UIAlertAction(title: kText.languages[language]?["addLetter"] ?? "Add letter", style: .default, handler: { (_) in
                 print("Adding another letter!")
                 let letter = self.sampleData.randomElement()!
                 let button = self.makeLetterButton(letter: letter)
@@ -334,7 +347,7 @@ class FingerSpellingViewController: UIViewController, AVCapturePhotoCaptureDeleg
                 self.addButton(sender: button)
             }))
             
-            alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: { (_) in
+            alert.addAction(UIAlertAction(title: kText.languages[language]?["dismiss"] ?? "Dismiss", style: .cancel, handler: { (_) in
                 print("User click Dismiss button")
             }))
             

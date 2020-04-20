@@ -32,6 +32,8 @@ class SubcategoriesViewController: UIViewController, UINavigationBarDelegate {
         
         return fetchedResultsController
     }()
+    
+    let language = UserDefaults.standard.string(forKey: "language")!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,7 +81,7 @@ class SubcategoriesViewController: UIViewController, UINavigationBarDelegate {
     
     func setupNavBar() {
         let height: CGFloat = 55
-        navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(back))
+        navItem.leftBarButtonItem = UIBarButtonItem(title: kText.languages[language]?["back"] ?? "Back", style: .plain, target: self, action: #selector(back))
         navItem.leftBarButtonItem?.tintColor = UIColor(red: 255/255, green: 247/255, blue: 214/255, alpha: 1)
         if #available(iOS 13.0, *) {
             let coloredAppearance = UINavigationBarAppearance()

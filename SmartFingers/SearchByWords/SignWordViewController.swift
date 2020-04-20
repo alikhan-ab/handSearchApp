@@ -27,6 +27,8 @@ class SignWordViewController: UIViewController, UINavigationBarDelegate {
     
     var word: Word?
     
+    let language = UserDefaults.standard.string(forKey: "language")!
+    
     lazy var errorImageView: UIImageView = {
         let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -99,7 +101,7 @@ class SignWordViewController: UIViewController, UINavigationBarDelegate {
         
 //        navbar.barTintColor = UIColor(r: 69, g: 70, b: 85) //(red: 62/255, green: 66/255, blue: 97/255, alpha: 1)rgb(69, 70, 85)
 //        navItem.title.
-        navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(back))
+        navItem.leftBarButtonItem = UIBarButtonItem(title: kText.languages[language]?["back"] ?? "Back", style: .plain, target: self, action: #selector(back))
         navItem.leftBarButtonItem?.tintColor = UIColor(red: 255/255, green: 247/255, blue: 214/255, alpha: 1)
         navbar.items = [navItem]
 //        navItem.title = word?.translation
@@ -163,6 +165,8 @@ class SignWordViewController: UIViewController, UINavigationBarDelegate {
     
     func setUpView(){
         self.view.backgroundColor = UIColor(r: 86, g: 89, b: 122)
+        
+        favouritesLabel.text = kText.languages[language]?["addToFavourites"] ?? "Add to Favourites"
         
         guard let isFavorite = word?.favourite else { return }
         starTapped = isFavorite

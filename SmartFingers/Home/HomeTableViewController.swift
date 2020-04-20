@@ -22,6 +22,8 @@ class HomeTableViewController: UIViewController, UINavigationBarDelegate {
     let image2 = UIImage(named: "icons8-list-100")//observatory
     let image3 = UIImage(named: "icons8-sign-language-i-100")//space-ship
     let image4 = UIImage(named: "icons8-favorite-folder-100")//comet
+    
+    var language: String!
 
     let tableview: UITableView = {
         let tv = UITableView()
@@ -35,6 +37,16 @@ class HomeTableViewController: UIViewController, UINavigationBarDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let language = UserDefaults.standard.string(forKey: "language")
+        if language == nil {
+            UserDefaults.standard.set("ru", forKey: "language")
+            self.language = "ru"
+        } else {
+            self.language = language!
+        }
+        
+        
         self.view.backgroundColor = gradientTwo
         setupTableView()
     }
@@ -70,9 +82,25 @@ extension HomeTableViewController: UITableViewDataSource, UITableViewDelegate {
         let cell = tableview.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! HomeCell
         let cellBackground = [gradientOne, gradientTwo, gradientThree, gradientFour, gradientThree]
         
-        let titles = [kText.wordsRU, "Categories", "Hand Shape", "FingerSpelling", "Favourites"]
+        
+        var title: String = ""
+        switch indexPath.row {
+        case 0:
+            title = kText.languages[language]?["words"] ?? "Words"
+        case 1:
+            title = kText.languages[language]?["categories"] ?? "Categories"
+        case 2:
+            title = kText.languages[language]?["handshape"] ?? "Hand Shape"
+        case 3:
+            title = kText.languages[language]?["fingerspelling"] ?? "FingerSpelling"
+        case 4:
+            title = kText.languages[language]?["favourites"] ?? "Favourites"
+        default:
+            title = ""
+        }
+        
         let images = [image1, image2, image3, image3, image4]
-        cell.nameLabel.text = titles[indexPath.row]
+        cell.nameLabel.text = title
         cell.leftImageView.image = images[indexPath.row]
         cell.backgroundColor = cellBackground[indexPath.row]
         return cell 
