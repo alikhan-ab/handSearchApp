@@ -24,9 +24,9 @@ class SubcategoriesViewController: UIViewController, UINavigationBarDelegate {
         
         let fetchRequest: NSFetchRequest<Word> = Word.fetchRequest()
         
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "translation", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "translation", ascending: true, selector: #selector(NSString.caseInsensitiveCompare))]
         
-        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.persistentContainer.viewContext, sectionNameKeyPath: "initialTranslation", cacheName: nil)
         
         fetchedResultsController.delegate = self
         
@@ -75,6 +75,10 @@ class SubcategoriesViewController: UIViewController, UINavigationBarDelegate {
         tableView.register(NameCell.self, forCellReuseIdentifier: "cellID")
         tableView.dataSource = self
         tableView.delegate = self
+        
+        tableView.sectionIndexTrackingBackgroundColor = UIColor(r: 72, g: 72, b:72)
+        tableView.sectionIndexBackgroundColor = UIColor(r: 99, g: 99, b: 102)
+        tableView.sectionIndexColor = .systemBlue
     }
     
     func setupNavBar() {
@@ -113,10 +117,52 @@ class SubcategoriesViewController: UIViewController, UINavigationBarDelegate {
 
 extension SubcategoriesViewController: UITableViewDataSource, UITableViewDelegate {
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return self.fetchedResultsController.sections!.count
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let words = fetchedResultsController.fetchedObjects else {return 0}
-        return words.count
+        guard let sections = self.fetchedResultsController.sections else { return 0}
+        let sectionInfo = sections[section]
+        return sectionInfo.numberOfObjects
+//        guard let words = fetchedResultsController.fetchedObjects else {return 0}
+//        return words.count
+    }
+    
+//    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+//        print(self.fetchedResultsController.sectionIndexTitles)
+//        return self.fetchedResultsController.sectionIndexTitles
+//    }
+    
+    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        if let sections = fetchedResultsController.sections {
+            var sectionTitles: [String] = []
+
+            for section in sections {
+                sectionTitles.append(String(describing: section.name.first!))
+            }
+            return sectionTitles
+        }
+
+        return fetchedResultsController.sectionIndexTitles
+    }
+    
+    
+    func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
+        let title = fetchedResultsController.sectionIndexTitles[index]
+        return self.fetchedResultsController.section(forSectionIndexTitle: title, at: index)
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if let sections = fetchedResultsController.sections {
+            var sectionTitles: [String] = []
+
+            for section in sections {
+                sectionTitles.append(String(describing: section.name.first!))
+            }
+            return sectionTitles[section]
+        }
+        return self.fetchedResultsController.sectionIndexTitles[section]
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
