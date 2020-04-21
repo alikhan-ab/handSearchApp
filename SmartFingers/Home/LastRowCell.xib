@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="LastCell" rowHeight="69" id="KGk-i7-Jjw" customClass="LastRowCell" customModule="Sign_Language_" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="69"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="69"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="flo-56-dTg">
+                        <rect key="frame" x="217.5" y="12" width="45" height="45"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="flo-56-dTg" secondAttribute="height" multiplier="1:1" id="z4k-vR-NdJ"/>
+                        </constraints>
+                        <state key="normal" image="Frame-2"/>
+                        <connections>
+                            <action selector="languageTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="OmV-ha-hky"/>
+                        </connections>
+                    </button>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lau-2w-dK0">
+                        <rect key="frame" x="57.5" y="12" width="45" height="45"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="Lau-2w-dK0" secondAttribute="height" multiplier="1:1" id="JZM-iI-IEN"/>
+                        </constraints>
+                        <state key="normal" image="star_filled"/>
+                        <connections>
+                            <action selector="starTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="bQw-8Z-Rvh"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="flo-56-dTg" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="79D-c9-Byk"/>
+                    <constraint firstItem="Lau-2w-dK0" firstAttribute="height" secondItem="H2p-sc-9uM" secondAttribute="height" multiplier="0.652174" id="BM3-Py-COr"/>
+                    <constraint firstItem="Lau-2w-dK0" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" multiplier="1:2" id="E7p-bY-1eM"/>
+                    <constraint firstItem="Lau-2w-dK0" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="iBU-q7-uoM"/>
+                    <constraint firstItem="flo-56-dTg" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" multiplier="3:2" id="oMd-81-9Rz"/>
+                    <constraint firstItem="flo-56-dTg" firstAttribute="height" secondItem="H2p-sc-9uM" secondAttribute="height" multiplier="0.652174" id="xTi-7h-Uqy"/>
+                </constraints>
+            </tableViewCellContentView>
+            <color key="backgroundColor" red="0.18823529411764706" green="0.20392156862745098" blue="0.32549019607843138" alpha="1" colorSpace="calibratedRGB"/>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <point key="canvasLocation" x="137.68115942028987" y="128.90625"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="Frame-2" width="512" height="512"/>
+        <image name="star_filled" width="512" height="512"/>
+    </resources>
+</document>

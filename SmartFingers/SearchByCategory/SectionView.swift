@@ -13,6 +13,8 @@ class SectionView: UIView {
 
     //MARK:- Variables:
     var section: Int!
+    
+    let language = UserDefaults.standard.string(forKey: "language")!
 
     lazy var nameLabel: UILabel = {
         let label = UILabel()
@@ -51,7 +53,9 @@ class SectionView: UIView {
         nameLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 12).isActive = true
 //        nameLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
         nameLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -48).isActive = true
-
+        
+        expandCloseButton.titleLabel?.text = kText.languages[language]?["close"] ?? "Close"
+        
         expandCloseButton.centerYAnchor.constraint(equalTo: nameLabel.centerYAnchor).isActive = true
         expandCloseButton.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -12).isActive = true
         expandCloseButton.heightAnchor.constraint(equalToConstant: 40).isActive = true

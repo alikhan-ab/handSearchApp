@@ -129,6 +129,27 @@ class ViewController: UIViewController {
         
     }
     
+    func setUpLanguage() {
+        let defaults = UserDefaults.standard
+        guard let lang = defaults.string(forKey: "language") else { return }
+        
+        if let wordText = kText.languages[lang]?["words"] {
+            dictionaryWordsNameLabel.text = wordText
+        }
+        
+        if let categoriesText = kText.languages[lang]?["categories"] {
+            categoryNameLabel.text = categoriesText
+        }
+        
+        if let fingerspellingText = kText.languages[lang]?["fingerspelling"] {
+            fingerSpellNameLabel.text = fingerspellingText
+        }
+        
+        if let handshapeText = kText.languages[lang]?["handshape"] {
+            signNameLabel.text = handshapeText
+        }
+    }
+    
     func setUpView(){
         self.view.backgroundColor = .yellow
         [dictionaryWordsImageView, dictionaryWordsNameLabel, categoryImageView, categoryNameLabel, signImageView, signNameLabel, starImageView].forEach(self.view.addSubview)

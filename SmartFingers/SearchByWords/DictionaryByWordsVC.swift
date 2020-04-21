@@ -34,6 +34,8 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
     var keyboardView = SignKeyboardView()
     var signPressed = false
     let screenSize: CGRect = UIScreen.main.bounds
+    
+    let language = UserDefaults.standard.string(forKey: "language")!
 
 
     let tableview: UITableView = {
@@ -117,12 +119,12 @@ class DictionaryByWordsVC: UIViewController, UINavigationBarDelegate, KeyboardDe
     func setupNavBar() {
         navbar.backgroundColor = UIColor.white
         navbar.delegate = self
-        navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(back))
-        navItem.rightBarButtonItem = UIBarButtonItem(title: "Sign", style: .plain, target: self, action: #selector(signToLetter))
+        navItem.leftBarButtonItem = UIBarButtonItem(title: kText.languages[language]?["back"] ?? "Back", style: .plain, target: self, action: #selector(back))
+        navItem.rightBarButtonItem = UIBarButtonItem(title: kText.languages[language]?["sign"] ?? "Sign", style: .plain, target: self, action: #selector(signToLetter))
         searchBar.backgroundColor = UIColor(red: 62/255, green: 66/255, blue: 97/255, alpha: 1)
         searchBar.tintColor = UIColor(red: 93/255, green: 96/255, blue: 130/255, alpha: 1) //247, 208, 111
         searchBar.searchBarStyle = UISearchBar.Style.prominent
-        searchBar.placeholder = " Search..."
+        searchBar.placeholder = "\(kText.languages[language]?["search"] ?? "Search")..."
         searchBar.sizeToFit()
         searchBar.isTranslucent = false
         searchBar.backgroundImage = UIImage()

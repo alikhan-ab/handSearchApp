@@ -65,11 +65,15 @@ class HandShapeImageCell: UICollectionViewCell {
         return label
     }()
     
+    let language = UserDefaults.standard.string(forKey: "language")!
+    
+    
     override init(frame: CGRect) {
         super.init(frame: .zero)
                 
         if isEmpty {
             contentView.addSubview(emptyView)
+            addLabel.text = kText.languages[language]?["addImage"] ?? "Add image"
             emptyView.addSubview(addLabel)
             emptyView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
             emptyView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true

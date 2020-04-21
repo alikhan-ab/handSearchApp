@@ -22,6 +22,9 @@ class CategoriesViewController: UIViewController, UINavigationBarDelegate {
     let navbar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 55))
     var navItem = UINavigationItem()
     lazy var searchBar: UISearchBar = UISearchBar()
+    
+    let language = UserDefaults.standard.string(forKey: "language")!
+    
 //
 //    var dataExample = [ExpandableSection(isExpanded: true, name: "Generalities", subsections: ["Colours", "Measurements", "Emotions","Characteristics","Numbers","General: Time"]),
 //                       ExpandableSection(isExpanded: true, name: "Sentences", subsections: ["Greeting & standard phrases", "Questions", "Idioms & expressions"]),
@@ -112,11 +115,11 @@ class CategoriesViewController: UIViewController, UINavigationBarDelegate {
         navbar.delegate = self
         let navItem = UINavigationItem()
         //        navItem.title = "Categories"
-        navItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(back))
+        navItem.leftBarButtonItem = UIBarButtonItem(title: kText.languages[language]?["back"] ?? "Back", style: .plain, target: self, action: #selector(back))
         navItem.leftBarButtonItem?.tintColor = UIColor(red: 255/255, green: 247/255, blue: 214/255, alpha: 1)
 
         searchBar.searchBarStyle = UISearchBar.Style.prominent
-        searchBar.placeholder = " Search..."
+        searchBar.placeholder = "\(kText.languages[language]?["search"] ?? "Search")..."
         searchBar.sizeToFit()
         searchBar.isTranslucent = false
         searchBar.backgroundImage = UIImage()
@@ -178,7 +181,7 @@ extension CategoriesViewController: UITableViewDataSource, UITableViewDelegate {
         view.backgroundColor = UIColor(r: 86, g: 89, b: 122)
         view.nameLabel.text = coredataData[section].name
         view.nameLabel.textColor = UIColor(r: 247, g: 208, b: 111)
-        view.expandCloseButton.setTitle("Open", for: .normal)
+        view.expandCloseButton.setTitle(kText.languages[language]?["open"] ?? "Open", for: .normal)
         view.expandCloseButton.setTitleColor(UIColor(r: 239, g: 134, b: 176), for: .normal)
         view.expandCloseButton.addTarget(self, action: #selector(handleExpandClose), for: .touchUpInside)
         view.expandCloseButton.tag = section
@@ -198,7 +201,7 @@ extension CategoriesViewController: UITableViewDataSource, UITableViewDelegate {
         filteredData[section].isExpanded = !isExpanded
         coredataData[section].isExpanded = !isExpanded
         
-        button.setTitle(isExpanded ? "Open" : "Close", for: .normal)
+        button.setTitle(isExpanded ? kText.languages[language]?["open"] ?? "Open" : kText.languages[language]?["close"] ?? "Close", for: .normal)
         
         if isExpanded {
             tableView.deleteRows(at: indexPaths, with: .top)

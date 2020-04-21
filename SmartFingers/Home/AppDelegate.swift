@@ -29,6 +29,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             defaults.set(true, forKey: "isPreloaded")
         }
         
+        // Check if lanugage option is added
+        let language = defaults.string(forKey: "language")
+        if language == nil {
+            defaults.set("ru", forKey: "language")
+        }
+        
         return true
     }
     
