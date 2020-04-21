@@ -38,7 +38,7 @@ class HomeTableViewController: UIViewController, UINavigationBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let language = UserDefaults.standard.string(forKey: "language")
+        
         if language == nil {
             UserDefaults.standard.set("ru", forKey: "language")
             self.language = "ru"
@@ -79,31 +79,40 @@ extension HomeTableViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableview.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! HomeCell
-        let cellBackground = [gradientOne, gradientTwo, gradientThree, gradientFour, gradientThree]
         
-        
-        var title: String = ""
         switch indexPath.row {
-        case 0:
-            title = kText.languages[language]?["words"] ?? "Words"
-        case 1:
-            title = kText.languages[language]?["categories"] ?? "Categories"
-        case 2:
-            title = kText.languages[language]?["handshape"] ?? "Hand Shape"
-        case 3:
-            title = kText.languages[language]?["fingerspelling"] ?? "FingerSpelling"
         case 4:
-            title = kText.languages[language]?["favourites"] ?? "Favourites"
+            var cell = tableView.dequeueReusableCell(withIdentifier: "LastCell") as? LastRowCell
+            if cell == nil {
+                cell = LastRowCell.createCell()!
+                cell?.delegate = self
+            }
+            return cell!
         default:
-            title = ""
+            let cell = tableview.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! HomeCell
+            let cellBackground = [gradientOne, gradientTwo, gradientThree, gradientFour, gradientThree]
+            
+            
+            var title: String = ""
+            switch indexPath.row {
+            case 0:
+                title = kText.languages[language]?["words"] ?? "Words"
+            case 1:
+                title = kText.languages[language]?["categories"] ?? "Categories"
+            case 2:
+                title = kText.languages[language]?["handshape"] ?? "Hand Shape"
+            case 3:
+                title = kText.languages[language]?["fingerspelling"] ?? "FingerSpelling"
+            default:
+                title = ""
+            }
+            
+            let images = [image1, image2, image3, image3]
+            cell.nameLabel.text = title
+            cell.leftImageView.image = images[indexPath.row]
+            cell.backgroundColor = cellBackground[indexPath.row]
+            return cell
         }
-        
-        let images = [image1, image2, image3, image3, image4]
-        cell.nameLabel.text = title
-        cell.leftImageView.image = images[indexPath.row]
-        cell.backgroundColor = cellBackground[indexPath.row]
-        return cell 
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -124,14 +133,44 @@ extension HomeTableViewController: UITableViewDataSource, UITableViewDelegate {
             let signVC = FingerSpellingViewController()
             self.present(signVC, animated: true, completion: nil)
         }
+    }
+    
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         if indexPath.row == 4 {
-            let signVC = FavouriteViewController()
-            self.present(signVC, animated: true, completion: nil)
+            return nil
+        } else {
+            return indexPath
         }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return screenSize.height/5
     }
+}
+
+extension HomeTableViewController: LastRowButtonsDelegate {
+    func lastRowButtonTapped(_ button: Int) {
+        switch button {
+        case 1:
+            let vc = FavouriteViewController()
+            print("test")
+            self.present(vc, animated: true, completion: nil)
+        case 2:
+            switchLanguage()
+        default:
+            return
+        }
+    }
     
+    func switchLanguage() {
+        if language == "ru" {
+            language = "en"
+        } else {
+            language = "ru"
+        }
+        UserDefaults.standard.set(language, forKey: "langugage")
+        tableview.reloadData()
+    }
+    
+
 }
