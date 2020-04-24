@@ -68,5 +68,34 @@ public struct kText {
     "edit": "Edit",
     "dismiss": "Dismiss"]
     
-    public static let languages = ["en": enDict, "ru": ruDict]
+    private static let kazDict = ["words": "Сөздер",
+    "categories": "Санаттар",
+    "handshape": "Қол пішіні",
+    "fingerspelling": "Дактиль",
+    "favourites": "Таңдаулы",
+    "back": "Кері",
+    "sign": "Дактиль",
+    "search": "Іздеу",
+    "addToFavourites": "Таңдаулыға қосу",
+    "open": "Ашу",
+    "close": "Жабу",
+    "favouritesIsEmpty": "Сіз мұнда ештеңе қоспаған сияқтысыз",
+    "handshapeRecognition": "Қол пішінінен тану",
+    "camera": "Камера",
+    "cancel": "Алып тастау",
+    "photo": "Фото",
+    "retake": "Қайта түсіру",
+    "usePhoto": "Фото қолдану",
+    "noResults": "Нәтижелер жоқ",
+    "addImage": "Фото қосу",
+    "fingerSpellingRecognition": "Дактилді тану",
+    "done": "Дайын",
+    "letterAt": "Әріп ",
+    "addLetter": "Әріпті қосу",
+    "delete": "Жою",
+    "edit": "Өзгерту",
+    "dimiss": "Болдырмау"
+]
+    
+    public static let languages = ["en": enDict, "ru": ruDict, "kaz": kazDict]
 }

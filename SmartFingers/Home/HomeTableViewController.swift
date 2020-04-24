@@ -163,14 +163,17 @@ extension HomeTableViewController: LastRowButtonsDelegate {
     }
     
     func switchLanguage() {
-        if language == "ru" {
+        switch language {
+        case "ru":
+            language = "kaz"
+        case "kaz":
             language = "en"
-        } else {
+        case "en":
+            language = "ru"
+        default:
             language = "ru"
         }
-        UserDefaults.standard.set(language, forKey: "langugage")
+        UserDefaults.standard.set(language, forKey: "language")
         tableview.reloadData()
     }
-    
-
 }
