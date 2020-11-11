@@ -26,6 +26,9 @@
 		9A75B23F237B6F4A001145D2 /* HandShapeVideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A75B23E237B6F4A001145D2 /* HandShapeVideoCell.swift */; };
 		9AA63C2723321E2900B34F41 /* ThirdDayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA63C2623321E2900B34F41 /* ThirdDayCell.swift */; };
 		BE1579FC240D97CC00E81EAF /* fingerspelling-v1.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = BE1579FB240D97CC00E81EAF /* fingerspelling-v1.mlmodel */; };
+		BE451B73255C6CEE00C5EEAC /* words.gif in Resources */ = {isa = PBXBuildFile; fileRef = BE451B70255C6CEC00C5EEAC /* words.gif */; };
+		BE451B74255C6CEE00C5EEAC /* fingerspelling.gif in Resources */ = {isa = PBXBuildFile; fileRef = BE451B71255C6CED00C5EEAC /* fingerspelling.gif */; };
+		BE451B75255C6CEE00C5EEAC /* handshape.gif in Resources */ = {isa = PBXBuildFile; fileRef = BE451B72255C6CEE00C5EEAC /* handshape.gif */; };
 		BE81E3B7244F1B6E00C68C85 /* LastRowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE81E3B5244F1B6D00C68C85 /* LastRowCell.swift */; };
 		BE81E3B8244F1B6E00C68C85 /* LastRowCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE81E3B6244F1B6D00C68C85 /* LastRowCell.xib */; };
 		BE93872D2445ECE80017DF3F /* database_1_v35 in Resources */ = {isa = PBXBuildFile; fileRef = BE93872A2445ECE70017DF3F /* database_1_v35 */; };
@@ -81,7 +84,11 @@
 		9A715E8A2354CC6800784AB0 /* FavouritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesViewController.swift; sourceTree = "<group>"; };
 		9A75B23E237B6F4A001145D2 /* HandShapeVideoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandShapeVideoCell.swift; sourceTree = "<group>"; };
 		9AA63C2623321E2900B34F41 /* ThirdDayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdDayCell.swift; sourceTree = "<group>"; };
+		BE0BDDC32559966D00003B0D /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		BE1579FB240D97CC00E81EAF /* fingerspelling-v1.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = "fingerspelling-v1.mlmodel"; sourceTree = "<group>"; };
+		BE451B70255C6CEC00C5EEAC /* words.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = words.gif; sourceTree = "<group>"; };
+		BE451B71255C6CED00C5EEAC /* fingerspelling.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = fingerspelling.gif; sourceTree = "<group>"; };
+		BE451B72255C6CEE00C5EEAC /* handshape.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = handshape.gif; sourceTree = "<group>"; };
 		BE81E3B5244F1B6D00C68C85 /* LastRowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastRowCell.swift; sourceTree = "<group>"; };
 		BE81E3B6244F1B6D00C68C85 /* LastRowCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LastRowCell.xib; sourceTree = "<group>"; };
 		BE93872A2445ECE70017DF3F /* database_1_v35 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = database_1_v35; sourceTree = "<group>"; };
@@ -145,6 +152,7 @@
 		19150E0D2320F42E00BF63DF /* SmartFingers */ = {
 			isa = PBXGroup;
 			children = (
+				BE0BDDC22559963400003B0D /* media */,
 				19150E1D2320F42E00BF63DF /* Info.plist */,
 				BE1579FB240D97CC00E81EAF /* fingerspelling-v1.mlmodel */,
 				BEDD20EF2445DD060056D9AC /* Handshapes35v2.mlmodel */,
@@ -158,6 +166,7 @@
 				C3DC71DF2344D219002F2F3D /* HandShape Recognition */,
 				9A715E892354CC4900784AB0 /* Favourite */,
 				C32708B7234352E60028940B /* Support */,
+				BE0BDDC32559966D00003B0D /* README.md */,
 			);
 			path = SmartFingers;
 			sourceTree = "<group>";
@@ -168,6 +177,16 @@
 				9A715E8A2354CC6800784AB0 /* FavouritesViewController.swift */,
 			);
 			path = Favourite;
+			sourceTree = "<group>";
+		};
+		BE0BDDC22559963400003B0D /* media */ = {
+			isa = PBXGroup;
+			children = (
+				BE451B71255C6CED00C5EEAC /* fingerspelling.gif */,
+				BE451B72255C6CEE00C5EEAC /* handshape.gif */,
+				BE451B70255C6CEC00C5EEAC /* words.gif */,
+			);
+			path = media;
 			sourceTree = "<group>";
 		};
 		C32708B7234352E60028940B /* Support */ = {
@@ -290,7 +309,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0920;
-				LastUpgradeCheck = 1100;
+				LastUpgradeCheck = 1210;
 				ORGANIZATIONNAME = "Aigerim Janaliyeva";
 				TargetAttributes = {
 					19150E0A2320F42E00BF63DF = {
@@ -332,10 +351,13 @@
 				BE93872E2445ECE80017DF3F /* database_3_v35 in Resources */,
 				C32708BB234357E40028940B /* Default-568h@2x.png in Resources */,
 				BE93872F2445ECE80017DF3F /* database_5_v35 in Resources */,
+				BE451B73255C6CEE00C5EEAC /* words.gif in Resources */,
+				BE451B75255C6CEE00C5EEAC /* handshape.gif in Resources */,
 				19150E1C2320F42E00BF63DF /* LaunchScreen.storyboard in Resources */,
 				BEDD20EC2445B6180056D9AC /* TestStoryboard.storyboard in Resources */,
 				19150E192320F42E00BF63DF /* Assets.xcassets in Resources */,
 				DB6C9DD2234AE67800BE5F3E /* vocabulary.json in Resources */,
+				BE451B74255C6CEE00C5EEAC /* fingerspelling.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -424,6 +446,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -449,7 +472,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -483,6 +506,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -502,7 +526,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
