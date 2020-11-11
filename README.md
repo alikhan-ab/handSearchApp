@@ -10,7 +10,7 @@
  ## Search by Handshapes
  The main functionally of the application is the ability to search for signs by the handshapes that are used to form them.
  
- ![](https://github.com/alikhan-ab/handSearchApp/tree/master/SmartFingers/media/handshape.gif)
+ ![](https://github.com/alikhan-ab/handSearchApp/blob/master/SmartFingers/media/handshape.gif)
  
  One of the drawbacks of the current implementations is that the application doesn't detect hand position and only classifies an area in the middle of the frame.
  
@@ -19,14 +19,14 @@
 ## Search by Fingerspelling
 In addition, the user can fingerspell a word to search for its sign-in Russian Sign Language.
  
- ![](https://github.com/alikhan-ab/handSearchApp/tree/master/SmartFingers/media/fingerspelling.gif)
+ ![](https://github.com/alikhan-ab/handSearchApp/blob/master/SmartFingers/media/fingerspelling.gif)
  
 In one of the previous implementations, both models used in Search by Handshapes and Search by Fingerspelling were hosted on a server.
 
  ## Search by Words and Category
 Finally, the application can be used as a regular Russian to Russian Sign Language dictionary. 
 
-![](https://github.com/alikhan-ab/handSearchApp/tree/master/SmartFingers/media/words.gif)
+![](https://github.com/alikhan-ab/handSearchApp/blob/master/SmartFingers/media/words.gif)
 
 ## Important
 This repo doesn't contain all videos from the Russian Sign Language, instead, it uses a placeholder video.
